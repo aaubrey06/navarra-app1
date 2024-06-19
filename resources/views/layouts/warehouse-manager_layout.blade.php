@@ -244,11 +244,6 @@
 
 
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('generateQR') }}">
-                    <i class="bi bi-qr-code"></i>
-                    <span>Add Product</span>
-                </a>
 
 
             <li class="nav-item">
@@ -257,6 +252,13 @@
                     <span>Purchase Request</span>
                 </a>
 
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('generateQR') }}">
+                    <i class="bi bi-qr-code"></i>
+                    <span>Add Product</span>
+                </a>
             </li>
 
             <li class="nav-item">
