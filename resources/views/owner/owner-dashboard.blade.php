@@ -1,11 +1,37 @@
 @extends('layouts.owner_layout')
-
-@section('title', 'Dashboard')
-
+{{-- 
+@section('title', 'Dashboard') --}}
 
 @section('contents')
-
     <section class="section dashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="store-tab" data-bs-toggle="tab" data-bs-target="#store"
+                            type="button" role="tab" aria-controls="store" aria-selected="true">Store</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="{{ route('owner.employee') }}">Employee</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="{{ route('owner.truck') }}">Trucks</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="store" role="tabpanel" aria-labelledby="store-tab">
+                        <!-- Store content here -->
+                    </div>
+                    <div class="tab-pane fade" id="employee" role="tabpanel" aria-labelledby="employee-tab">
+                        <!-- Employee content here -->
+                    </div>
+                    <div class="tab-pane fade" id="trucks" role="tabpanel" aria-labelledby="trucks-tab">
+                        <!-- Trucks content here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
 
             <!-- Left side columns -->
@@ -17,7 +43,8 @@
                         <div class="card info-card sales-card">
 
                             <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i
+                                        class="bi bi-three-dots"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li class="dropdown-header text-start">
                                         <h6>Filter</h6>
@@ -185,7 +212,7 @@
                                                 enabled: false
                                             },
                                             stroke: {
-                                                curve: 'smooth',
+                                                curve: 'mooth',
                                                 width: 2
                                             },
                                             xaxis: {
@@ -379,5 +406,4 @@
 
         </div>
     </section>
-
 @endsection

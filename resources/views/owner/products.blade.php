@@ -1,11 +1,14 @@
 @extends('layouts.owner_layout')
 
-@section('title', 'Products')
+{{-- @section('title', 'Products') --}}
 
 @section('contents')
     <div class="d-flex flex-column">
-        <div class="d-flex justify-content-between">
-            <a href="{{ route('owner.create') }}" class="btn btn-primary">Add Products</a>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <b>
+                <h2 class="mb-0">List of Products</h2>
+            </b>
+            <a href="{{ route('owner.create') }}" class="btn btn-primary btn-rounded">Add Product</a>
         </div>
     </div>
     <div></div>
@@ -14,11 +17,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">List of Products</h5>
-
                         <!-- Table with stripped rows -->
-                        <table class="table datatable">
-                            <thead>
+                        <table class="table datatable table-striped table-hover">
+                            <thead class="thead-dark">
                                 <tr>
                                     <th>Rice type</th>
                                     <th>Unit</th>
@@ -40,18 +41,16 @@
                                         <td>{{ $product->target_level }}</td>
                                         <td>{{ $product->reorder_level }}</td>
                                         <td>
-                                            <a href="" class="btn">View</a>
-                                            {{-- {{ route('owner.products.show', ['product' => $product->id]) }} --}}
+                                            <a href="" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </a>
 
-                                            <a href="" class="btn">Edit</a>
-                                            {{-- {{ route('owner.products.edit', ['product' => $product->id]) }} --}}
-
-
-                                            {{-- {{ route('owner.products.destroy', ['product' => $product->id]) }} --}}
                                             <form action="" method="post" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn">Delete</button>
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
                                             </form>
 
                                         </td>

@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'warehouse-manager-dashboard' => Warehousemanager::class,
             'driver-dashboard' => Driver::class,
             'customer-dashboard' => Customer::class,
+            // 'super-admin' => SuperAdmin::class,
             'roleauth' => RoleAuth::class
         ]);
     })

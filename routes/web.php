@@ -5,6 +5,8 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\WarehouseManagerController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\TruckController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
@@ -62,7 +64,7 @@ Route::prefix('owner')->group(function () {
     Route::delete('owner/products/{product}', [ProductController::class, 'destroy'])->name('owner.products.destroy');
 
 
-    Route::get('order', [ProductController::class, 'order'])->name('order');
+    Route::get('order', [ProductController::class, 'order'])->name('owner.order');
     Route::get('customer_order', [ProductController::class, 'customer_order'])->name('customer_order');
     Route::get('purchase_order', [ProductController::class, 'purchase_order'])->name('owner.purchase_order');
     Route::get('delivery', [ProductController::class, 'delivery'])->name('delivery');
@@ -71,6 +73,14 @@ Route::prefix('owner')->group(function () {
     Route::get('stocks', [ProductController::class, 'stocks'])->name('stocks');
     Route::get('reports', [ProductController::class, 'reports'])->name('reports');
     Route::get('warehouse_manager.warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse_manager.warehouse');
+
+    
+    // Route::get('truck', [TruckController::class, 'truck'])->name('owner.truck');
+    // Route::get('employee', [EmployeeController::class, 'employee'])->name('owner.employee');
+
+    Route::get('/trucks', [TruckController::class, 'index'])->name('owner.truck');
+    Route::get('/employees', [EmployeeController::class, 'employee'])->name('owner.employee');
+
 
 });
 

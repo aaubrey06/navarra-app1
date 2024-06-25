@@ -142,7 +142,10 @@
             </ul>
         </nav><!-- End Icons Navigation -->
 
+
     </header><!-- End Header -->
+
+
 
     <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar">
@@ -158,7 +161,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse"
-                    href="{{ route('order') }}">
+                    href="{{ route('owner.order') }}">
 
                     <i class="bi bi-cart"></i><span>Orders</span><i></i>
                 </a>
@@ -176,18 +179,13 @@
                 </a>
             </li><!-- End Product Dashboard Nav -->
 
-            <!-- Delivery Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('delivery') }}">
-                    <i class="bi bi-truck"></i>
-                    <span>Delivery</span>
+                <a class="nav-link collapsed" href="">
+                    <i class="bi bi-person"></i>
+                    <span>Walk-in</span>
                 </a>
-            </li><!-- EndDelivery  Dashboard Nav -->
-
-
-
-            </li><!-- End Tables Nav -->
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse"
@@ -223,7 +221,21 @@
                     </li>
 
                 </ul>
-            </li><!-- End Charts Nav -->
+            </li>
+
+            <!-- Delivery Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('delivery') }}">
+                    <i class="bi bi-truck"></i>
+                    <span>Delivery</span>
+                </a>
+            </li><!-- EndDelivery  Dashboard Nav -->
+
+
+
+            </li><!-- End Tables Nav -->
+
 
 
             <!-- REports Dashboard Nav -->

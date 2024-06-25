@@ -3,10 +3,10 @@
 @section('contents')
     <section class="section">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6 offset-lg-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Add Products</h5>
+                        <h2 class="card-title mb-3 text-center">Add Product</h2>
 
                         <form action="{{ route('owner.products.store') }}" method="POST">
                             @csrf
@@ -56,9 +56,8 @@
                             </div>
 
                             <div class="row mb-3">
-                                <div class="col-sm-10">
-                                    <button type="submit" class="btn btn-primary">Add Product</button>
-                                    <form action="{{ route('owner.products.store') }}" method='post'></form>
+                                <div class="col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-rounded">Add Product</button>
                                 </div>
                             </div>
                         </form>

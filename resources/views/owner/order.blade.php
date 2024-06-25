@@ -2,7 +2,7 @@
 
 
 @section('title', 'Products')
-
+dgdgdgd
 @section('contents')
 
 @endsection

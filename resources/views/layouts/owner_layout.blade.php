@@ -150,16 +150,23 @@
 
         <ul class="sidebar-nav" id="sidebar-nav">
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link collpased" href="{{ route('owner-dashboard') }}">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
-            </li><!-- End Dashboard Nav -->
+            </li><!-- End Dashboard Nav --> --}}
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('owner-dashboard') }}">
+                    <i class="bi bi-house-door"></i>
+                    <span>Home</span>
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse"
-                    href="{{ route('order') }}">
+                    href="{{ route('owner.order') }}">
 
                     <i class="bi bi-cart"></i><span>Orders</span><i></i>
                 </a>
@@ -204,7 +211,7 @@
                     </li>
                     <li>
                         <a href="{{ route('stocks') }}">
-                            <i class="bi bi-circle"></i><span>Stocks</span>
+                            <i class="bi bi-circle"></i><span>Store Stocks</span>
                         </a>
                     </li>
                     <li>
