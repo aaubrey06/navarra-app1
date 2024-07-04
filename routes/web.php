@@ -135,7 +135,7 @@ Route::prefix('customer')->group(function () {
     Route::get('/cart', [CustomerController::class, 'view'])->name('cart');
     Route::get('/order-list', [CustomerController::class, 'orders'])->name('order-list');
     Route::get('/history', [CustomerController::class, 'history'])->name('history');
-    //Route::get('/customer-dashboard', [CustomerController::class, 'products'])->name('customer-dashboard');
+    Route::get('/customer-dashboard', [CustomerController::class, 'products'])->name('customer-dashboard');
 });
 
 require __DIR__.'/auth.php';
