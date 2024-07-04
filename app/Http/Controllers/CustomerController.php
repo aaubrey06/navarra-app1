@@ -23,11 +23,11 @@ class CustomerController extends Controller
         return view('customer.history');
     }
 
-    // public function products(): View
-    // {
-    //     $products = Product::all(); // Fetch all products
-    //     dd($products);
-    //     return view('customer.customer-dashboard', compact('products')); // Pass products to the view
-    // }
+    public function products(): View
+    {
+        $products = Product::all(); // Fetch all products
+        //dd($products);
+        return view('customer.customer-dashboard', compact('products')); // Pass products to the view
+    }
 
 }
