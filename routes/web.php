@@ -7,7 +7,9 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\WarehouseManagerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TruckController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
 
