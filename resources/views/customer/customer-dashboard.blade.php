@@ -22,15 +22,17 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($products as $product)
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><!--Image of the Product--></td>
+                                        <td>{{ $product->rice_type }}</td>
+                                        <td>{{ $product->unit }}</td>
+                                        <td>{{ $product->selling_price }}</td>
                                         <td>
-                                            <a href="{{ route('cart') }}" class="btn btn-success mx-2" >Add to Cart</a>
+                                            <a href="{{ route('cart', $product->product_id) }}" class="btn btn-success mx-2" >Add to Cart</a>
                                         </td>
                                     </tr>
+                                @endforeach
                             </tbody>
                         </table>
                         <!-- End Table with stripped rows -->
