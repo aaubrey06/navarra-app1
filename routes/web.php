@@ -77,7 +77,7 @@ Route::prefix('owner')->group(function () {
     // Route::get('truck', [TruckController::class, 'truck'])->name('owner.truck');
     // Route::get('employee', [EmployeeController::class, 'employee'])->name('owner.employee');
 
-    Route::get('/trucks', [TruckController::class, 'index'])->name('owner.truck');
+    Route::get('/trucks', [TruckController::class, 'truck'])->name('owner.truck');
     Route::get('/employees', [EmployeeController::class, 'employee'])->name('owner.employee');
 
 });

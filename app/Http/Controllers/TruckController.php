@@ -8,7 +8,7 @@ use Illuminate\View\View;
 
 class TruckController extends Controller
 {
-    public function index()
+    public function truck(): View
     {
         $trucks = Truck::all();
         return view('owner.truck', compact('trucks'));

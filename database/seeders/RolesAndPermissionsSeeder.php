@@ -14,11 +14,11 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         // Create roles
         $owner = Role::create(['name' => 'owner']);
-        $storemanager = Role::create(['name' => 'store manager']);
-        $warehousemanager = Role::create(['name' => 'warehouse manager']);
+        $store_manager = Role::create(['name' => 'store manager']);
+        $warehouse_manager= Role::create(['name' => 'warehouse manager']);
         $driver = Role::create(['name' => 'driver']);
         $customer = Role::create(['name' => 'customer']);
-        $superAdminRole = Role::create(['name' => 'superadmin']);
+        $superAdmin = Role::create(['name' => 'superadmin']);
 
         // Create permissions
         $createUserPermission = Permission::create(['name' => 'create user']);
@@ -28,10 +28,10 @@ class RolesAndPermissionsSeeder extends Seeder
         $managePermissionsPermission = Permission::create(['name' => 'manage permissions']);
 
         // Assign permissions to roles
-        $superAdminRole->givePermissionTo($createUserPermission);
-        $superAdminRole->givePermissionTo($editUserPermission);
-        $superAdminRole->givePermissionTo($deleteUserPermission);
-        $superAdminRole->givePermissionTo($manageRolesPermission);
-        $superAdminRole->givePermissionTo($managePermissionsPermission);
+        $superAdmin->givePermissionTo($createUserPermission);
+        $superAdmin->givePermissionTo($editUserPermission);
+        $superAdmin->givePermissionTo($deleteUserPermission);
+        $superAdmin->givePermissionTo($manageRolesPermission);
+        $superAdmin->givePermissionTo($managePermissionsPermission);
     }
 }

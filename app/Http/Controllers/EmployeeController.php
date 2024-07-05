@@ -8,7 +8,7 @@ use Illuminate\View\View;
 
 class EmployeeController extends Controller
 {
-    public function employee()
+    public function employee(): View
     {
         $employees = Employee::all();
         return view('owner.employee', compact('employees'));
