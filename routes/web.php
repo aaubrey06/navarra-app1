@@ -1,18 +1,14 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\TruckController;
-<<<<<<< Updated upstream
-use App\Http\Controllers\CustomerController;
-=======
 use App\Http\Controllers\WarehouseManagerController;
->>>>>>> Stashed changes
 use Illuminate\Support\Facades\Route;
-
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
 
@@ -92,10 +88,10 @@ Route::prefix('warehouse_manager')->group(function () {
     Route::get('warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse');
     Route::get('generate-qr', [WarehouseManagerController::class, 'generateQR'])->name('generateQR');
     Route::get('create', [WarehouseManagerController::class, 'create'])->name('wm_create');
+    Route::get('purchase_req', [WarehouseManagerController::class, 'purchase_req'])->name('purchase_req');
     Route::post('warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse');
     Route::get('qrScan', [WarehouseManagerController::class, 'qrScan'])->name('qrScan');
     Route::post('add_stocks', [WarehouseManagerController::class, 'add_stocks']);
-    Route::get('purchase_req', [WarehouseManagerController::class, 'purchase_req'])->name('purchase_req');
     Route::get('foroutbound/{qrCode}', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
     Route::get('outbound_stocks', [WarehouseManagerController::class, 'outbound_stocks'])->name('outbound_stocks');
     Route::post('sendoutbound', [WarehouseManagerController::class, 'sendoutbound']);
