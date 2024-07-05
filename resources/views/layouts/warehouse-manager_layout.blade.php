@@ -247,7 +247,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link collapsed " href="">
+                <a class="nav-link collapsed " href="{{ route('purchase_req') }}">
                     <i class="bi bi-qr-code-scan"></i>
                     <span>Purchase Request</span>
                 </a>

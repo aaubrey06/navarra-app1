@@ -38,7 +38,7 @@
                                                 $warehouse_stocks_arr = json_decode(json_encode($warehouse_data['warehouse_stocks']), true);
                                                 foreach ($warehouse_stocks_arr as $key => $warehouse_stock) :
                                                     if($warehouse_stock['warehouse_stocks_id'] == $warehouse->warehouse_stocks_id):
-                                                        print_r($warehouse_stock['warehouse_stocks_id']);
+                                                   
                                             ?>
                                             <td>
                                                 <?php

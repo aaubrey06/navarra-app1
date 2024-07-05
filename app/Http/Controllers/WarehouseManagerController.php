@@ -30,6 +30,11 @@ class WarehouseManagerController extends Controller
         return view('warehouse_manager.qrScan');
     }
 
+    public function purchase_req(): View
+    {
+        return view('warehouse_manager.purchase_req');
+    }
+
     public function foroutbound(Request $request): View
     {
 

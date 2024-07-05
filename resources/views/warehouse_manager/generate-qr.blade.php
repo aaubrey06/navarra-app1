@@ -50,7 +50,13 @@
         const generateBtn = document.getElementById('generateBtn');
         const qrcodeDiv = document.getElementById('qrcode');
 
-        generateBtn.addEventListener('click', () => {
+
+
+        generateBtn.addEventListener('click', (event) => {
+            if (!confirm('Are you sure you want to add this product?')) {
+                event.preventDefault(); // Prevent form submission if the user cancels
+                return;
+            }
             const text = rice_type.value + arrival_date.value;
             console.log(text)
             if (text) {
@@ -61,6 +67,6 @@
                     height: 128
                 });
             }
-        })
+        });
     </script>
 @endsection

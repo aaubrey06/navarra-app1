@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
-use App\Http\Controllers\WarehouseManagerController;
-use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TruckController;
+<<<<<<< Updated upstream
 use App\Http\Controllers\CustomerController;
+=======
+use App\Http\Controllers\WarehouseManagerController;
+>>>>>>> Stashed changes
 use Illuminate\Support\Facades\Route;
 
 
@@ -65,7 +68,6 @@ Route::prefix('owner')->group(function () {
     Route::put('owner/products/{product}', [ProductController::class, 'update'])->name('owner.products.update');
     Route::delete('owner/products/{product}', [ProductController::class, 'destroy'])->name('owner.products.destroy');
 
-
     Route::get('order', [ProductController::class, 'order'])->name('owner.order');
     Route::get('customer_order', [ProductController::class, 'customer_order'])->name('customer_order');
     Route::get('purchase_order', [ProductController::class, 'purchase_order'])->name('owner.purchase_order');
@@ -76,13 +78,11 @@ Route::prefix('owner')->group(function () {
     Route::get('reports', [ProductController::class, 'reports'])->name('reports');
     Route::get('warehouse_manager.warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse_manager.warehouse');
 
-    
     // Route::get('truck', [TruckController::class, 'truck'])->name('owner.truck');
     // Route::get('employee', [EmployeeController::class, 'employee'])->name('owner.employee');
 
     Route::get('/trucks', [TruckController::class, 'index'])->name('owner.truck');
     Route::get('/employees', [EmployeeController::class, 'employee'])->name('owner.employee');
-
 
 });
 
@@ -95,6 +95,7 @@ Route::prefix('warehouse_manager')->group(function () {
     Route::post('warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse');
     Route::get('qrScan', [WarehouseManagerController::class, 'qrScan'])->name('qrScan');
     Route::post('add_stocks', [WarehouseManagerController::class, 'add_stocks']);
+    Route::get('purchase_req', [WarehouseManagerController::class, 'purchase_req'])->name('purchase_req');
     Route::get('foroutbound/{qrCode}', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
     Route::get('outbound_stocks', [WarehouseManagerController::class, 'outbound_stocks'])->name('outbound_stocks');
     Route::post('sendoutbound', [WarehouseManagerController::class, 'sendoutbound']);
@@ -105,13 +106,11 @@ Route::prefix('store_manager')->group(function () {
 
     Route::resource('sales', SalesController::class);
     Route::resource('sales', 'SalesController');
-    
 
     Route::get('/', function () {
         return redirect()->route('store_manager.sales.sales');
     });
 
-    
     Route::get('sales', [SalesController::class, 'sales'])->name('store_manager.sales.sales');
     Route::get('sales/{sale}', [SalesController::class, 'show'])->name('store_manager.sales.show');
     Route::get('sales/create', [SalesController::class, 'create'])->name('store_manager.sales.create');
