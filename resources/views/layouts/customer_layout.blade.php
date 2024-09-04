@@ -166,7 +166,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('order-list') }}">
+                        <a href="{{ route('cart.order-list') }}">
                             <i class="bi bi-circle"></i><span>Order List</span>
                         </a>
                     </li>

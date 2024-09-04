@@ -53,9 +53,9 @@ return new class extends Migration
         });
 
 
-        Schema::table('sales', function (Blueprint $table) {
-            $table->foreign('product_id')->references('product_id')->on('products');
-        });
+        // Schema::table('sales', function (Blueprint $table) {
+        //     $table->foreign('product_id')->references('product_id')->on('products');
+        // });
 
     }
 

@@ -11,12 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Schema::create('order_details', function (Blueprint $table) {
+        //     $table->id('orderdetails_id');
+        //     $table->foreignId('order_id');
+        //     $table->foreignId('product_id');
+        //     $table->integer('quantity');
+        //     $table->float('unit_price');
+        // });
+
         Schema::create('order_details', function (Blueprint $table) {
-            $table->id('orderdetails_id');
-            $table->foreignId('order_id');
-            $table->foreignId('product_id');
+            $table->id();
+            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('product_id');
+            $table->string('rice_type');
+            $table->string('unit');
+            $table->decimal('selling_price', 8, 2);
             $table->integer('quantity');
-            $table->float('unit_price');
+            $table->decimal('total_selling_price', 8, 2);
+            $table->timestamps();
+
+            $table->foreign('order_id')->references('id')->on('order')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 
@@ -28,5 +43,5 @@ return new class extends Migration
         Schema::dropIfExists('order_details');
     }
 
-    
+
 };
