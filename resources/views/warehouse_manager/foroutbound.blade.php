@@ -12,13 +12,7 @@
                         {{-- <b><a>Product Code:</b> {{ $data['warehouse_stock'][0]->product_code }}<br></a> --}}
                         <b><a>Batch Code:</b> {{ $data['warehouse_stock'][0]->batch_code }}<br></a>
                         <?php
-                        // $products_arr = json_decode(json_encode($data['products']), true);
-                        // foreach ($products_arr as $product) {
-                        //     $product_arr = json_decode(json_encode($product), true);
-                        //     if ($warehouse_arr['product_id'] == $product_arr['product_id']) {
-                        //         echo $product_arr['rice_type'];
-                        //     }
-                        // }
+                        
                         ?>
                         <form action="{{ url('warehouse_manager/sendoutbound') }}" method="POST">
                             @csrf

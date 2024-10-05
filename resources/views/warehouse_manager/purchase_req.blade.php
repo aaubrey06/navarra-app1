@@ -23,9 +23,13 @@
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th>Rice type</th>
-                                        <th>Unit</th>
+                                        <th>Request Number</th>
+                                        <th>Date</th>
+                                        <th>Phone Number</th>
+                                        <th>Requested By</th>
+                                        <th>Product</th>
                                         <th>Quantity</th>
+                                        <th>Scan QR Code</th>
                                     </tr>
                                 </thead>
                             </table>
