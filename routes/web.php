@@ -134,3 +134,7 @@ Route::prefix('customer')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// FOR DRIVER
+
+Route::get('/markers', [App\Http\Controllers\MapController::class, 'getMarkers']);
