@@ -10,6 +10,14 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">List of Products</h5>
+                        
+                        <!-- Display Alert Message -->
+                        @if (session('status'))
+                            <div class="alert alert-success">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        
                         <!-- Table with stripped rows -->
                         <table class="table datatable">
                             <thead>
@@ -29,7 +37,14 @@
                                         <td>{{ $product->unit }}</td>
                                         <td>{{ $product->selling_price }}</td>
                                         <td>
-                                            <a href="{{ route('cart', $product->product_id) }}" class="btn btn-success mx-2" >Add to Cart</a>
+                                            <form action="{{ route('cart.store') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{ $product->product_id }}">
+                                                <input type="number" name="quantity" value="1" min="1">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="bi bi-cart-plus"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

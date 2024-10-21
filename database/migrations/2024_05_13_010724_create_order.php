@@ -11,12 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order', function (Blueprint $table) {
+        // Schema::create('order', function (Blueprint $table) {
+        //     $table->id('order_id');
+        //     $table->foreignId('customer_id');
+        //     $table->date('order_date');
+        //     $table->string('method', length: 25);//Ano ang method???
+        //     $table->foreignId('order_status_id');
+        // });
+
+        Schema::create('orders', function (Blueprint $table) {
             $table->id('order_id');
-            $table->foreignId('customer_id');
-            $table->date('order_date');
-            $table->string('method', length: 25);
-            $table->foreignId('order_status_id');
+            $table->string('tracking_no');
+            $table->date('delivery_date');
+            $table->string('payment_status');
+            $table->string('order_status');
+            $table->timestamps();
         });
     }
 

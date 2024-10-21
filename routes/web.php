@@ -8,6 +8,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\WarehouseManagerController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderHistoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
@@ -127,10 +129,40 @@ Route::prefix('driver')->group(function () {
 
 // FOR CUSTOMER
 Route::prefix('customer')->group(function () {
-    Route::get('/cart', [CustomerController::class, 'view'])->name('cart');
+    // Route::get('/cart', [CustomerController::class, 'view'])->name('cart');
     Route::get('/order-list', [CustomerController::class, 'orders'])->name('order-list');
     Route::get('/history', [CustomerController::class, 'history'])->name('history');
+
+    //Products
     Route::get('/customer-dashboard', [CustomerController::class, 'products'])->name('customer-dashboard');
+
+    //Cart
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('/cart/{product_id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
+    //Summary
+    Route::get('/order-summary', [CartController::class, 'summary'])->name('cart.summary');
+
+    //Order-list
+    Route::get('/order-list', [CartController::class, 'orders'])->name('cart.order-list');
+    Route::post('/order-list', [CartController::class, 'placeOrder'])->name('cart.placeOrder');
+    Route::get('customer/customer-order-details/{order}', [CartController::class, 'orderDetails'])->name('customer.order-details');
+    Route::patch('/order/{order}/cancel', [CartController::class, 'cancelOrder'])->name('order.cancel');
+
+    //History
+    Route::get('/order-history-details/{id}', [OrderHistoryController::class, 'showOrderDetails'])->name('order.history.details');
+    Route::get('/history', [OrderHistoryController::class, 'index'])->name('customer.history.index');
+    Route::get('/history', [OrderHistoryController::class, 'history'])->name('customer.history.history');
+    Route::delete('/history/{id}', [OrderHistoryController::class, 'destroy'])->name('customer.history.destroy');
+
+    //Confirm Delivery
+    Route::post('/order/{order}/confirm', [CartController::class, 'confirmDelivery'])->name('order.confirm');
+
+    // Route::get('/order-list', [CartController::class, 'orders'])->name('order-list');
+    Route::get('/history', [OrderHistoryController::class, 'index'])->name('history');
+
 });
 
 require __DIR__.'/auth.php';
