@@ -117,4 +117,31 @@ class WarehouseManagerController extends Controller
     //     $warehouse_stocks_id = $request->rice_type;
     //     return redirect()->route('foroutbound')->with(['warehouse_stocks_id' => $warehouse_stocks_id]);
     // }
+    public function categorization(Request $request)
+    {
+        $warehouse_stocks = DB::table('warehouse_stocks')->get();
+        $products = DB::table('products')->get();
+        $warehouse_data = [
+            'warehouse_stocks' => $warehouse_stocks,
+            'products' => $products,
+        ];
+        $total_per_product = [];
+        $percentage_per_product = [];
+        $total_quantity = DB::table('warehouse_stocks')->sum('quantity');
+        foreach ($products as $key => $product) {
+            $product_total = DB::table('warehouse_stocks')->where('product_id', '=', $product->product_id)->sum('quantity');
+            $total_per_product[$product->product_id] = $product_total;
+            $percentage = ($product_total / $total_quantity) * 100;
+            $percentage_per_product[$product->rice_type]['percentage'] = $percentage;
+            if ($percentage >= 70) {
+                $percentage_per_product[$product->rice_type]['category'] = 'category_a';
+            } elseif ($percentage >= 15) {
+                $percentage_per_product[$product->rice_type]['category'] = 'category_b';
+            } else {
+                $percentage_per_product[$product->rice_type]['category'] = 'category_c';
+            }
+        }
+
+        return view('warehouse_manager.categorization', ['percentage_per_product' => $percentage_per_product]);
+    }
 }
