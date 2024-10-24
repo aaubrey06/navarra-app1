@@ -99,7 +99,6 @@
 
     // Dijkstra's Algorithm to find the shortest path
     function dijkstra(waypoints) {
-        // A very simple implementation just for demonstration. You can replace it with a proper graph representation.
         let shortestPath = [userLocation]; // Start with user's location
         shortestPath = shortestPath.concat(waypoints); // Append the waypoints
         return shortestPath; // Return the path (this should be modified for actual distance calculation)
