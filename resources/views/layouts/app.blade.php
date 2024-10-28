@@ -36,7 +36,7 @@
             </header>
         @endif
 
-        <button id="notificationButton">
+        {{-- <button id="notificationButton">
             Notifications (<span id="notificationCount">{{ auth()->user()->unreadNotifications->count() }}</span>)
         </button>
 
@@ -46,7 +46,7 @@
                     <li>{{ $notification->data['message'] }}</li>
                 @endforeach
             </ul>
-        </div>
+        </div> --}}
 
         <!-- Page Content -->
         <main>
