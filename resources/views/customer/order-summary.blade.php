@@ -12,8 +12,8 @@
                 @php
                     $cartItems = session()->get('cartItems', []);
                     $totalPrice = 0;
-                    // $totalPrice = calculateTotalPrice($cartItems);
-                    $totalQuantity = 0; // Initialize total quantity
+                    <!-- $totalPrice = calculateTotalPrice($cartItems); -->
+                    $totalQuantity = 0; <!--Initialize total quantity-->
                 @endphp
 
                 <div class="card">
@@ -30,7 +30,7 @@
                                     <th>Selling Price</th>
                                     <th>Quantity</th>
                                     <th>Total Selling Price</th>
-                                    {{-- <th>Action</th> --}}
+                                    <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,7 +47,7 @@
                                 @php
                                     $totalPrice += $item['total_selling_price'];
 
-                                    $totalQuantity += $item['quantity']; // Accumulate total quantity
+                                    $totalQuantity += $item['quantity']; <!--Accumulate total quantity-->
                                 @endphp
 
                                 @empty
@@ -67,22 +67,6 @@
                             <h5>5800</h5>
                             <button class="btn btn-primary edit-btn">Edit</button>
                         </div>
-
-                        {{-- <div class="card-body">
-                            <h5 class="card-title">Delivery Option</h5>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="deliveryOption" id="delivery" value="delivery" checked>
-                                <label class="form-check-label" for="delivery">
-                                    Delivery
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="deliveryOption" id="pickup" value="pickup">
-                                <label class="form-check-label" for="pickup">
-                                    Pick-up
-                                </label>
-                            </div>
-                        </div> --}}
 
                         <div class="card-body">
                             <h5 class="card-title">Delivery Option</h5>
@@ -104,15 +88,6 @@
                                 </label>
                             </div>
                         </div>
-
-                        {{-- <form action="{{ route('cart.placeOrder') }}" method="POST">
-                            @csrf
-                            <div class="text-end">
-                                <h5>Total: ${{ number_format($totalPrice, 2) }}</h5>
-                                <a href="{{ route('cart') }}" class="btn btn-success mx-2">Edit Order</a>
-                                <button type="submit" class="btn btn-success mx-2">Place Order</button>
-                            </div>
-                        </form> --}}
 
                         <form id="placeOrderForm" action="{{ route('cart.placeOrder') }}" method="POST">
                             @csrf
