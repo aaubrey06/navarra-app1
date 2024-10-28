@@ -38,7 +38,7 @@
                                         <td>{{ $order->order_status }}</td>
                                         <td>
                                             <a href="{{ route('order.history.details', ['id' => $order->id]) }}" class="btn btn-success mx-2">View Details</a>
-                                            {{-- <button type="submit" class="btn btn-danger">Remove</button> --}}
+                                            <!-- <button type="submit" class="btn btn-danger">Remove</button> -->
 
                                             <form action="{{ route('customer.history.destroy', $order->id) }}" method="POST" class="d-inline-block" onsubmit="return confirmRemoval()">
                                                 @csrf
