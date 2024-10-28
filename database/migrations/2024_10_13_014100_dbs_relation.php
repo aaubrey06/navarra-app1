@@ -35,7 +35,7 @@ return new class extends Migration
         // });
         Schema::table('store_manager', function (Blueprint $table) {
             $table->foreign('id')->references('id')->on('users');
-            $table->foreign('store_id')->references('store_id')->on('store');
+            $table->foreign('store_id')->references('store_id')->on('stores');
         });
         Schema::table('warehouse_manager', function (Blueprint $table) {
             $table->foreign('id')->references('id')->on('users');
@@ -49,7 +49,7 @@ return new class extends Migration
         Schema::table('store_stocks', function (Blueprint $table) {
             $table->foreign('product_id')->references('product_id')->on('products');
             $table->foreign('invtype_id')->references('invtype_id')->on('inventory_transaction_type');
-            $table->foreign('store_id')->references('store_id')->on('store');
+            $table->foreign('store_id')->references('store_id')->on('stores');
         });
 
 

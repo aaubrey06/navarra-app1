@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->string('order_number')->unique(); // Unique order number
-            $table->foreignId('store_id')->constrained('store', 'store_id'); // Foreign key referencing the stores table
+            $table->foreignId('store_id')->constrained('stores', 'store_id'); // Foreign key referencing the stores table
             $table->decimal('total_amount', 10, 2)->nullable(); // Total amount of the purchase order
             $table->string('status')->default('pending'); // Status of the purchase order (e.g., pending, completed)
             $table->text('notes')->nullable(); // Optional notes about the purchase order

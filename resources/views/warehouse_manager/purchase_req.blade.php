@@ -25,7 +25,6 @@
                                     <tr>
                                         <th>Request Number</th>
                                         <th>Date</th>
-                                        <th>Phone Number</th>
                                         <th>Requested By</th>
                                         <th>Product</th>
                                         <th>Quantity</th>
