@@ -12,13 +12,12 @@
             class="d-flex flex-column">
             @csrf
             {{-- <input class="mb-3 p-2 rounded-3" type="text" name="rice_type" id="rice_type"> --}}
-            <select class="mb-3 p-2 rounded-3 w-100" name="rice_type" id="rice_type">
+            <select class="mb-3 p-2 rounded-3 w-100" name="rice_type" id="rice_type" onchange="selectRice(this)">
                 <option value="" disabled selected>Rice Type</option>
                 @foreach ($products as $product)
                     <option value="{{ $product->product_id }}">{{ $product->rice_type }}</option>
                 @endforeach
             </select>
-
 
             <input class="mb-3 p-2 rounded-3 w-100" type="date" name="arrival_date" id="arrival_date"
                 placeholder="Arrival Date">
@@ -26,9 +25,9 @@
 
             <select class="mb-3 p-2 rounded-3 w-100" name="unit" id="unit">
                 <option value="" disabled selected>Unit </option>
-                @foreach ($products as $product)
+                {{-- @foreach ($products as $product)
                     <option value="{{ $product->product_id }}">{{ $product->unit }}</option>
-                @endforeach
+                @endforeach --}}
             </select>
 
 
@@ -49,8 +48,19 @@
         const quantity = document.getElementById('quantity');
         const generateBtn = document.getElementById('generateBtn');
         const qrcodeDiv = document.getElementById('qrcode');
+        var prods = {!! json_encode($products->toArray(), JSON_HEX_TAG) !!};
 
-
+        function selectRice(sel) {
+            unit.options.length = 0;
+            unit.add(new Option('Unit', 'Unit'))
+            unit.options[0].disabled = true
+            d = sel.options[sel.selectedIndex].text
+            prods.forEach(element => {
+                if (element.rice_type == d) {
+                    unit.add(new Option(element.unit, element.product_id))
+                }
+            })
+        }
 
         generateBtn.addEventListener('click', (event) => {
             if (!confirm('Are you sure you want to add this product?')) {

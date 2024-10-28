@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'product_id';
     protected $fillable = [
         'rice_type',
         'unit',
@@ -16,5 +18,5 @@ class Product extends Model
         'target_level',
         'reorder_level',
     ];
-    
+
 }

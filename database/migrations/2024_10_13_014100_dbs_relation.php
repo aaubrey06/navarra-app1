@@ -52,14 +52,10 @@ return new class extends Migration
             $table->foreign('store_id')->references('store_id')->on('store');
         });
 
-        // Schema::table('sales', function (Blueprint $table) {
-        //     $table->foreign('product_id')->references('product_id')->on('products');
-        // });
 
-        // Schema::table('srock_request', function (Blueprint $table) {
-        //     $table->foreign('product_id')->references('product_id')->on('products');
-        //     $table->foreign('product_id')->references('product_id')->on('products');
-        // });
+        Schema::table('sales', function (Blueprint $table) {
+            $table->foreign('product_id')->references('product_id')->on('products');
+        });
 
     }
 

@@ -1,22 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use App\Models\Order;
-use Illuminate\View\View;
 
+use App\Notifications\OrderShippedNotification;
 
-class OrderController extends Controller
+public function shipOrder($orderId)
 {
-    public function index(): View
-    {
-        $orders = Order::with('products')->get();
-        return view ('store_manager.orders.index', compact('orders'));
-    }
+    $order = Order::find($orderId);
+    $user = User::find($order->user_id);
 
-    public function show($id): View
-    {
-        $order = Order::with('products')->find($id);
-        return view('store_manager.order.show', compact('order'));
-    }
+    // Notify the user
+    $user->notify(new OrderShippedNotification($order));
+
+    return response()->json(['status' => 'Order shipped and notification sent']);
 }

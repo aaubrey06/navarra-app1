@@ -238,6 +238,11 @@
                             <i class="bi bi-circle"></i><span>Outbound</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('categorization') }}">
+                            <i class="bi bi-circle"></i><span>Categorization</span>
+                        </a>
+                    </li>
 
                 </ul>
             </li><!-- End Components Nav -->
@@ -248,7 +253,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed " href="{{ route('purchase_req') }}">
-                    <i class="bi bi-qr-code-scan"></i>
+                    <i class="bi bi-receipt"></i>
                     <span>Purchase Request</span>
                 </a>
 
@@ -256,7 +261,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('generateQR') }}">
-                    <i class="bi bi-qr-code"></i>
+                    <i class="bi bi-plus-square"></i>
                     <span>Add Product</span>
                 </a>
             </li>
@@ -271,7 +276,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed " href="{{ route('qrScan') }}">
-                    <i class="bi bi-qr-code-scan"></i>
+                    <i class="bi bi-file-earmark-bar-graph"></i>
                     <span>Reports</span>
                 </a>
 

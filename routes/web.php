@@ -1,17 +1,17 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\OrderHistoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\WarehouseManagerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderHistoryController;
-use App\Http\Controllers\PurchaseOrderController;
-use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -102,6 +102,7 @@ Route::prefix('warehouse_manager')->group(function () {
     Route::get('foroutbound/{qrCode}', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
     Route::get('outbound_stocks', [WarehouseManagerController::class, 'outbound_stocks'])->name('outbound_stocks');
     Route::post('sendoutbound', [WarehouseManagerController::class, 'sendoutbound']);
+    Route::get('categorization', [WarehouseManagerController::class, 'categorization'])->name('categorization');
     // Route::post('update_stocks', [WarehouseManagerController::class, 'update_stocks'])->name('update_stocks');
 });
 
@@ -175,3 +176,7 @@ Route::prefix('customer')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// FOR DRIVER
+
+Route::get('/markers', [App\Http\Controllers\MapController::class, 'getMarkers']);
