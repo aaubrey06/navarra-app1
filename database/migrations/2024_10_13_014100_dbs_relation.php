@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('purchase_order_details', function (Blueprint $table) {
-            $table->foreign('product_id')->references('product_id')->on('products');
-            $table->foreign('po_status_id')->references('po_status_id')->on('purchase_order_status');
-            $table->foreign('supplier_id')->references('supplier_id')->on('supplier');
-        });
+        // Schema::table('purchase_order_details', function (Blueprint $table) {
+        //     $table->foreign('product_id')->references('product_id')->on('products');
+        //     $table->foreign('po_status_id')->references('po_status_id')->on('purchase_order_status');
+        //     $table->foreign('supplier_id')->references('supplier_id')->on('supplier');
+        // });
         Schema::table('order_details', function (Blueprint $table) {
             $table->foreign('product_id')->references('product_id')->on('products');
             $table->foreign('order_id')->references('order_id')->on('order');
@@ -52,10 +52,14 @@ return new class extends Migration
             $table->foreign('store_id')->references('store_id')->on('store');
         });
 
+        // Schema::table('sales', function (Blueprint $table) {
+        //     $table->foreign('product_id')->references('product_id')->on('products');
+        // });
 
-        Schema::table('sales', function (Blueprint $table) {
-            $table->foreign('product_id')->references('product_id')->on('products');
-        });
+        // Schema::table('srock_request', function (Blueprint $table) {
+        //     $table->foreign('product_id')->references('product_id')->on('products');
+        //     $table->foreign('product_id')->references('product_id')->on('products');
+        // });
 
     }
 

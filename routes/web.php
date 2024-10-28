@@ -10,7 +10,12 @@ use App\Http\Controllers\TruckController;
 use App\Http\Controllers\WarehouseManagerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderHistoryController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
+
+
+
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
 
@@ -105,6 +110,8 @@ Route::prefix('store_manager')->group(function () {
     Route::resource('sales', SalesController::class);
     Route::resource('sales', 'SalesController');
 
+    Route::get('orders/index', [OrderController::class, 'orders'])->name('store_manager.orders.index');
+
     Route::get('/', function () {
         return redirect()->route('store_manager.sales.sales');
     });
@@ -118,7 +125,9 @@ Route::prefix('store_manager')->group(function () {
     Route::delete('sales/{sale}', [SalesController::class, 'destroy'])->name('store_manager.sales.destroy');
     // Route::post('sales', [SalesController::class, 'store'])->name('store_manager.sales.sales');
     // Route::get('sales/create', [SalesController::class, 'create'])->name('store_manager.sales.create');
-
+    Route::get('/purchase_orders/create', [PurchaseOrderController::class, 'create'])->name('purchase_orders.create');
+    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('store_manager.purchase_order.index');
+    // Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase_orders.store');
 });
 
 Route::prefix('driver')->group(function () {

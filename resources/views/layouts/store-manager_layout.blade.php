@@ -161,7 +161,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse"
-                    href="{{ route('owner.order') }}">
+                    href="{{ route('store_manager.orders.index') }}">
 
                     <i class="bi bi-cart"></i><span>Orders</span><i></i>
                 </a>
@@ -210,7 +210,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="store_manager.purchase_order.index">
                             <i class="bi bi-circle"></i><span>Purchase Stocks</span>
                         </a>
                     </li>
