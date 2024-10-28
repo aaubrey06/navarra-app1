@@ -30,8 +30,8 @@ return new class extends Migration
             $table->decimal('total_selling_price', 8, 2);
             $table->timestamps();
 
-            $table->foreign('order_id')->references('id')->on('order')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('order_id')->references('order_id')->on('order')->onDelete('cascade');
+            $table->foreign('product_id')->references('product_id')->on('products');
         });
     }
 
