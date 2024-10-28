@@ -132,7 +132,8 @@ class WarehouseManagerController extends Controller
             $product_total = DB::table('warehouse_stocks')->where('product_id', '=', $product->product_id)->sum('quantity');
             $total_per_product[$product->product_id] = $product_total;
             $percentage = ($product_total / $total_quantity) * 100;
-            $percentage_per_product[$product->rice_type]['percentage'] = $percentage;
+            $formatted_percentage = number_format($percentage, 2);
+            $percentage_per_product[$product->rice_type]['percentage'] = $formatted_percentage;
             if ($percentage >= 70) {
                 $percentage_per_product[$product->rice_type]['category'] = 'category_a';
             } elseif ($percentage >= 15) {

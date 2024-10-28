@@ -5,21 +5,13 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderHistoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\WarehouseManagerController;
-<<<<<<< Updated upstream
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\OrderHistoryController;
-=======
-use App\Http\Controllers\OrderController;
->>>>>>> Stashed changes
 use Illuminate\Support\Facades\Route;
-
-
-
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
 
@@ -130,16 +122,9 @@ Route::prefix('store_manager')->group(function () {
     Route::delete('sales/{sale}', [SalesController::class, 'destroy'])->name('store_manager.sales.destroy');
     // Route::post('sales', [SalesController::class, 'store'])->name('store_manager.sales.sales');
     // Route::get('sales/create', [SalesController::class, 'create'])->name('store_manager.sales.create');
-<<<<<<< Updated upstream
-    Route::get('/purchase_orders/create', [PurchaseOrderController::class, 'create'])->name('purchase_orders.create');
-    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('store_manager.purchase_order.index');
-    // Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase_orders.store');
-=======
 
-    
     Route::get('/orders', [OrderController::class, 'index'])->name('store_manager.order.index');
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
->>>>>>> Stashed changes
 });
 
 Route::prefix('driver')->group(function () {
