@@ -266,21 +266,7 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed " href="{{ route('qrScan') }}">
-                    <i class="bi bi-qr-code-scan"></i>
-                    <span>Scan QR Code</span>
-                </a>
 
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed " href="{{ route('qrScan') }}">
-                    <i class="bi bi-file-earmark-bar-graph"></i>
-                    <span>Reports</span>
-                </a>
-
-            </li>
 
             <!-- End Dashboard Nav -->
 

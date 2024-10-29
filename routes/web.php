@@ -5,11 +5,15 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderHistoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\WarehouseManagerController;
+use App\Http\Controllers\OrderController;
+use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -93,9 +97,9 @@ Route::prefix('warehouse_manager')->group(function () {
     Route::get('create', [WarehouseManagerController::class, 'create'])->name('wm_create');
     Route::get('purchase_req', [WarehouseManagerController::class, 'purchase_req'])->name('purchase_req');
     Route::post('warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse');
-    Route::get('qrScan', [WarehouseManagerController::class, 'qrScan'])->name('qrScan');
+    Route::get('qrScan/{id}', [WarehouseManagerController::class, 'qrScan'])->name('qrScan');
     Route::post('add_stocks', [WarehouseManagerController::class, 'add_stocks']);
-    Route::get('foroutbound/{qrCode}', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
+    Route::get('foroutbound', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
     Route::get('outbound_stocks', [WarehouseManagerController::class, 'outbound_stocks'])->name('outbound_stocks');
     Route::post('sendoutbound', [WarehouseManagerController::class, 'sendoutbound']);
     Route::get('categorization', [WarehouseManagerController::class, 'categorization'])->name('categorization');
@@ -122,9 +126,16 @@ Route::prefix('store_manager')->group(function () {
     Route::delete('sales/{sale}', [SalesController::class, 'destroy'])->name('store_manager.sales.destroy');
     // Route::post('sales', [SalesController::class, 'store'])->name('store_manager.sales.sales');
     // Route::get('sales/create', [SalesController::class, 'create'])->name('store_manager.sales.create');
+<<<<<<< Updated upstream
     Route::get('/purchase_orders/create', [PurchaseOrderController::class, 'create'])->name('purchase_orders.create');
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('store_manager.purchase_order.index');
     // Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase_orders.store');
+=======
+
+    
+    Route::get('/orders', [OrderController::class, 'index'])->name('store_manager.order.index');
+    Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+>>>>>>> Stashed changes
 });
 
 Route::prefix('driver')->group(function () {

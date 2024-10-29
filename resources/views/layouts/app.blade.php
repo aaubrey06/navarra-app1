@@ -37,16 +37,16 @@
         @endif
 
         {{-- <button id="notificationButton">
-            Notifications (<span id="notificationCount">{{ auth()->user()->unreadNotifications->count() }}</span>)
-        </button>
+    Notifications (<span id="notificationCount">{{ auth()->user()->unreadNotifications->count() }}</span>)
+</button>
 
-        <div id="notificationDropdown" style="display:none;">
-            <ul id="notificationList">
-                @foreach (auth()->user()->unreadNotifications as $notification)
-                    <li>{{ $notification->data['message'] }}</li>
-                @endforeach
-            </ul>
-        </div> --}}
+<div id="notificationDropdown" style="display:none;">
+    <ul id="notificationList">
+        @foreach (auth()->user()->unreadNotifications as $notification)
+            <li>{{ $notification->data['message'] }}</li>
+        @endforeach
+    </ul>
+</div> --}}
 
         <!-- Page Content -->
         <main>

@@ -214,7 +214,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{ route('store_manager.inventory.stockrequest') }}">
                             <i class="bi bi-circle"></i><span>Request Stocks</span>
                         </a>
                     </li>

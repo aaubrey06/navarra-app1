@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('stock_requests', function (Blueprint $table) {
             $table->id('request_id');
-            $table->foreignId('store_id')->constrained('store', 'store_id');
+            $table->foreignId('store_id')->constrained('stores', 'store_id');
             $table->foreignId('product_id')->constrained('products', 'product_id');
             $table->integer('quantity_requested');
+            $table->integer('unit');
             $table->enum('status', ['pending', 'approved', 'rejected', 'delivered'])->default('pending');
             $table->timestamps();
         });

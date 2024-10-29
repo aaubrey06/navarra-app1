@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('store', function (Blueprint $table) {
+        Schema::create('stores', function (Blueprint $table) {
             $table->id('store_id');
+            $table->string('store_name', length: 45);
             $table->string('store_location', length: 45);
             $table->string('store_longitude', length: 45);
             $table->string('store_latitude', length: 45);
