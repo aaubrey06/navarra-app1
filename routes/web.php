@@ -95,9 +95,9 @@ Route::prefix('warehouse_manager')->group(function () {
     Route::get('create', [WarehouseManagerController::class, 'create'])->name('wm_create');
     Route::get('purchase_req', [WarehouseManagerController::class, 'purchase_req'])->name('purchase_req');
     Route::post('warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse');
-    Route::get('qrScan', [WarehouseManagerController::class, 'qrScan'])->name('qrScan');
+    Route::get('qrScan/{id}', [WarehouseManagerController::class, 'qrScan'])->name('qrScan');
     Route::post('add_stocks', [WarehouseManagerController::class, 'add_stocks']);
-    Route::get('foroutbound/{qrCode}', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
+    Route::get('foroutbound', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
     Route::get('outbound_stocks', [WarehouseManagerController::class, 'outbound_stocks'])->name('outbound_stocks');
     Route::post('sendoutbound', [WarehouseManagerController::class, 'sendoutbound']);
     Route::get('categorization', [WarehouseManagerController::class, 'categorization'])->name('categorization');

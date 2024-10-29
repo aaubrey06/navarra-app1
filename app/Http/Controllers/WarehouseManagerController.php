@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\StockRequest;
+use App\Models\Store;
 use App\Models\Warehouse;
 use App\Models\WarehouseHistory;
 use Illuminate\Http\Request;
@@ -25,24 +28,38 @@ class WarehouseManagerController extends Controller
         return view('warehouse_manager.generate-qr', ['products' => $products]);
     }
 
-    public function qrScan(): View
+    public function qrScan(Request $request): View
     {
-        return view('warehouse_manager.qrScan');
+        $stock_requests_id = $request->id;
+        return view('warehouse_manager.qrScan',['request_details' => $stock_requests_id]);
     }
 
     public function purchase_req(): View
     {
-        return view('warehouse_manager.purchase_req');
+        $warehouse_stocks = [];
+        $store = Store::all();
+        $products = Product::all();
+        $requests = StockRequest::all();
+        $stock_requests = [];
+        foreach ($products as $key => $product) {
+            $product_total = DB::table('warehouse_stocks')->where('product_id', '=', $product->product_id)->sum('quantity');
+            $warehouse_stocks[$key]['product_id'] = $product->product_id;
+            $warehouse_stocks[$key]['product_name'] = $product->rice_type;
+            $warehouse_stocks[$key]['quantity'] = $product_total;
+        }
+        return view('warehouse_manager.purchase_req', ['requests' => $requests, 'products' => $products, 'stores' => $store, 'warehouse_stocks' => $warehouse_stocks]);
     }
 
     public function foroutbound(Request $request): View
     {
 
-        $warehouse_stocks_id = $request->qrCode;
-        $warehouse_stock = DB::table('warehouse_stocks')->where('qr_code', '=', $request->qrCode)->get();
+        $warehouse_stocks_id = $request->qrData;
+        $warehouse_stock = DB::table('warehouse_stocks')->where('qr_code', '=', $request->qrData)->get();
+        $stock_requests_id = $request->requestId;
+        $stock_request = DB::table('stock_requests')->where('request_id', '=', $request->requestId)->get();
 
         $products = DB::table('products')->where('product_id', '=', $warehouse_stock[0]->product_id)->get();
-        $data = ['products' => $products, 'warehouse_stock' => $warehouse_stock];
+        $data = ['products' => $products, 'warehouse_stock' => $warehouse_stock,'stock_requests' => $stock_request];
 
         return view('warehouse_manager.foroutbound', ['data' => $data]);
     }

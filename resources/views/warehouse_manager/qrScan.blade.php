@@ -12,9 +12,10 @@
             <button class="mb-3 p-2 rounded-3" id="StartScanBtn">Start Scanning</button>
             <video id="qrVideo" autoplay playinline></video>
             <div id="scanResult"></div>
-            <form id="formElem" style="display: none">
-                <input type="text" id="warehouse_stocks_id" name="warehouse_stocks_id">
-                <input type="submit">
+            <form id="foroutbound" action = "{{ url('warehouse_manager/foroutbound') }}" style="visibility: hidden">
+                <input type="text" id="qrData" name="qrData">
+                <input type="text" id="requestId" name="requestId" value="{{ $request_details }}">
+                <input type="submit" id="submit">
             </form>
         </div>
 
@@ -45,7 +46,10 @@
                     });
                     scanner.addListener('scan', content => {
                         scanResult.innerHTML = `scanned QR Code: ${content}`;
-                        window.location.href = "foroutbound/" + content
+                        console.log(content)
+                        document.getElementById('qrData').value = content;
+                        document.getElementById('submit').click()
+
                     });
                     Instascan.Camera.getCameras()
                         .then(cameras => {
