@@ -125,10 +125,9 @@ Route::prefix('store_manager')->group(function () {
     // Route::post('sales', [SalesController::class, 'store'])->name('store_manager.sales.sales');
     // Route::get('sales/create', [SalesController::class, 'create'])->name('store_manager.sales.create');
 
+    
     Route::get('/orders', [OrderController::class, 'index'])->name('store_manager.order.index');
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-    Route::get('inventory/stockrequests', [StockRequestController::class, 'getAllStockRequest'])->name('store_manager.inventory.stockrequest');
-    Route::post('inventory/stockrequests/add', [StockRequestController::class, 'addStock'])->name('store_manager.inventory.newstockrequest');
 });
 
 Route::prefix('driver')->group(function () {
