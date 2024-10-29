@@ -1,4 +1,4 @@
-@extends('layouts.warehouse-manager_layout')
+@extends('layouts.store-manager_layout')
 
 @section('title', 'Generate QR')
 
@@ -55,12 +55,13 @@
                                             </td>
                                             <td>
                                                 <?php
-                                            // $store = json_decode(json_encode($store), true);
-                                            foreach ($products as $key => $product){
-                                                if($product->product_id == $request->product_id){
-                                                    echo $product->rice_type;
-                                                }}
-                                            ?>
+                                                // $store = json_decode(json_encode($store), true);
+                                                foreach ($products as $key => $product) {
+                                                    if ($product->product_id == $request->product_id) {
+                                                        echo $product->rice_type;
+                                                    }
+                                                }
+                                                ?>
                                             </td>
                                             <td>
                                                 {{ $request->unit }}
@@ -68,14 +69,14 @@
 
                                             <td>
 
-                                            {{ $request->quantity_requested }}
+                                                {{ $request->quantity_requested }}
                                             </td>
                                             <td>
 
                                             </td>
                                             <td>
 
-                                            {{ $request->status }}
+                                                {{ $request->status }}
                                             </td>
                                         </tr>
                                     @endforeach

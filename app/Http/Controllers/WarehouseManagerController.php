@@ -31,7 +31,8 @@ class WarehouseManagerController extends Controller
     public function qrScan(Request $request): View
     {
         $stock_requests_id = $request->id;
-        return view('warehouse_manager.qrScan',['request_details' => $stock_requests_id]);
+
+        return view('warehouse_manager.qrScan', ['request_details' => $stock_requests_id]);
     }
 
     public function purchase_req(): View
@@ -47,6 +48,7 @@ class WarehouseManagerController extends Controller
             $warehouse_stocks[$key]['product_name'] = $product->rice_type;
             $warehouse_stocks[$key]['quantity'] = $product_total;
         }
+
         return view('warehouse_manager.purchase_req', ['requests' => $requests, 'products' => $products, 'stores' => $store, 'warehouse_stocks' => $warehouse_stocks]);
     }
 
@@ -59,7 +61,7 @@ class WarehouseManagerController extends Controller
         $stock_request = DB::table('stock_requests')->where('request_id', '=', $request->requestId)->get();
 
         $products = DB::table('products')->where('product_id', '=', $warehouse_stock[0]->product_id)->get();
-        $data = ['products' => $products, 'warehouse_stock' => $warehouse_stock,'stock_requests' => $stock_request];
+        $data = ['products' => $products, 'warehouse_stock' => $warehouse_stock, 'stock_requests' => $stock_request];
 
         return view('warehouse_manager.foroutbound', ['data' => $data]);
     }
