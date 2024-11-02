@@ -119,6 +119,7 @@ Route::prefix('driver')->group(function () {
     Route::get('/routes', [DriverController::class, 'view'])->name('routes');
     Route::get('/orders', [DriverController::class, 'orders'])->name('orders');
     Route::get('/schedule', [DriverController::class, 'schedule'])->name('schedule');
+    Route::get('/markers', [App\Http\Controllers\MapController::class, 'getMarkers']);
 });
 
 // FOR CUSTOMER
@@ -154,3 +155,5 @@ Route::prefix('customer')->group(function () {
 Route::get('/home', function () {
     return view('home');
 });
+
+require __DIR__.'/auth.php';
