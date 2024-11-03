@@ -9,6 +9,15 @@
     <div class="d-flex flex-column">
         <div class="scanner">
             <h2>Scan Your QR Code</h2>
+           @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
             <button class="mb-3 p-2 rounded-3" id="StartScanBtn">Start Scanning</button>
             <video id="qrVideo" autoplay playinline></video>
             <div id="scanResult"></div>

@@ -57,7 +57,7 @@
             d = sel.options[sel.selectedIndex].text
             prods.forEach(element => {
                 if (element.rice_type == d) {
-                    unit.add(new Option(element.unit, element.product_id))
+                    unit.add(new Option(element.unit, element.unit))
                 }
             })
         }
@@ -71,12 +71,23 @@
             console.log(text)
             if (text) {
                 qrcodeDiv.innerHTML = '';
+
+                qrcodeDiv.style.display = 'flex';
+                qrcodeDiv.style.justifyContent = 'center';
+                qrcodeDiv.style.alignItems = 'center';
+
+
                 const qrcode = new QRCode(qrcodeDiv, {
                     text: text,
-                    width: 128,
-                    height: 128
+                    width: 300,
+                    height: 300
                 });
             }
         });
+
+
+
+
+        
     </script>
 @endsection

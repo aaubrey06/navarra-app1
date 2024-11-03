@@ -29,10 +29,12 @@
                                         <th>Product</th>
                                         <th>Quantity</th>
                                         <th>Scan QR Code</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                  @foreach ($requests as $request)
+                                 @if ($request->status == 'pending')
                                         <tr>
                                             <td>
                                                 {{ $request->request_id }}
@@ -70,6 +72,8 @@
                                             <a class="button button-primary" href="{{ route('qrScan',$request->request_id) }}"> Scan QR</a>
                                             </td>
                                         </tr>
+                                     
+                                 @endif
                                     @endforeach
                                 </tbody>
                             </table>
