@@ -130,7 +130,12 @@ class WarehouseManagerController extends Controller
         $affected = DB::table('warehouse_stocks')
             ->where('warehouse_stocks_id', $request->warehouse_stocks_id)
             ->update(['quantity' => $request->previous_value - $request->outbound_quantity]);
+        $affectedreq = DB::table('stock_requests')
+            ->where('request_id', $request->stock_request_id)
+            ->update(['status' => 'approved']);
         $warehouse_history->save();
+
+        
 
         return redirect()->route('warehouse');
     }
@@ -155,16 +160,18 @@ class WarehouseManagerController extends Controller
             $total_per_product[$product->product_id] = $product_total;
             $percentage = ($product_total / $total_quantity) * 100;
             $formatted_percentage = number_format($percentage, 2);
-            $percentage_per_product[$product->rice_type]['percentage'] = $formatted_percentage;
+            $percentage_per_product[$key]['percentage'] = $formatted_percentage;
+            $percentage_per_product[$key]['name'] = $product->rice_type;
+            $percentage_per_product[$key]['unit'] = $product->unit;
             if ($percentage >= 70) {
-                $percentage_per_product[$product->rice_type]['category'] = 'category_a';
+                $percentage_per_product[$key]['category'] = 'category_a';
             } elseif ($percentage >= 15) {
-                $percentage_per_product[$product->rice_type]['category'] = 'category_b';
+                $percentage_per_product[$key]['category'] = 'category_b';
             } else {
-                $percentage_per_product[$product->rice_type]['category'] = 'category_c';
+                $percentage_per_product[$key]['category'] = 'category_c';
             }
         }
 
-        return view('warehouse_manager.categorization', ['percentage_per_product' => $percentage_per_product]);
+        return view('warehouse_manager.categorization', ['percentage_per_product' => $percentage_per_product, 'warehouse_data' => $warehouse_data]);
     }
 }

@@ -49,10 +49,10 @@
                                 <a class="btn btn-primary" href="{{ route('warehouse') }}">Cancel</a>
                             </div>
                             <div class="col-sm-5">
-                                <button onclick="save()" class="btn btn-primary">Download</button>
+                                <button onclick="save()" class="btn btn-primary">Confirm Outbound</button>
                             </div>
                         </div>
-                        <form action="{{ url('warehouse_manager/sendoutbound') }}" method="POST"
+                        <form action="{{ url('warehouse_manager/sendoutbound') }}" id="sendoutbound" method="POST"
                             style="visibility: hidden; height: 0">
                             @csrf
 
@@ -61,13 +61,15 @@
                                         Outbound</b></label>
                                 <div class="col-sm-5">
                                     <input type="number" class="form-control" id="outbound_quantity"
-                                        name="outbound_quantity" required>
+                                        name="outbound_quantity" value="{{ $data['stock_requests'][0]->quantity_requested }}" required>
                                     <input type="text" class="form-control" id="previous_value" name="previous_value"
-                                        style="display: none" value=" {{ $data['warehouse_stock'][0]->quantity }}" required>
+                                     value=" {{ $data['warehouse_stock'][0]->quantity }}" required>
                                     <input type="text" class="form-control" id="warehouse_stocks_id"
-                                        name="warehouse_stocks_id" style="display: none"
+                                        name="warehouse_stocks_id"
                                         value=" {{ $data['warehouse_stock'][0]->warehouse_stocks_id }}" required>
-
+                                        <input type="number" class="form-control" id="stock_request_id"
+                                        name="stock_request_id" value="{{ $data['stock_requests'][0]->request_id }}" required>
+                                    
 
                                 </div>
                             </div>
@@ -98,6 +100,7 @@
             .replace("image/jpeg", "image/octet-stream");
           a.download = "warehouse_invoice.png";
           a.click();
+          document.getElementById("sendoutbound").submit();
             });
         }
     </script>
