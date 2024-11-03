@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         // Drop the products table if it exists to avoid conflicts
-        if (Schema::hasTable('products')) {
-            Schema::drop('products');
-        }
+        // if (Schema::hasTable('products')) {
+        //     Schema::drop('products');
+        // }
 
         Schema::create('products', function (Blueprint $table) {
             $table->id('product_id');

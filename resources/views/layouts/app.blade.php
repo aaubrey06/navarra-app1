@@ -18,16 +18,16 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-    <!-- Scripts -->
+<!-- 
+    <!-- Scripts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-
+p
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         <livewire:layout.navigation />
 
-            <!-- <button id="notificationButton">
+            <button id="notificationButton">
     Notifications (<span id="notificationCount">{{ auth()->user()->unreadNotifications->count() }}</span>)
 </button> -->
 
@@ -37,13 +37,13 @@
             <li>{{ $notification->data['message'] }}</li>
         @endforeach
     </ul>
-</div> -->
+</div>
 
-        <!-- Page Content -->
+        Page Content -->
         <main>
             {{ $slot }}
         </main>
     </div>
-</body>
+</body> -->
 
 </html>

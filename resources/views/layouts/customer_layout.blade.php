@@ -161,17 +161,17 @@
                 </a>
                 <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="{{ route('cart') }}">
+                        <!-- <a href="{{ route('cart') }}">
                             <i class="bi bi-circle"></i><span>My Cart</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('cart.order-list') }}">
                             <i class="bi bi-circle"></i><span>Order List</span>
-                        </a>
+                        </a> -->
                     </li>
                 </ul>
-            </li><!-- End Forms Nav -->
+            </li>End Forms Nav
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('history') }}">

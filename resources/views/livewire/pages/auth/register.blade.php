@@ -18,6 +18,7 @@ state([
     'email' => '',
     'password' => '',
     'password_confirmation' => '',
+    'address' => '',
 ]);
 
 rules([
@@ -25,6 +26,7 @@ rules([
     'last_name' => ['required', 'string', 'max:255'],
     'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
     'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+    'address' => ['required', 'string', 'max:255'],
 ]);
 
 $register = function () {
@@ -43,58 +45,68 @@ $register = function () {
 
 <div>
     <form wire:submit="register">
-        <!-- Name -->
+        <!-- Name Fields -->
         <div class="flex gap-3">
             <div>
                 <x-input-label for="first_name" :value="__('First Name')" />
-                <x-text-input wire:model="first_name" id="first_name" class="block mt-1 w-full" type="text"
-                    name="first_name" required autofocus autocomplete="name" />
-                <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                <x-text-input wire:model="first_name" id="first_name" class="block mt-1 w-full" type="text" name="first_name" required autofocus autocomplete="given-name" />
+                <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
             </div>
             <div>
                 <x-input-label for="last_name" :value="__('Last Name')" />
-                <x-text-input wire:model="last_name" id="last_name" class="block mt-1 w-full" type="text"
-                    name="last_name" required autofocus autocomplete="name" />
-                <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                <x-text-input wire:model="last_name" id="last_name" class="block mt-1 w-full" type="text" name="last_name" required autocomplete="family-name" />
+                <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
             </div>
         </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email"
-                required autocomplete="username" />
+            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="email" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <!-- Password -->
+        <!-- Password Fields -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password"
-                required autocomplete="new-password" />
-
+            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
-
-        <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                type="password" name="password_confirmation" required autocomplete="new-password" />
-
+            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <!-- Address Field with Google Maps Autocomplete -->
+        <div class="mt-4">
+            <x-input-label for="address" :value="__('Address')" />
+            <x-text-input wire:model="address" id="address" class="block mt-1 w-full" type="text" name="address" placeholder="Enter your address" required />
+            <x-input-error :messages="$errors->get('address')" class="mt-2" />
+        </div>
+
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                href="{{ route('login') }}" wire:navigate>
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}" wire:navigate>
                 {{ __('Already registered?') }}
             </a>
-
-            <x-primary-button class="ms-4">
+            <x-primary-button class="ml-4">
                 {{ __('Register') }}
             </x-primary-button>
         </div>
     </form>
 </div>
+
+<!-- Google Maps Autocomplete Script -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSV1H3B9U0Ze4jyL05cJliB9CR7Zk14d4&libraries=places"></script>
+<script>
+    function initialize() {
+        const addressInput = document.getElementById('address');
+        const autocomplete = new google.maps.places.Autocomplete(addressInput);
+
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            addressInput.value = place.formatted_address; // Get formatted address only
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
