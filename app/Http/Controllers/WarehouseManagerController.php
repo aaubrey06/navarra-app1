@@ -31,7 +31,8 @@ class WarehouseManagerController extends Controller
     public function qrScan(Request $request): View
     {
         $stock_requests_id = $request->id;
-        return view('warehouse_manager.qrScan',['request_details' => $stock_requests_id]);
+
+        return view('warehouse_manager.qrScan', ['request_details' => $stock_requests_id]);
     }
 
     public function purchase_req(): View
@@ -47,6 +48,7 @@ class WarehouseManagerController extends Controller
             $warehouse_stocks[$key]['product_name'] = $product->rice_type;
             $warehouse_stocks[$key]['quantity'] = $product_total;
         }
+
         return view('warehouse_manager.purchase_req', ['requests' => $requests, 'products' => $products, 'stores' => $store, 'warehouse_stocks' => $warehouse_stocks]);
     }
 
@@ -63,6 +65,7 @@ class WarehouseManagerController extends Controller
         if($warehouse_stock[0]->product_id != $stock_request[0]->product_id){
             return back()->withErros(['login' => 'You have to log in to access admin module.']);
         }
+
         return view('warehouse_manager.foroutbound', ['data' => $data]);
     }
 

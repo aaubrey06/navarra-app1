@@ -161,8 +161,11 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse"
+<<<<<<< HEAD
+                    href="{{ route('store_manager.order.index') }}">
+=======
                     href="{{ route('store_manager.orders.index') }}">
-
+>>>>>>> 77571d80ff93a5392478e7f3ef6bace04e829209
                     <i class="bi bi-cart"></i><span>Orders</span><i></i>
                 </a>
 

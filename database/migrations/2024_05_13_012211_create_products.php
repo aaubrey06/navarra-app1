@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Drop the products table if it exists to avoid conflicts
+        if (Schema::hasTable('products')) {
+            Schema::drop('products');
+        }
+
         Schema::create('products', function (Blueprint $table) {
             $table->id('product_id');
-            $table->string('rice_type', length: 45);
+            $table->string('rice_type', 45);
             $table->integer('unit');
             $table->float('unit_price');
             $table->float('selling_price')->default(0.0);

@@ -9,11 +9,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderHistoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\StockRequestController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\WarehouseManagerController;
-use App\Http\Controllers\StockRequestController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
 
@@ -50,9 +49,6 @@ Route::middleware(['auth', 'verified', 'store-manager-dashboard'])->group(functi
 });
 
 Route::prefix('owner')->group(function () {
-
-    // Route::get('dashboard', [ProductController::class, 'dashboard'])->name('dashboard');
-
     Route::get('products', [ProductController::class, 'products'])->name('owner.products');
 
     Route::get('/', function () {
@@ -61,13 +57,12 @@ Route::prefix('owner')->group(function () {
 
     Route::resource('products', ProductController::class);
 
-    Route::get('products', [ProductController::class, 'products'])->name('owner.products');
     Route::get('create', [ProductController::class, 'create'])->name('owner.create');
     Route::post('products', [ProductController::class, 'store'])->name('owner.products.store');
-    Route::get('owner/products/{product}', [ProductController::class, 'show'])->name('owner.products.show');
-    Route::get('owner/products/{product}/edit', [ProductController::class, 'edit'])->name('owner.products.edit');
-    Route::put('owner/products/{product}', [ProductController::class, 'update'])->name('owner.products.update');
-    Route::delete('owner/products/{product}', [ProductController::class, 'destroy'])->name('owner.products.destroy');
+    Route::get('products/{product}', [ProductController::class, 'show'])->name('owner.products.show');
+    Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('owner.products.edit');
+    Route::put('products/{product}', [ProductController::class, 'update'])->name('owner.products.update');
+    Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('owner.products.destroy');
 
     Route::get('order', [ProductController::class, 'order'])->name('owner.order');
     Route::get('customer_order', [ProductController::class, 'customer_order'])->name('customer_order');
@@ -79,17 +74,11 @@ Route::prefix('owner')->group(function () {
     Route::get('reports', [ProductController::class, 'reports'])->name('reports');
     Route::get('warehouse_manager.warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse_manager.warehouse');
 
-    // Route::get('truck', [TruckController::class, 'truck'])->name('owner.truck');
-    // Route::get('employee', [EmployeeController::class, 'employee'])->name('owner.employee');
-
     Route::get('/trucks', [TruckController::class, 'truck'])->name('owner.truck');
     Route::get('/employees', [EmployeeController::class, 'employee'])->name('owner.employee');
-
 });
 
 Route::prefix('warehouse_manager')->group(function () {
-
-    // Route::get('dashboard', [ProductController::class, 'dashboard'])->name('dashboard');
     Route::get('warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse');
     Route::get('generate-qr', [WarehouseManagerController::class, 'generateQR'])->name('generateQR');
     Route::get('create', [WarehouseManagerController::class, 'create'])->name('wm_create');
@@ -101,14 +90,10 @@ Route::prefix('warehouse_manager')->group(function () {
     Route::get('outbound_stocks', [WarehouseManagerController::class, 'outbound_stocks'])->name('outbound_stocks');
     Route::post('sendoutbound', [WarehouseManagerController::class, 'sendoutbound']);
     Route::get('categorization', [WarehouseManagerController::class, 'categorization'])->name('categorization');
-    // Route::post('update_stocks', [WarehouseManagerController::class, 'update_stocks'])->name('update_stocks');
 });
 
 Route::prefix('store_manager')->group(function () {
-
     Route::resource('sales', SalesController::class);
-    Route::resource('sales', 'SalesController');
-
     Route::get('orders/index', [OrderController::class, 'orders'])->name('store_manager.orders.index');
 
     Route::get('/', function () {
@@ -122,11 +107,10 @@ Route::prefix('store_manager')->group(function () {
     Route::put('sales/{sale}', [SalesController::class, 'update'])->name('store_manager.sales.update');
     Route::post('sales', [SalesController::class, 'store'])->name('store_manager.sales.store');
     Route::delete('sales/{sale}', [SalesController::class, 'destroy'])->name('store_manager.sales.destroy');
-    // Route::post('sales', [SalesController::class, 'store'])->name('store_manager.sales.sales');
-    // Route::get('sales/create', [SalesController::class, 'create'])->name('store_manager.sales.create');
 
     Route::get('/orders', [OrderController::class, 'index'])->name('store_manager.order.index');
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
     Route::get('inventory/stockrequests', [StockRequestController::class, 'getAllStockRequest'])->name('store_manager.inventory.stockrequest');
     Route::post('inventory/stockrequests/add', [StockRequestController::class, 'addStock'])->name('store_manager.inventory.newstockrequest');
 });
@@ -135,13 +119,13 @@ Route::prefix('driver')->group(function () {
     Route::get('/routes', [DriverController::class, 'view'])->name('routes');
     Route::get('/orders', [DriverController::class, 'orders'])->name('orders');
     Route::get('/schedule', [DriverController::class, 'schedule'])->name('schedule');
+    Route::get('/markers', [App\Http\Controllers\MapController::class, 'getMarkers']);
 });
 
 // FOR CUSTOMER
 Route::prefix('customer')->group(function () {
-    // Route::get('/cart', [CustomerController::class, 'view'])->name('cart');
     Route::get('/order-list', [CustomerController::class, 'orders'])->name('order-list');
-    Route::get('/history', [CustomerController::class, 'history'])->name('history');
+    Route::get('/history', [CustomerController::class, 'history'])->name('customer.history.index');
 
     //Products
     Route::get('/customer-dashboard', [CustomerController::class, 'products'])->name('customer-dashboard');
@@ -156,27 +140,20 @@ Route::prefix('customer')->group(function () {
     Route::get('/order-summary', [CartController::class, 'summary'])->name('cart.summary');
 
     //Order-list
-    Route::get('/order-list', [CartController::class, 'orders'])->name('cart.order-list');
     Route::post('/order-list', [CartController::class, 'placeOrder'])->name('cart.placeOrder');
     Route::get('customer/customer-order-details/{order}', [CartController::class, 'orderDetails'])->name('customer.order-details');
     Route::patch('/order/{order}/cancel', [CartController::class, 'cancelOrder'])->name('order.cancel');
 
     //History
     Route::get('/order-history-details/{id}', [OrderHistoryController::class, 'showOrderDetails'])->name('order.history.details');
-    Route::get('/history', [OrderHistoryController::class, 'index'])->name('customer.history.index');
-    Route::get('/history', [OrderHistoryController::class, 'history'])->name('customer.history.history');
     Route::delete('/history/{id}', [OrderHistoryController::class, 'destroy'])->name('customer.history.destroy');
 
-    //Confirm Delivery
-    Route::post('/order/{order}/confirm', [CartController::class, 'confirmDelivery'])->name('order.confirm');
+    // Confirm Delivery
+    Route::post('/confirm-delivery', [OrderController::class, 'confirmDelivery'])->name('customer.confirm-delivery');
+});
 
-    // Route::get('/order-list', [CartController::class, 'orders'])->name('order-list');
-    Route::get('/history', [OrderHistoryController::class, 'index'])->name('history');
-
+Route::get('/home', function () {
+    return view('home');
 });
 
 require __DIR__.'/auth.php';
-
-// FOR DRIVER
-
-Route::get('/markers', [App\Http\Controllers\MapController::class, 'getMarkers']);
