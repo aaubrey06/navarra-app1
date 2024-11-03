@@ -57,7 +57,7 @@
             d = sel.options[sel.selectedIndex].text
             prods.forEach(element => {
                 if (element.rice_type == d) {
-                    unit.add(new Option(element.unit, element.product_id))
+                    unit.add(new Option(element.unit, element.unit))
                 }
             })
         }

@@ -50,7 +50,7 @@ class WarehouseManagerController extends Controller
         return view('warehouse_manager.purchase_req', ['requests' => $requests, 'products' => $products, 'stores' => $store, 'warehouse_stocks' => $warehouse_stocks]);
     }
 
-    public function foroutbound(Request $request): View
+    public function foroutbound(Request $request)
     {
 
         $warehouse_stocks_id = $request->qrData;
@@ -60,7 +60,9 @@ class WarehouseManagerController extends Controller
 
         $products = DB::table('products')->where('product_id', '=', $warehouse_stock[0]->product_id)->get();
         $data = ['products' => $products, 'warehouse_stock' => $warehouse_stock,'stock_requests' => $stock_request];
-
+        if($warehouse_stock[0]->product_id != $stock_request[0]->product_id){
+            return back()->withErros(['login' => 'You have to log in to access admin module.']);
+        }
         return view('warehouse_manager.foroutbound', ['data' => $data]);
     }
 
