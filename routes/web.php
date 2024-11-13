@@ -69,6 +69,8 @@ Route::prefix('owner')->group(function () {
     Route::resource('products', ProductController::class);
     Route::get('/owner/products/index', [ProductController::class, 'products'])->name(name: 'owner.products.index');
 
+    Route::get('/owner/products', [ProductController::class, 'products'])->name('owner.products');
+
     Route::get('create', [ProductController::class, 'create'])->name('owner.create');
     Route::post('products', [ProductController::class, 'store'])->name('owner.products.store');
     Route::get('products/{product}', [ProductController::class, 'show'])->name('owner.products.show');
@@ -142,7 +144,13 @@ Route::prefix('warehouse_manager')->group(function () {
     Route::get('foroutbound', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
     Route::get('outbound_stocks', [WarehouseManagerController::class, 'outbound_stocks'])->name('outbound_stocks');
     Route::post('sendoutbound', [WarehouseManagerController::class, 'sendoutbound']);
+    Route::get('/clean-warehouse-stocks', [WarehouseManagerController::class, 'cleanZeroOrNegativeQuantityStocks']);
     Route::get('categorization', [WarehouseManagerController::class, 'categorization'])->name('categorization');
+    Route::get('/warehouse-manager/notifications', [WarehouseManagerController::class, 'showNotifications'])->middleware('auth');
+
+    /// Notification routes for warehouse_manager
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/mark-notifications-read', [NotificationController::class, 'markNotificationsRead'])->name('mark.notifications.read');
 });
 
 Route::prefix('store_manager')->group(function () {

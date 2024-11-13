@@ -21,6 +21,7 @@ p
         <livewire:layout.navigation />
 
         {{-- <!-- <button id="notificationButton">
+        {{-- <!-- <button id="notificationButton">
     Notifications (<span id="notificationCount">{{ auth()->user()->unreadNotifications->count() }}</span>)
 </button> --> --}}
 
@@ -30,9 +31,12 @@ p
 <li>{{ $notification->data['message'] }}</li>
 @endforeach --}}
     </ul>
-</div>
+</div> --> --}}
 
-        Page Content -->
+    Page Content -->
+    <main>
+        {{ $slot }}
+    </main>
     <main>
         {{ $slot }}
     </main>

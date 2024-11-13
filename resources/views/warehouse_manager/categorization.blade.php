@@ -10,54 +10,50 @@
 
 
 
-     <section class="section">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Warehouse Stocks Categorization</h5>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Categorization</h5>
 
-                    <!-- Table with stripped rows -->
-                    <table class="table datatable">
-                        <thead>
-                            <tr>
-                                <th>Category A</th>
-                                <th>Category B</th>
-                                <th>Category C</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($percentage_per_product as $item)
-                                <tr>
-                                    <!-- Category A -->
-                                    <td>
-                                        @if ($item['category'] == 'category_a')
-                                            {{ $item['name'] }} - {{ $item['unit'] }} kg - {{ $item['percentage'] }}%
-                                        @endif
-                                    </td>
+                            <!-- Table with stripped rows -->
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Rice Type</th>
+                                        <th>Category</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($percentage_per_product as $item)
+                                        <tr>
+                                            <!-- Item -->
+                                            <td>
+                                                {{ $item['name'] }} - {{ $item['unit'] }} kg - {{ $item['percentage'] }}%
+                                            </td>
 
-                                    <!-- Category B -->
-                                    <td>
-                                        @if ($item['category'] == 'category_b')
-                                            {{ $item['name'] }} - {{ $item['unit'] }} kg - {{ $item['percentage'] }}%
-                                        @endif
-                                    </td>
-
-                                    <!-- Category C -->
-                                    <td>
-                                        @if ($item['category'] == 'category_c')
-                                            {{ $item['name'] }} - {{ $item['unit'] }} kg - {{ $item['percentage'] }}%
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                            <!-- Category with color coding -->
+                                            <td>
+                                                @if ($item['category'] == 'category_a')
+                                                    <span class="badge bg-success">Category A</span>
+                                                @elseif ($item['category'] == 'category_b')
+                                                    <span class="badge bg-warning text-dark">Category B</span>
+                                                @elseif ($item['category'] == 'category_c')
+                                                    <span class="badge bg-primary">Category C</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
+
+
 
 
         <script></script>

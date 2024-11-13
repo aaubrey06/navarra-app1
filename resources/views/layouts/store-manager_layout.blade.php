@@ -159,6 +159,20 @@
                 </a>
             </li><!-- End Dashboard Nav -->
 
+            <a class="nav-link collapsed" href="{{ route('store_manager.in-store-orders.index') }}">
+                <i class="bi bi-cart"></i>
+                <span>In-Store Orders</span>
+            </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('store_manager.orders.index') }}">
+                    <i class="bi bi-cart"></i>
+                    <span>Online Orders</span>
+                </a>
+            </li>
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('store_manager.orders.index') }}">

@@ -61,8 +61,8 @@ class WarehouseManagerController extends Controller
         $stock_request = DB::table('stock_requests')->where('request_id', '=', $request->requestId)->get();
 
         $products = DB::table('products')->where('product_id', '=', $warehouse_stock[0]->product_id)->get();
-        $data = ['products' => $products, 'warehouse_stock' => $warehouse_stock,'stock_requests' => $stock_request];
-        if($warehouse_stock[0]->product_id != $stock_request[0]->product_id){
+        $data = ['products' => $products, 'warehouse_stock' => $warehouse_stock, 'stock_requests' => $stock_request];
+        if ($warehouse_stock[0]->product_id != $stock_request[0]->product_id) {
             return back()->withErros(['login' => 'You have to log in to access admin module.']);
         }
 
@@ -83,6 +83,16 @@ class WarehouseManagerController extends Controller
         return view('warehouse_manager.outbound_stocks', ['warehouse_data' => $warehouse_data]);
     }
 
+    // public function cleanZeroOrNegativeQuantityStocks()
+    // {
+    //     $deleted = DB::table('warehouse_stocks')->where('quantity', '<=', 0)->get();
+    //     Log::info('Records to delete: ', $deleted->toArray());
+
+    //     DB::table('warehouse_stocks')->where('quantity', '<=', 0)->delete();
+    //     Log::info('Cleaning zero or negative stocks executed');
+
+    // }
+
     public function create(): View
     {
         return view('warehouse_manager.create');
@@ -102,6 +112,14 @@ class WarehouseManagerController extends Controller
 
     public function add_stocks(Request $request)
     {
+
+        $request->validate([
+            'rice_type' => 'required|exists:products,product_id',
+            'unit' => 'required|string',
+            'quantity' => 'required|integer|min:1', // Ensure quantity is non-negative
+            'arrival_date' => 'required|date',
+        ]);
+
         $batch_code = Str::random(10);
         $product_code = Str::upper(Str::random(8));
         $qr_code = $batch_code.$product_code;
@@ -113,6 +131,7 @@ class WarehouseManagerController extends Controller
         $data->batch_code = $batch_code;
         $data->product_code = $product_code;
         $data->qr_code = $qr_code;
+        $data->supplier = $request->supplier;
         $data->invtype_id = '1';
         $data->warehouse_id = '1';
 
@@ -123,6 +142,9 @@ class WarehouseManagerController extends Controller
 
     public function sendoutbound(Request $request)
     {
+        // // Calculate the updated quantity
+        // $updated_quantity = $request->previous_value - $request->outbound_quantity;
+
         $warehouse_history = new WarehouseHistory;
         $warehouse_history->warehouse_stocks_id = $request->warehouse_stocks_id;
         $warehouse_history->previous_value = $request->previous_value;
@@ -130,12 +152,18 @@ class WarehouseManagerController extends Controller
         $affected = DB::table('warehouse_stocks')
             ->where('warehouse_stocks_id', $request->warehouse_stocks_id)
             ->update(['quantity' => $request->previous_value - $request->outbound_quantity]);
+        // ->update(['quantity' => $updated_quantity]);
+
+        // if ($updated_quantity <= 0) {
+        //     DB::table('warehouse_stocks')
+        //         ->where('warehouse_stocks_id', $request->warehouse_stocks_id)
+        //         ->delete();
+        // }
+
         $affectedreq = DB::table('stock_requests')
             ->where('request_id', $request->stock_request_id)
             ->update(['status' => 'approved']);
         $warehouse_history->save();
-
-        
 
         return redirect()->route('warehouse');
     }

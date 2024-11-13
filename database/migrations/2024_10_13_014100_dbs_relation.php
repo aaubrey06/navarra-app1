@@ -42,16 +42,15 @@ return new class extends Migration
             $table->foreign('warehouse_id')->references('warehouse_id')->on('warehouse');
         });
         Schema::table('warehouse_stocks', function (Blueprint $table) {
-            $table->foreign('product_id')->references('product_id')->on('products');
-            $table->foreign('invtype_id')->references('invtype_id')->on('inventory_transaction_type');
-            $table->foreign('warehouse_id')->references('warehouse_id')->on('warehouse');
+            $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
+            $table->foreign('invtype_id')->references('invtype_id')->on('inventory_transaction_type')->onDelete('cascade');
+            $table->foreign('warehouse_id')->references('warehouse_id')->on('warehouse')->onDelete('cascade');
         });
         // Schema::table('store_stocks', function (Blueprint $table) {
         //     $table->foreign('product_id')->references('product_id')->on('products');
         //     $table->foreign('invtype_id')->references('invtype_id')->on('inventory_transaction_type');
         //     $table->foreign('store_id')->references('store_id')->on('stores');
         // });
-
 
         // Schema::table('sales', function (Blueprint $table) {
         //     $table->foreign('product_id')->references('product_id')->on('products');

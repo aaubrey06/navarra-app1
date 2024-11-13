@@ -1,6 +1,6 @@
 @extends('layouts.warehouse-manager_layout')
 
-@section('title', 'Generate QR')
+@section('title', 'Outbound Stocks')
 
 
 @section('contents')
@@ -16,72 +16,72 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Warehouse Stocks</h5>
+                            <h5 class="card-title">Outbound Stocks</h5>
 
-
-                            <!-- Table with stripped rows -->
-                            <table class="table datatable">
-                                <thead>
-                                    <tr>
-                                        <th>Rice type</th>
-                                        <th>Unit</th>
-                                        <th>Outbound Quantity</th>
-                                        <th>Outbound Date</th>
-                                        {{-- <th>Product Code</th> --}}
-                                        <th>Batch Code</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($warehouse_data['warehouse_history'] as $key => $warehouse)
+                            <div class="table-responsive">
+                                <!-- Table with stripped rows -->
+                                <table class="table datatable">
+                                    <thead>
                                         <tr>
-                                            <?php
+                                            <th>Rice type</th>
+                                            <th>Unit</th>
+                                            <th>Outbound Quantity</th>
+                                            <th>Outbound Date</th>
+                                            {{-- <th>Product Code</th> --}}
+                                            <th>Batch Code</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($warehouse_data['warehouse_history'] as $key => $warehouse)
+                                            <tr>
+                                                <?php
                                                 $warehouse_stocks_arr = json_decode(json_encode($warehouse_data['warehouse_stocks']), true);
                                                 foreach ($warehouse_stocks_arr as $key => $warehouse_stock) :
                                                     if($warehouse_stock['warehouse_stocks_id'] == $warehouse->warehouse_stocks_id):
                                                    
                                             ?>
-                                            <td>
-                                                <?php
-                                                $products_arr = json_decode(json_encode($warehouse_data['products']), true);
-                                                foreach ($products_arr as $product) {
-                                                    if ($warehouse_stock['product_id'] == $product['product_id']) {
-                                                        echo $product['rice_type'];
+                                                <td>
+                                                    <?php
+                                                    $products_arr = json_decode(json_encode($warehouse_data['products']), true);
+                                                    foreach ($products_arr as $product) {
+                                                        if ($warehouse_stock['product_id'] == $product['product_id']) {
+                                                            echo $product['rice_type'];
+                                                        }
                                                     }
-                                                }
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <?php
-                                                echo $warehouse_stock['unit'];
-                                                ?>
-                                            </td>
-                                            <td>
-                                                {{ $warehouse->outbound_quantity }}
-                                            </td>
-                                            <td>
-                                                {{ $warehouse->created_at }}
-                                            </td>
-                                            {{-- <td>
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    echo $warehouse_stock['unit'];
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    {{ $warehouse->outbound_quantity }}
+                                                </td>
+                                                <td>
+                                                    {{ $warehouse->created_at }}
+                                                </td>
+                                                {{-- <td>
                                                 @php
                                                     echo $warehouse_stock['product_code'];
                                                 @endphp
                                             </td> --}}
-                                            <td>
-                                                @php
-                                                    echo $warehouse_stock['batch_code'];
-                                                @endphp
-                                            </td>
-                                            <?php
+                                                <td>
+                                                    @php
+                                                        echo $warehouse_stock['batch_code'];
+                                                    @endphp
+                                                </td>
+                                                <?php
                                                 
                                                     endif;
                                         endforeach;
                                             ?>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <!-- End Table with stripped rows -->
-
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <!-- End Table with stripped rows -->
+                            </div>
                         </div>
                     </div>
 

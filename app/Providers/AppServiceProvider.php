@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\Notification;
+use Illuminate\Support\ServiceProvider;  // Ensure the Notification model is imported
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
+        view()->composer('*', function ($view) {
+            $notifications = Notification::all();
+            $view->with(['notifications' => $notifications]);
+        });
     }
 }
