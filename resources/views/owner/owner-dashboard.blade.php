@@ -14,10 +14,10 @@
                             type="button" role="tab" aria-controls="store" aria-selected="true">Store</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" href="{{ route('owner.employee') }}">Employee</a>
+                        <a class="nav-link" href="{{ route('owner.employee.index') }}">Employee</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" href="{{ route('owner.truck') }}">Trucks</a>
+                        <a class="nav-link" href="{{ route('owner.truck.index') }}">Trucks</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
