@@ -8,11 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Store extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'location'];
 
-    // A store can have many purchase orders
-    public function purchaseOrders()
-    {
-        return $this->hasMany(PurchaseOrder::class);
-    }
+    protected $table = 'store';
+    protected $primaryKey = 'store_id';
+    protected $fillable = [
+        'store_name',
+        'store_location',
+        'store_latitude',
+        'store_longitude',
+        'contact',
+        'working_hours',
+        'status',
+    ];
+
+    // public function purchaseOrders()
+    // {
+    //     return $this->hasMany(PurchaseOrder::class);
+    // }
 }

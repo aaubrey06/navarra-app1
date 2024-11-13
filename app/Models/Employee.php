@@ -9,9 +9,28 @@ class Employee extends Model
 {
     use HasFactory;
 
+    protected $table = 'employees';
+
+    protected $primaryKey = 'employee_id';
+    public $incrementing = true;
+
     protected $fillable = [
         'name',
+        'gender',
         'position',
-        'salary',
+        'dob',
+        'email',
+        'phone_number',
+        'address',
+        'city',
+        'province',
+        'region',
+        'postal_code',
+        'nationality',
+        'ssn',
+    ];
+
+    protected $casts = [
+        'dob' => 'date',  
     ];
 }

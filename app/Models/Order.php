@@ -12,21 +12,51 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $fillable = [
+        'order_date',
+        'customer_id',
+        'rice_type',
+        'quantity',
+        'method', 
         'tracking_no',
         'delivery_date',
         'payment_status',
-        'order_status',
+        'order_status_id',
+        'latitude',  
+        'longitude',
     ];
 
+    protected $casts = [
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
+    ];
+
+    public $timestamps = true;
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
     public function orderDetails()
     {
         return $this->hasMany(OrderDetails::class);
     }
 
-    // Define a scope to filter orders by status
     public function scopeDelivered($query)
     {
-        return $query->where('order_status', 'Delivered');
+        return $query->where('order_status_id', 'Delivered');
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'customer_id');
+    }
+
+    public function orderStatus()
+    {
+        return $this->belongsTo(OrderStatus::class, 'order_status_id');
+    }
+
+
+
 
 }

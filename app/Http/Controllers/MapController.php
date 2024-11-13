@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Marker; // Make sure to import your Marker model
+use App\Models\Marker; 
 use Illuminate\Http\JsonResponse;
 
 class MapController extends Controller

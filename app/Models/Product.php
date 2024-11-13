@@ -9,14 +9,10 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'product_id';
     protected $fillable = [
-        'rice_type',
-        'unit',
-        'unit_price',
-        'selling price',
-        'target_level',
-        'reorder_level',
+        'image', 'rice_type', 'unit', 'unit_price', 'selling_price', 'target_level', 'reorder_level', 'current_quantity'
     ];
+
+    protected $primaryKey = 'product_id';
 
 }

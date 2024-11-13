@@ -12,18 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sales', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->string('rice_type');
-            $table->integer('quantity');
-            $table->float('total_price');
-            $table->date('sale_date');
+            $table->id('sale_id');
+            $table->foreignId('product_id')->constrained('products', 'product_id')->onDelete('cascade');
+            $table->integer('quantity_sold');
+            $table->decimal('total_price', 10, 2);
+            $table->string('customer_name')->nullable();  
+            $table->string('location')->nullable();
+            $table->enum('method', ['pickup', 'delivery']); 
+            $table->timestamp(column: 'sale_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
-
-            $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
-        
         });
-
     }
 
     /**

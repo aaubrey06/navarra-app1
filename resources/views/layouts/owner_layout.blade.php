@@ -165,20 +165,18 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse"
-                    href="{{ route('owner.order') }}">
-
-                    <i class="bi bi-cart"></i><span>Orders</span><i></i>
+                <a class="nav-link collapsed" href="{{ route('owner.order.order') }}">
+                    <i class="bi bi-cart"></i>
+                    <span>Orders</span>
                 </a>
-
-            </li><!-- End Components Nav -->
+            </li>
 
             <!-- End Forms Nav -->
 
             <!--Product  Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed " href="{{ route('owner.products') }}">
+                <a class="nav-link collapsed " href="{{ route('owner.products.index') }}">
                     <i class="bi bi-box"></i>
                     <span>Products</span>
                 </a>
@@ -187,7 +185,7 @@
             <!-- Delivery Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('delivery') }}">
+                <a class="nav-link collapsed" href="{{ route('owner.delivery.delivery') }}">
                     <i class="bi bi-truck"></i>
                     <span>Delivery</span>
                 </a>
@@ -205,7 +203,7 @@
                 </a>
                 <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="{{ route('store_manager.sales.sales') }}">
+                        <a href="{{ route('owner.sales.sales') }}">
                             <i class="bi bi-circle"></i><span>Sales</span>
                         </a>
                     </li>
@@ -215,17 +213,17 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('warehouse_manager.warehouse') }}">
+                        <a href="{{ route('owner.warehouse_stock.index') }}">
                             <i class="bi bi-circle"></i><span>Warehouse Stocks</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{ route('owner.purchase_stock.index') }}">
                             <i class="bi bi-circle"></i><span>Purchase Stocks</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{ route('owner.request_stock.index') }}">
                             <i class="bi bi-circle"></i><span>Request Stocks</span>
                         </a>
                     </li>
@@ -234,12 +232,34 @@
             </li><!-- End Charts Nav -->
 
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('owner.store.index') }}">
+                    <i class="bi bi-truck"></i>
+                    <span>Store</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('owner.employee.index') }}">
+                    <i class="bi bi-person"></i>
+                    <span>Employee</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('owner.truck.index') }}">
+                    <i class="bi bi-truck"></i>
+                    <span>Truck</span>
+                </a>
+            </li>
+
+
             <!-- REports Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('reports') }}">
+                <a class="nav-link collapsed" href="{{ route('store_manager.forecasting.index') }}">
                     <i class="bi bi-bar-chart-line"></i>
-                    <span>Reports</span>
+                    <span>Forecasting</span>
                 </a>
             </li><!-- End Reports Dashboard Nav -->
 
