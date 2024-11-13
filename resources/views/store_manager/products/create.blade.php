@@ -1,73 +1,97 @@
 @extends('layouts.store-manager_layout')
 
 @section('contents')
-    <section class="section">
-        <div class="row">
-            <div class="col-lg-6">
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="card p-4" style="width: 100%; max-width: 600px;">
+            <h1 class="text-center mb-4">Add New Product</h1>
 
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Add Products</h5>
+            <form action="{{ route('store_manager.products.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="image" class="form-label">Product Image</label>
+                        <input type="file" name="image" id="image"
+                            class="form-control @error('image') is-invalid @enderror">
+                        @error('image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                        {{-- <form action="{{route('products.store')}}" method="post"> </form> --}}
-
-                        <form>
-                            <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">Rice Type</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="rice_type" name="rice_type">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">Unit</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="unit" name="unit">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">Unit Price</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="unit_price" name="unit_price">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">Selling Price</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="selling_price" name="selling_price">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">Target level</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="target_level" name="target_level">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">Re-order level</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="reorder_level" name="target_level">
-                                </div>
-                            </div>
+                    <div class="col-12 mb-3">
+                        <label for="rice_type" class="form-label">Rice Type</label>
+                        <input type="text" name="rice_type" id="rice_type"
+                            class="form-control @error('rice_type') is-invalid @enderror" value="{{ old('rice_type') }}"
+                            required>
+                        @error('rice_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
 
-                            <div class="row mb-3">
+                    <div class="col-12 mb-3">
+                        <label for="unit" class="form-label">Unit</label>
+                        <select name="unit" id="unit" class="form-select @error('unit') is-invalid @enderror"
+                            required>
+                            <option value="5" {{ old('unit') == '5' ? 'selected' : '' }}>5</option>
+                            <option value="10" {{ old('unit') == '10' ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ old('unit') == '25' ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ old('unit') == '50' ? 'selected' : '' }}>50</option>
+                        </select>
+                        @error('unit')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                                <div class="col-sm-10">
-                                    <button type="submit" class="btn btn-primary">Add Product</button>
-                                    <form action="{{ route('store_manager.store') }}" method='post'></form>
-                                </div>
-                            </div>
+                    <!-- Unit Price -->
+                    <div class="col-12 mb-3">
+                        <label for="unit_price" class="form-label">Unit Price</label>
+                        <input type="number" name="unit_price" id="unit_price"
+                            class="form-control @error('unit_price') is-invalid @enderror" value="{{ old('unit_price') }}"
+                            step="0.01" required>
+                        @error('unit_price')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                        </form>
+                    <!-- Selling Price -->
+                    <div class="col-12 mb-3">
+                        <label for="selling_price" class="form-label">Selling Price</label>
+                        <input type="number" name="selling_price" id="selling_price"
+                            class="form-control @error('selling_price') is-invalid @enderror"
+                            value="{{ old('selling_price') }}" step="0.01" required>
+                        @error('selling_price')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Target Level -->
+                    <div class="col-12 mb-3">
+                        <label for="target_level" class="form-label">Target Level</label>
+                        <input type="number" name="target_level" id="target_level"
+                            class="form-control @error('target_level') is-invalid @enderror"
+                            value="{{ old('target_level') }}" required>
+                        @error('target_level')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Reorder Level -->
+                    <div class="col-12 mb-3">
+                        <label for="reorder_level" class="form-label">Reorder Level</label>
+                        <input type="number" name="reorder_level" id="reorder_level"
+                            class="form-control @error('reorder_level') is-invalid @enderror"
+                            value="{{ old('reorder_level') }}" required>
+                        @error('reorder_level')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-primary">Add Product</button>
                     </div>
                 </div>
-
-            </div>
+            </form>
         </div>
-    </section>
+    </div>
 @endsection

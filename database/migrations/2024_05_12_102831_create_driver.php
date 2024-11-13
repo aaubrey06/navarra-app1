@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('driver', function (Blueprint $table) {
-            $table->id('driver_id');
-            $table->foreignId('id');
+            $table->bigIncrements(column: 'driver_id');
+            $table->string('name'); 
+            $table->timestamps();
         });
     }
 

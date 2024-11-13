@@ -159,24 +159,27 @@
                 </a>
             </li><!-- End Dashboard Nav -->
 
+
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse"
-<<<<<<< HEAD
-                    href="{{ route('store_manager.order.index') }}">
-=======
-                    href="{{ route('store_manager.orders.index') }}">
->>>>>>> 77571d80ff93a5392478e7f3ef6bace04e829209
-                    <i class="bi bi-cart"></i><span>Orders</span><i></i>
+                <a class="nav-link collapsed" href="{{ route('store_manager.orders.index') }}">
+                    <i class="bi bi-cart"></i>
+                    <span>Online Orders</span>
                 </a>
+            </li>
 
-            </li><!-- End Components Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('store_manager.in-store-orders.index') }}">
+                    <i class="bi bi-cart"></i>
+                    <span>In-Store Orders</span>
+                </a>
+            </li>
 
-            <!-- End Forms Nav -->
+
 
             <!--Product  Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed " href="{{ route('owner.products') }}">
+                <a class="nav-link collapsed " href="{{ route('store_manager.products.index') }}">
                     <i class="bi bi-box"></i>
                     <span>Products</span>
                 </a>
@@ -184,9 +187,9 @@
 
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="">
+                <a class="nav-link collapsed" href="{{ route('store_manager.walk-in.index') }}">
                     <i class="bi bi-person"></i>
-                    <span>Walk-in</span>
+                    <span>In-Store</span>
                 </a>
             </li>
 
@@ -198,22 +201,22 @@
                 </a>
                 <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="{{ route('store_manager.sales.sales') }}">
+                        <a href="{{ route('store_manager.sales.index') }}">
                             <i class="bi bi-circle"></i><span>Sales</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('stocks') }}">
+                        <a href="{{ route('store_manager.stocks.index') }}">
                             <i class="bi bi-circle"></i><span>Stocks</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('warehouse_manager.warehouse') }}">
+                        <a href="{{ route('store_manager.warehouse_stock.index') }}">
                             <i class="bi bi-circle"></i><span>Warehouse Stocks</span>
                         </a>
                     </li>
                     <li>
-                        <a href="store_manager.purchase_order.index">
+                        <a href="{{ route('store_manager.purchase_stock.index') }}">
                             <i class="bi bi-circle"></i><span>Purchase Stocks</span>
                         </a>
                     </li>
@@ -229,7 +232,7 @@
             <!-- Delivery Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('delivery') }}">
+                <a class="nav-link collapsed" href="{{ route('store_manager.delivery.index') }}">
                     <i class="bi bi-truck"></i>
                     <span>Delivery</span>
                 </a>
@@ -243,12 +246,19 @@
 
             <!-- REports Dashboard Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('reports') }}">
+            {{-- <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('store_manager.forecast.index') }}">
                     <i class="bi bi-bar-chart-line"></i>
-                    <span>Reports</span>
+                    <span>Forecasting</span>
                 </a>
-            </li><!-- End Reports Dashboard Nav -->
+            </li><!-- End Reports Dashboard Nav --> --}}
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('store_manager.forecasting.index') }}">
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span>Forecast</span>
+                </a>
+            </li>
 
 
 
@@ -271,8 +281,8 @@
 
     </main><!-- End #main -->
 
-    <!-- ======= Footer ======= -->
-    {{-- <footer id="footer" class="footer">
+    {{-- <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
         <div class="copyright">
             &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
         </div>

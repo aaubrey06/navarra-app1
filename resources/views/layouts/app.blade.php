@@ -8,13 +8,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{ asset('rise.png') }}" type="image/png">
-    <link rel="icon" href="{{ asset('rise.png') }}" sizes="16x16" type="image/png">
-    <link rel="icon" href="{{ asset('rise.png') }}" sizes="32x32" type="image/png">
-    <link rel="icon" href="{{ asset('rise.png') }}" sizes="96x96" type="image/png">
-
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -27,15 +20,15 @@
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         <livewire:layout.navigation />
 
-            <!-- <button id="notificationButton">
+        {{-- <!-- <button id="notificationButton">
     Notifications (<span id="notificationCount">{{ auth()->user()->unreadNotifications->count() }}</span>)
-</button> -->
+</button> --> --}}
 
-<!-- <div id="notificationDropdown" style="display:none;">
+        <!-- <div id="notificationDropdown" style="display:none;">
     <ul id="notificationList">
-        @foreach (auth()->user()->unreadNotifications as $notification)
-            <li>{{ $notification->data['message'] }}</li>
-        @endforeach
+        {{-- @foreach (auth()->user()->unreadNotifications as $notification)
+<li>{{ $notification->data['message'] }}</li>
+@endforeach --}}
     </ul>
 </div> -->
 

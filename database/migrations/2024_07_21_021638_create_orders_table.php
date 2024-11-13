@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->date('order_date');
-            $table->string('customer_name');
-            $table->decimal('total', 10, 2);
-            $table->string('status');
-            $table->timestamps();
+
+        Schema::create('purchase_order_status', function (Blueprint $table) {
+            $table->id('po_status_id');
+            $table->string('po_status', length: 25);
         });
+
+        // Schema::create('stocks', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('product_id')->references(column: 'product_id')->on('products');
+        //     $table->integer('current_quantity')->default(0); 
+        //     $table->timestamps(); 
+
+        // });
     }
 
     /**
@@ -26,6 +31,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+
+        Schema::dropIfExists('purchase_order_status');
+
+        // Schema::dropIfExists('stocks');
+
     }
 };

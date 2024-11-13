@@ -9,22 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('order', function (Blueprint $table) {
-            $table->id('order_id');
-            $table->foreignId('customer_id');
-            $table->date('order_date');
-            $table->string('method', length: 25);
-            $table->foreignId('order_status_id');
-        });
-    }
+    // public function up(): void
+    // {
+    //     Schema::table('orders', function (Blueprint $table) {
+    //         $table->decimal('latitude', 10, 8)->nullable();
+    //         $table->decimal('longitude', 11, 8)->nullable();
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('order');
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  */
+    // public function down(): void
+    // {
+    //     Schema::table('orders', function (Blueprint $table) {
+    //         $table->dropColumn(['latitude', 'longitude']);
+    //     });
+    // }
 };

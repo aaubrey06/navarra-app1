@@ -13,15 +13,24 @@ class Sale extends Model
 
     protected $fillable = [
         'product_id',
-        'rice_type',
-        'quantity',
+        'quantity_sold',
         'total_price',
-        'sale_date'
+        'customer_name',
+        'location',
+        'method',
+        'sale_date',
+        
     ];
+    
 
+    protected $primaryKey = 'sale_id';
+
+    // Define the relationship with the Product model
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
+    // Optionally: If you want to explicitly enable automatic timestamping
+    public $timestamps = true; 
 }

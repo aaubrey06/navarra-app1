@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Drop the products table if it exists to avoid conflicts
+        
         if (Schema::hasTable('products')) {
             Schema::drop('products');
         }
 
         Schema::create('products', function (Blueprint $table) {
             $table->id('product_id');
-            $table->string('rice_type', 45);
-            $table->integer('unit');
-            $table->float('unit_price');
-            $table->float('selling_price')->default(0.0);
+            $table->string(column: 'image')->nullable();
+            $table->string('rice_type');
+            $table->enum('unit', ['5', '10', '25', '50']);
+            $table->decimal('unit_price', 10, 2);
+            $table->decimal('selling_price', 10, 2);
             $table->integer('target_level');
             $table->integer('reorder_level');
+            $table->integer('current_quantity')->default(0);
             $table->timestamps();
         });
     }

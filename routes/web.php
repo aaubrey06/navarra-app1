@@ -3,20 +3,29 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\InStoreController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderHistoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockRequestController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TruckController;
+use App\Http\Controllers\WalkinController;
 use App\Http\Controllers\WarehouseManagerController;
+use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\WarehousestockController;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
 
-// To Delete
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -24,7 +33,9 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
-// To Delete
+
+
+// Route::get('login', [AuthController::class, 'login'])->name('auth.login');
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -49,13 +60,14 @@ Route::middleware(['auth', 'verified', 'store-manager-dashboard'])->group(functi
 });
 
 Route::prefix('owner')->group(function () {
-    Route::get('products', [ProductController::class, 'products'])->name('owner.products');
+    // Route::get('products', [ProductController::class, 'products'])->name('owner.products');
 
-    Route::get('/', function () {
-        return redirect()->route('owner.products');
-    });
+    // Route::get('/', function () {
+    //     return redirect()->route('owner.products');
+    // });
 
     Route::resource('products', ProductController::class);
+    Route::get('/owner/products/index', [ProductController::class, 'products'])->name(name: 'owner.products.index');
 
     Route::get('create', [ProductController::class, 'create'])->name('owner.create');
     Route::post('products', [ProductController::class, 'store'])->name('owner.products.store');
@@ -71,11 +83,52 @@ Route::prefix('owner')->group(function () {
     Route::get('inventory', [ProductController::class, 'inventory'])->name('inventory');
     Route::get('sales', [ProductController::class, 'sales'])->name('sales');
     Route::get('stocks', [ProductController::class, 'stocks'])->name('stocks');
-    Route::get('reports', [ProductController::class, 'reports'])->name('reports');
     Route::get('warehouse_manager.warehouse', [WarehouseManagerController::class, 'warehouse'])->name('warehouse_manager.warehouse');
 
-    Route::get('/trucks', [TruckController::class, 'truck'])->name('owner.truck');
-    Route::get('/employees', [EmployeeController::class, 'employee'])->name('owner.employee');
+    // Route::resource('owner/truck', TruckController::class);
+    Route::get('/owner/truck/index', [TruckController::class, 'index'])->name('owner.truck.index');
+    Route::get('/owner/truck/create', [TruckController::class, 'create'])->name('owner.truck.create');
+    Route::post('/truck', [TruckController::class, 'store'])->name('owner.truck.store'); 
+    Route::get('/truck/{truck}/edit', [TruckController::class, 'edit'])->name('owner.truck.edit');
+    Route::put('/truck/{truck}', [TruckController::class, 'update'])->name('owner.truck.update');
+    Route::delete('/truck/{truck}', [TruckController::class, 'destroy'])->name('owner.truck.destroy');
+
+    Route::prefix('owner/employee')->name('owner.employee.')->group(function () {
+        Route::get('/index', [EmployeeController::class, 'index'])->name('index');       
+        Route::get('/create', [EmployeeController::class, 'create'])->name('create');      
+        Route::post('/store', [EmployeeController::class, 'store'])->name('store');        
+        Route::get('/{employee}/edit', [EmployeeController::class, 'edit'])->name('edit'); 
+        Route::put('/{employee}', [EmployeeController::class, 'update'])->name('update');  
+        Route::delete('/{employee}', [EmployeeController::class, 'destroy'])->name('destroy'); 
+    });
+
+    Route::get('/owner/delivery/delivery}', [DeliveryController::class, 'showdelivery'])->name('owner.delivery.delivery');
+    Route::get('/owner/warehouse_stock/index', [WarehousestockController::class, 'showstock'])->name(name: 'owner.warehouse_stock.index');
+    Route::get('/owner/purchase_stock/index', [PurchaseController::class, 'stock'])->name(name: 'owner.purchase_stock.index');
+    Route::get('/owner/request_stock/index', [WarehouseManagerController::class, 'request'])->name(name: 'owner.request_stock.index');
+
+    Route::get('/owner/store/index', [StoreController::class, 'index'])->name(name: 'owner.store.index');
+    Route::get('/owner/store/create', [StoreController::class, 'create'])->name(name: 'owner.store.create');
+    Route::post('/owner/store/store', action: [StoreController::class, 'store'])->name(name: 'owner.store.store');
+    Route::get('store/{id}/edit', [StoreController::class, 'edit'])->name('owner.store.edit');
+    Route::put('store/{store_id}', [StoreController::class, 'update'])->name('owner.store.update');
+    Route::delete('store/{store_id}', [StoreController::class, 'destroy'])->name('owner.store.destroy');
+
+
+    Route::get('/owner/employee/index', [EmployeeController::class, 'index'])->name('owner.employee.index');
+    Route::get('/owner/employee/create', [EmployeeController::class, 'create'])->name('owner.employee.create');
+    Route::get('/owner/employee/store', [EmployeeController::class, 'store'])->name('owner.employee.store');
+    Route::get('employees/{employee_id}/edit', [EmployeeController::class, 'edit'])->name('owner.employee.edit');
+    Route::put('employees/{employee_id}', [EmployeeController::class, 'update'])->name('owner.employee.update');
+    Route::delete('/employee/{employee_id}', [EmployeeController::class, 'destroy'])->name('owner.employee.destroy');
+
+
+
+    Route::get('/owner/order/order', action: [OrderController::class, 'order'])->name(name: 'owner.order.order');
+    Route::get('/owner/sales/sales', action: [SalesController::class, 'sales'])->name(name: 'owner.sales.sales');
+
+    Route::get('/owner/order/order', [ProductController::class, 'ordersOwner'])->name('owner.order.order');
+
 });
 
 Route::prefix('warehouse_manager')->group(function () {
@@ -94,22 +147,79 @@ Route::prefix('warehouse_manager')->group(function () {
 
 Route::prefix('store_manager')->group(function () {
     Route::resource('sales', SalesController::class);
-    Route::get('orders/index', [OrderController::class, 'orders'])->name('store_manager.orders.index');
+   
 
     Route::get('/', function () {
         return redirect()->route('store_manager.sales.sales');
     });
 
-    Route::get('sales', [SalesController::class, 'sales'])->name('store_manager.sales.sales');
-    Route::get('sales/{sale}', [SalesController::class, 'show'])->name('store_manager.sales.show');
-    Route::get('sales/create', [SalesController::class, 'create'])->name('store_manager.sales.create');
-    Route::get('sales/{sale}/edit', [SalesController::class, 'edit'])->name('store_manager.sales.edit');
-    Route::put('sales/{sale}', [SalesController::class, 'update'])->name('store_manager.sales.update');
-    Route::post('sales', [SalesController::class, 'store'])->name('store_manager.sales.store');
-    Route::delete('sales/{sale}', [SalesController::class, 'destroy'])->name('store_manager.sales.destroy');
-
-    Route::get('/orders', [OrderController::class, 'index'])->name('store_manager.order.index');
+    Route::get('/store_manager/sales/index', [SalesController::class, 'index'])->name('store_manager.sales.index');
+    
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+    Route::get('inventory/stockrequests', [StockRequestController::class, 'getAllStockRequest'])->name('store_manager.inventory.stockrequest');
+    Route::post('inventory/stockrequests/add', [StockRequestController::class, 'addStock'])->name('store_manager.inventory.newstockrequest');
+   
+    Route::get('/store_manager/forecast/dashboard', [ForecastController::class, 'showDashboard'])->name('store_manager.forecast.dashboard');
+    Route::post('/store_manager/forecast/upload-sales-data', [ForecastController::class, 'uploadSalesData'])->name('forecast.sales.upload');
+    Route::post('/store_manager/forecast/run-forecast', [ForecastController::class, 'forecastSales'])->name('forecast.sales.run');
+    Route::get('/store_manager/forecast/forecast-data', [ForecastController::class, 'getForecastData'])->name(name: 'forecast.sales.data');
+    
+    Route::get('/store_manager/forecast/index', [ForecastController::class, 'index'])->name(name: 'store_manager.forecast.index');
+
+
+    Route::get('/store_manager/delivery/index', [DeliveryController::class, 'index'])->name('store_manager.delivery.index');
+    Route::get('/store_manager/order/index', [OrderController::class, 'index'])->name('store_manager.order.index');
+    Route::get('/store_manager/walk-in/index', [WalkinController::class, 'index'])->name('store_manager.walk-in.index');
+    Route::get('/store_manager/pos', [WalkinController::class, 'index'])->name('store_manager.pos');
+    Route::post('/store_manager/pos/submit', [WalkinController::class, 'submit'])->name('store_manager.pos.submit');
+    Route::get('/store_manager/purchase_stock/index', [PurchaseController::class, 'index'])->name(name: 'store_manager.purchase_stock.index');
+    Route::get('purchase-stock', [PurchaseController::class, 'index'])->name('store_manager.purchase_stock.index');
+    Route::post('purchase-stock', [PurchaseController::class, 'submit'])->name('store_manager.purchase_stock.submit');
+    Route::get('/store_manager/warehouse_stock/index', [WarehousestockController::class, 'index'])->name(name: 'store_manager.warehouse_stock.index');
+    Route::post('/store_manager.orders/index', [ProductController::class, 'submitWalkinOrder'])->name('store_manager.orders.walkin_orders');
+    Route::get('/store-manager/walk-in/index', [ProductController::class, 'showWalkInSales'])->name(name: 'store_manager.walk-in.index');
+    Route::get('/store-manager/walk-in/add', [ProductController::class, 'addWalkIn'])->name(name: 'store_manager.walk-in.add');
+    Route::post('/store-manager/walk-in/store', [SalesController::class, 'storeWalkInSale'])->name('store_manager.walk-in.store');
+
+    //order
+    // Route::patch('/orders/{id}/status', [ProductController::class, 'updateStatus'])
+    // ->name('store_manager.orders.update_status');
+    // Route::get('/store-manager/store_orders/index', [OrderController::class, 'getOrders'])->name('store_manager.store_orders.index');
+
+    Route::get('/store_manager.orders.index', action: [OrderController::class, 'orders'])->name('store_manager.orders.index');
+    Route::get('/store_manager.orders/walkin_order', [OrderController::class, 'showWalkinForm'])->name('store_manager.orders.walkin_order');
+    Route::post('/orders', [OrderController::class, 'store'])->name('store_manager.orders.store'); 
+
+
+    Route::get('/store-manager/stocks/index', [StockController::class, 'index'])->name('store_manager.stocks.index');
+    Route::get('/store-manager/stocks/create', [StockController::class, 'create'])->name('store_manager.stocks.create');
+    Route::post('/store-manager/stocks/store', [StockController::class, 'store'])->name('store_manager.stocks.store');
+    Route::patch('/orders/{orderId}/status', [OrderController::class, 'updateStatus'])->name('store_manager.orders.updateStatus');
+
+
+
+    // products 
+
+    Route::get('/store_manager/products/index', [ProductController::class, 'index'])->name('store_manager.products.index');
+    Route::get('store_manager/products/create', [ProductController::class, 'create'])->name('store_manager.products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('store_manager.products.store');
+    Route::get('store_manager/products/{product}/edit', [ProductController::class, 'edit'])->name('store_manager.products.edit');
+    Route::put('products/{product}', [ProductController::class, 'update'])->name('store_manager.products.update');
+    Route::delete('/store_manager.products/{product}', [ProductController::class, 'destroy'])->name('store_manager.products.destroy');
+
+    // MA
+    Route::get('/store_manager/forecasting/index', [ForecastController::class, 'showMovingAverage'])->name(name: 'store_manager.forecasting.index');
+    
+    //instore orders 
+    Route::get('/store_manager/in-store-orders/index', [InStoreController::class, 'index'])->name(name: 'store_manager.in-store-orders.index');
+    Route::get('/store_manager/in-store-orders/create', [InStoreController::class, 'create'])->name('store_manager.in-store-orders.create');
+    Route::post('/store_manager/in-store-orders/store', [InStoreController::class, 'store'])->name('store_manager.in-store-orders.store');
+    Route::get('in-store-orders/{order}/edit', [InStoreController::class, 'edit'])->name('store_manager.in-store-orders.edit');
+    Route::put('in-store-orders/{order}', [InStoreController::class, 'update'])->name('store_manager.in-store-orders.update'); 
+    Route::delete('in-store-orders/{order}', [InStoreController::class, 'destroy'])->name('store_manager.in-store-orders.destroy');
+    Route::put('/orders/{order_id}/update-status', [InStoreController::class, 'updateStatus'])
+    ->name('store_manager.in-store-orders.update-status');
 
     Route::get('inventory/stockrequests', [StockRequestController::class, 'getAllStockRequest'])->name('store_manager.inventory.stockrequest');
     Route::post('inventory/stockrequests/add', [StockRequestController::class, 'addStock'])->name('store_manager.inventory.newstockrequest');
@@ -119,6 +229,7 @@ Route::prefix('driver')->group(function () {
     Route::get('/routes', [DriverController::class, 'view'])->name('routes');
     Route::get('/orders', [DriverController::class, 'orders'])->name('orders');
     Route::get('/schedule', [DriverController::class, 'schedule'])->name('schedule');
+    Route::get('/markers', [App\Http\Controllers\MapController::class, 'getMarkers']);
 });
 
 // FOR CUSTOMER
@@ -149,8 +260,11 @@ Route::prefix('customer')->group(function () {
 
     // Confirm Delivery
     Route::post('/confirm-delivery', [OrderController::class, 'confirmDelivery'])->name('customer.confirm-delivery');
+    Route::get('/history', [OrderHistoryController::class, 'index'])->name('history');
 });
 
 Route::get('/home', function () {
     return view('home');
 });
+
+require __DIR__.'/auth.php';

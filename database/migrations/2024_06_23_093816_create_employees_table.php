@@ -12,11 +12,21 @@ return new class extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('position');
-            $table->decimal('salary', 8, 2);
-            $table->timestamps();
+        $table->id('employee_id');
+        $table->string('name');
+        $table->string('position');
+        $table->string('gender')->nullable(); 
+        $table->date('dob')->nullable(); 
+        $table->string('email')->unique(); 
+        $table->string('phone_number')->nullable(); 
+        $table->string('address')->nullable(); 
+        $table->string('city')->nullable(); 
+        $table->string('province')->nullable(); 
+        $table->string('region')->nullable(); 
+        $table->string('postal_code')->nullable(); 
+        $table->string('nationality')->nullable(); 
+        $table->string('ssn')->nullable(); 
+        $table->timestamps();
         });
     }
 

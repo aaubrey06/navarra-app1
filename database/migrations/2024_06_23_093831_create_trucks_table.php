@@ -12,12 +12,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('trucks', function (Blueprint $table) {
-            $table->id();
+            $table->id('truck_id');
             $table->string('license_plate');
             $table->string('model');
             $table->integer('year');
+            $table->decimal('capacity', 8, 2)->nullable();
+            $table->string('color')->nullable();
+            $table->unsignedBigInteger('driver_id')->nullable();
             $table->timestamps();
         });
+      
     }
 
     public function down()

@@ -32,7 +32,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                 @foreach ($requests as $request)
+                                    @foreach ($requests as $request)
                                         <tr>
                                             <td>
                                                 {{ $request->request_id }}
@@ -53,21 +53,23 @@
                                             </td>
                                             <td>
                                                 <?php
-                                            // $store = json_decode(json_encode($store), true);
-                                            foreach ($products as $key => $product){
-                                                if($product->product_id == $request->product_id){
-                                                    echo $product->rice_type;
-                                                }}
-                                            ?>
+                                                // $store = json_decode(json_encode($store), true);
+                                                foreach ($products as $key => $product) {
+                                                    if ($product->product_id == $request->product_id) {
+                                                        echo $product->rice_type;
+                                                    }
+                                                }
+                                                ?>
                                             </td>
 
                                             <td>
 
-                                            {{ $request->quantity_requested }}
+                                                {{ $request->quantity_requested }}
                                             </td>
                                             <td>
 
-                                            <a class="button button-primary" href="{{ route('qrScan',$request->request_id) }}"> Scan QR</a>
+                                                <a class="button button-primary"
+                                                    href="{{ route('qrScan', $request->request_id) }}"> Scan QR</a>
                                             </td>
                                         </tr>
                                     @endforeach
