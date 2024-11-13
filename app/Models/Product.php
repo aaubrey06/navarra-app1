@@ -12,9 +12,6 @@ class Product extends Model
     protected $primaryKey = 'product_id';
 
     protected $fillable = [
-        'image', 'rice_type', 'unit', 'unit_price', 'selling_price', 'target_level', 'reorder_level', 'current_quantity'
+        'image', 'rice_type', 'unit', 'unit_price', 'selling_price', 'target_level', 'reorder_level', 'current_quantity',
     ];
-
-    protected $primaryKey = 'product_id';
-
 }

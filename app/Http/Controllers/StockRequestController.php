@@ -16,7 +16,7 @@ class StockRequestController extends Controller
     public function getAllStockRequest()
     {
         $warehouse_stocks = [];
-        $store = Store::all();
+        $stores = Store::all();
         $products = Product::all();
         $requests = StockRequest::all();
         $stock_requests = [];
