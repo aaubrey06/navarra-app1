@@ -283,8 +283,8 @@
                                    required placeholder="Enter barangay">
                         </div>
 
-                        <input type="hidden" id="latitude" name="latitude" value="{{ $user->latitude ?? '' }}">
-                        <input type="hidden" id="longitude" name="longitude" value="{{ $user->longitude ?? '' }}">
+                        {{-- <input type="hidden" id="latitude" name="latitude" value="{{ $user->latitude ?? '' }}">
+                        <input type="hidden" id="longitude" name="longitude" value="{{ $user->longitude ?? '' }}"> --}}
 
                         {{-- Map --}}
                         <div class="mb-3">
