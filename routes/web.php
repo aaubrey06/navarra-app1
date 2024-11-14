@@ -252,7 +252,7 @@ Route::prefix('customer')->group(function () {
     Route::get('/order-list', [CartController::class, 'orders'])->name('cart.order-list');
     Route::post('/order-list', [CartController::class, 'placeOrder'])->name('cart.placeOrder');
     Route::get('customer/customer-order-details/{order}', [CartController::class, 'orderDetails'])->name('customer.order-details');
-    Route::patch('/order/{order}/cancel', [CartController::class, 'cancelOrder'])->name('order.cancel');
+    Route::patch('/order/{order}/cancel', [CartController::class, 'cancel'])->name('order.cancel');
 
     //History
     Route::get('/order-history-details/{order}', [OrderHistoryController::class, 'showOrderDetails'])->name('order.history.details');
