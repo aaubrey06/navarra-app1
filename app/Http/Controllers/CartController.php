@@ -248,7 +248,8 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $customer = $user->customer;
-        $orderDetails = $order->orderDetails;
+        $orderDetails = OrderDetails::where('order_id', $order->id)->get();
+
         return view('customer.customer-order-details', compact('order', 'orderDetails', 'user', 'customer'));
     }
 

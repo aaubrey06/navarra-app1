@@ -11,6 +11,8 @@ class Order extends Model
 
     protected $table = 'orders';
 
+    protected $primaryKey = 'order_id';
+
     protected $fillable = [
         'tracking_no',
         'delivery_date',
@@ -32,7 +34,7 @@ class Order extends Model
     }
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetails::class);
+        return $this->hasMany(OrderDetails::class, 'order_id');
     }
 
     public function scopeDelivered($query)
