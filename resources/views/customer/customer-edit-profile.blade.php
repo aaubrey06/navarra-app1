@@ -2,11 +2,171 @@
 
 @section('title', 'Edit Profile')
 
+@section('styles')
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+@endsection
+
+@section('scripts')
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSV1H3B9U0Ze4jyL05cJliB9CR7Zk14d4&libraries=places&callback=initMap" defer></script>
+
+    <script>
+        let map, marker; //Nov. 11
+
+        // Initialize Google Map
+        function initMap() {
+            // Default coordinates (Iloilo City)
+            const defaultLocation = {
+                lat: 10.7202,
+                lng: 122.5621
+            };
+
+            // Create map instance
+            // const map = new google.maps.Map(document.getElementById('map'), {
+            //     center: defaultLocation,
+            //     zoom: 13,
+            //     mapTypeControl: true,
+            //     streetViewControl: true,
+            //     fullscreenControl: true,
+            //     zoomControl: true
+            // });
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: defaultLocation,
+                zoom: 13
+            });
+
+            // Create marker instance
+            // const marker = new google.maps.Marker({
+            //     position: defaultLocation,
+            //     map: map,
+            //     draggable: true,
+            //     animation: google.maps.Animation.DROP,
+            //     title: 'Drag to set your location'
+            // });
+            marker = new google.maps.Marker({
+                position: defaultLocation,
+                map: map,
+                draggable: true
+            });
+
+            // Update lat/lng inputs on marker drag
+            google.maps.event.addListener(marker, 'dragend', (event) => {
+                document.getElementById('latitude').value = event.latLng.lat();
+                document.getElementById('longitude').value = event.latLng.lng();
+            });
+
+            // Attach address change events
+            ['region', 'province', 'city', 'barangay'].forEach(id => {
+                document.getElementById(id).addEventListener('change', geocodeAddress);
+            });
+
+            //Old Codes
+            // Add marker drag event listener
+            marker.addListener('dragend', function(event) {
+                document.getElementById('latitude').value = event.latLng.lat();
+                document.getElementById('longitude').value = event.latLng.lng();
+
+                // Reverse geocoding
+                const geocoder = new google.maps.Geocoder();
+                geocoder.geocode({
+                    location: event.latLng
+                }, function(results, status) {
+                    if (status === 'OK' && results[0]) {
+                        updateAddressFields(results[0].address_components);
+                    }
+                });
+            });
+
+            // Try to get user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        map.setCenter(pos);
+                        marker.setPosition(pos);
+                        document.getElementById('latitude').value = pos.lat;
+                        document.getElementById('longitude').value = pos.lng;
+                    },
+                    () => {
+                        console.log('Error: The Geolocation service failed.');
+                    }
+                );
+            }
+        }
+
+        // Geocode the address based on the form input
+        function geocodeAddress() {
+            const region = document.getElementById('region').value;
+            const province = document.getElementById('province').value;
+            const city = document.getElementById('city').value;
+            const barangay = document.getElementById('barangay').value;
+
+            const address = `${barangay}, ${city}, ${province}, ${region}`;
+
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: address }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    const location = results[0].geometry.location;
+                    map.setCenter(location);
+                    marker.setPosition(location);
+
+                    document.getElementById('latitude').value = location.lat();
+                    document.getElementById('longitude').value = location.lng();
+                } else {
+                    console.error('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+        function updateAddressFields(addressComponents) {
+            for (const component of addressComponents) {
+                const componentType = component.types[0];
+
+                switch (componentType) {
+                    case "administrative_area_level_1":
+                        document.getElementById('region').value = component.long_name;
+                        break;
+                    case "administrative_area_level_2":
+                        document.getElementById('province').value = component.long_name;
+                        break;
+                    case "locality":
+                        document.getElementById('city').value = component.long_name;
+                        break;
+                    case "sublocality_level_1":
+                        document.getElementById('barangay').value = component.long_name;
+                        break;
+                }
+            }
+        }
+
+        // Add this to ensure the function is available globally
+        window.initMap = initMap;
+
+        // Add a DOMContentLoaded listener as a backup
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            // Check if Google Maps API is loaded
+            if (typeof google === 'undefined') {
+                console.log('Google Maps API not loaded yet');
+            } else {
+                console.log('Google Maps API loaded');
+                initMap();
+            }
+        });
+    </script>
+@endsection
 
 @section('contents')
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSV1H3B9U0Ze4jyL05cJliB9CR7Zk14d4&libraries=places">
-    </script>
 
     <section class="section">
         <div class="container">
@@ -127,12 +287,12 @@
                         <input type="hidden" id="longitude" name="longitude" value="{{ $user->longitude ?? '' }}">
 
                         {{-- Map --}}
-                        {{-- <div class="mb-3">
+                        <div class="mb-3">
                             <label for="map" class="form-label">Pin Your Location on the Map</label>
-                            <div id="map" style="height: 300px; border-radius: 8px;"></div>
+                            <div id="map" style="height: 300px; width: 100%; border-radius: 8px;"></div>
                             <input type="hidden" id="latitude" name="latitude" value="{{ $user->latitude ?? '' }}">
                             <input type="hidden" id="longitude" name="longitude" value="{{ $user->longitude ?? '' }}">
-                        </div> --}}
+                        </div>
 
                         {{-- <div class="mb-3">
                             <div id="map"></div>
@@ -178,29 +338,5 @@
 
 @endsection
 
-@section('scripts')
-<script>
 
-    // Initialize Google Map
-    function initMap() {
-        const map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 10.7202, lng: 122.5621 },
-            zoom: 13,
-        });
 
-        const marker = new google.maps.Marker({
-            position: { lat: 10.7202, lng: 122.5621 },
-            map: map,
-            draggable: true,
-        });
-
-        google.maps.event.addListener(marker, 'dragend', function (event) {
-            $('#latitude').val(event.latLng.lat());
-            $('#longitude').val(event.latLng.lng());
-        });
-    }
-
-    // Load Google Maps
-    window.onload = initMap;
-</script>
-@endsection
