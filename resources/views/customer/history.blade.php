@@ -37,14 +37,14 @@
                                         <td>{{ $order->delivery_date }}</td>
                                         <td>{{ $order->order_status }}</td>
                                         <td>
-                                            <a href="{{ route('order.history.details', ['id' => $order->id]) }}" class="btn btn-success mx-2">View Details</a>
+                                            <a href="{{ route('order.history.details', ['order' => $order->order_id]) }}" class="btn btn-success mx-2">View Details</a>
                                             <!-- <button type="submit" class="btn btn-danger">Remove</button> -->
 
-                                            <form action="{{ route('customer.history.destroy', $order->id) }}" method="POST" class="d-inline-block" onsubmit="return confirmRemoval()">
+                                            {{-- <form action="{{ route('customer.history.destroy', $order->order_id) }}" method="POST" class="d-inline-block" onsubmit="return confirmRemoval()">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Remove</button>
-                                            </form>
+                                            </form> --}}
 
                                         </td>
                                     </tr>
@@ -62,7 +62,7 @@
                                 return confirm('Are you sure you want to remove this order?');
                             }
                         </script>
-                        
+
                     </div>
                 </div>
             </div>
