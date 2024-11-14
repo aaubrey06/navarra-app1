@@ -74,6 +74,7 @@ Route::prefix('owner')->group(function () {
 
     Route::get('/owner/products', [ProductController::class, 'products'])->name('owner.products');
 
+    Route::get('/owner/products', [ProductController::class, 'products'])->name('owner.products');
     Route::get('create', [ProductController::class, 'create'])->name('owner.create');
     Route::post('products', [ProductController::class, 'store'])->name('owner.products.store');
     Route::get('products/{product}', [ProductController::class, 'show'])->name('owner.products.show');

@@ -16,7 +16,7 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Outbound Stocks</h5>
+                            <h5 class="card-title">Warehouse Outbound Stocks</h5>
 
                             <div class="table-responsive">
                                 <!-- Table with stripped rows -->

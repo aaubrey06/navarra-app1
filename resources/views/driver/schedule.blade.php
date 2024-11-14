@@ -6,6 +6,7 @@
     <div class="d-flex flex-column">
     </div>
     <div></div>
+    <div class="table-responsive"> </div>
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -22,6 +23,7 @@
                                     <th>Customer Name</th>
                                     <th>Location</th>
                                     <th>Contact Number</th>
+                                    <th>Status</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -51,6 +53,11 @@
             </div>
         </div>
     </section>
+
+    <!-- Notification Alert -->
+    <div id="notification" class="alert alert-success" role="alert" style="display: none;">
+        Status updated successfully!
+    </div>
 @endsection
 
 <!-- Include jQuery and Bootstrap JS for modal functionality -->

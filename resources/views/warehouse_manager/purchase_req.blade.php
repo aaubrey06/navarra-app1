@@ -17,6 +17,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Stock Request</h5>
+                            <h5 class="card-title">Stock Request</h5>
 
                             <div class="table-responsive">
                                 <!-- Table with stripped rows -->

@@ -35,6 +35,10 @@
 <!-- Directions panel -->
 <div id="directions-panel"></div>
 
+<video id="video" width="320" height="240" autoplay style="display: none;"></video>
+<canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
+<button id="capture-button" style="display: none;">Capture Photo</button>
+
 <script>
    var map, directionsService, directionsRenderer, userLocationMarker;
   var geocoder;
@@ -279,5 +283,150 @@
   // Initialize the map when the window loads
   window.onload = initMap;
 </script>
+
+<style>
+
+/* Table Styling */
+.highlight {
+    background-color: #e6f7ff;
+}
+
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+table.table thead th {
+    background-color: #0056b3;
+    color: #ffffff;
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 2px solid #ddd;
+}
+
+table.table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+table.table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Button Styling */
+.btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 0;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    box-shadow: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slight shadow on hover */
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    box-shadow: none;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slight shadow on hover */
+}
+
+
+#capture-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+#capture-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+/* Status Indicators */
+.status-pending {
+    color: #ffca28;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.status-delivered {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.status-failed {
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Video Styling */
+#video {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+#map {
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#directions-panel {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.alert {
+    font-weight: bold;
+    color: #dc3545;
+}
+</style>
 
 @endsection
