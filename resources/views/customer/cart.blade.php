@@ -11,7 +11,7 @@
                 @php
                     $cartItems = session()->get('cartItems', []);
                 @endphp
-                
+
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">My Cart</h5>
@@ -21,7 +21,7 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        
+
                         <!-- Table with stripped rows -->
                         <table class="table datatable">
                             <thead>
@@ -72,7 +72,7 @@
                                 <button type="submit" class="btn btn-success mx-2" id="checkoutButton">Check Out</button>
                             </form>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

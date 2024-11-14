@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('product_code', length: 45);
             $table->integer('quantity');
             $table->string('qr_code', length: 45);
+            $table->string('supplier', length: 45);
             $table->foreignId('invtype_id');
             $table->foreignId('warehouse_id');
             $table->timestamps();

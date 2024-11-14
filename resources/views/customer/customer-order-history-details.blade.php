@@ -36,9 +36,9 @@
                                     <td>{{ $item['total_selling_price'] }}</td>
                                 </tr>
 
-                                <!-- @php
+                                {{-- @php
                                     $totalPrice += $item['total_selling_price'];
-                                @endphp -->
+                                @endphp --}}
 
                                 @empty
                                     <tr>
@@ -55,25 +55,16 @@
                             <h5>Delivery Date: {{ $order->delivery_date }}</h5>
                             <h5>Payment Status: {{ $order->payment_status }}</h5>
                             <h5>Order Status: {{ $order->order_status }}</h5>
-                            <h5>Delivery Option: <!-- Insert Delivery Option Here --></h5>
+                            <h5>Delivery Option: {{ $order->delivery_option }}</h5>
                         </div>
 
                         <div class="card-body">
                             <h5 class="card-title">Delivery Address</h5>
-                            <h5>Grace Poe</h5>
-                            <h5>09123456789</h5>
-                            <h5>Iloilo City, Iloilo</h5>
-                            <h5>5800</h5>
+                            <h5>{{ $user->first_name }} {{ $user->last_name }}</h5>
+                            <h5>{{ $customer->phone }}</h5>
+                            <h5>{{ $customer->barangay }}, {{ $customer->city }},
+                                {{ $customer->province }}, {{ $customer->region }}</h5>
                         </div>
-
-                        <!-- <form action="{{ route('cart.placeOrder') }}" method="POST">
-                            @csrf
-                            <div class="text-end">
-                                <h5>Total: ${{ number_format($totalPrice, 2) }}</h5>
-                                <a href="{{ route('cart') }}" class="btn btn-success mx-2">Edit Order</a>
-                                <button type="submit" class="btn btn-success mx-2">Place Order</button>
-                            </div>
-                        </form> -->
 
                     </div>
                 </div>

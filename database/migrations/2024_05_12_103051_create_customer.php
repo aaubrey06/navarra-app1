@@ -19,6 +19,7 @@ return new class extends Migration
             // $table->string('c_latitude', length: 45);
             $table->id('customer_id');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Foreign key
+            $table->string('phone', 15);
             $table->string('region', 100);
             $table->string('province', 100);
             $table->string('city', 100);

@@ -55,10 +55,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'owner',
         ]);
 
-        
-        
-
-
         $this->call([
             // MethodSeeder::class,  
             // StatusSeeder::class, 

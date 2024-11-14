@@ -11,24 +11,20 @@ class Order extends Model
 
     protected $table = 'orders';
 
+    protected $primaryKey = 'order_id';
+
     protected $fillable = [
-        'order_date',
-        'customer_id',
-        'rice_type',
-        'quantity',
-        'method', 
         'tracking_no',
         'delivery_date',
         'payment_status',
-        'order_status_id',
-        'latitude',  
-        'longitude',
+        'order_status',
+        'delivery_option',
     ];
 
-    protected $casts = [
-        'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8',
-    ];
+    // protected $casts = [
+    //     'latitude' => 'decimal:8',
+    //     'longitude' => 'decimal:8',
+    // ];
 
     public $timestamps = true;
 
@@ -38,7 +34,7 @@ class Order extends Model
     }
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetails::class);
+        return $this->hasMany(OrderDetails::class, 'order_id');
     }
 
     public function scopeDelivered($query)

@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Auth;
 
 class CustomerProfileController extends Controller
 {
     public function index()
     {
         $user = Auth::user(); // Assuming you are using Laravel's Auth
-        return view('customer.customer-profile', compact('user'));
+        $customer = \App\Models\Customer::where('user_id', $user->id)->first();
+
+        return view('customer.customer-profile', compact('user', 'customer'));
     }
 
     public function updateProfile(Request $request)
@@ -42,6 +44,7 @@ class CustomerProfileController extends Controller
         $customer = \App\Models\Customer::updateOrCreate(
             ['user_id' => $user->id],  // Match by user_id
             [
+                'phone' => $validated['phone'],
                 'region' => $validated['region'],
                 'province' => $validated['province'],
                 'city' => $validated['city'],

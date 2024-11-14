@@ -13,48 +13,48 @@
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
-
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Warehouse Stocks Categorization</h5>
-
+                            <h5 class="card-title">Categorization</h5>
 
                             <!-- Table with stripped rows -->
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th>Category A</th>
-                                        <th>Category B</th>
-                                        <th>Category C</th>
+                                        <th>Rice Type</th>
+                                        <th>Category</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            @foreach ($percentage_per_product as $key => $item)
+                                    @foreach ($percentage_per_product as $item)
+                                        <tr>
+                                            <!-- Item -->
+                                            <td>
+                                                {{ $item['name'] }} - {{ $item['unit'] }} kg - {{ $item['percentage'] }}%
+                                            </td>
+
+                                            <!-- Category with color coding -->
+                                            <td>
                                                 @if ($item['category'] == 'category_a')
-                                                    {{ $key }} {{ $item['percentage'] }}%<br>
+                                                    <span class="badge bg-success">Category A</span>
+                                                @elseif ($item['category'] == 'category_b')
+                                                    <span class="badge bg-warning text-dark">Category B</span>
+                                                @elseif ($item['category'] == 'category_c')
+                                                    <span class="badge bg-primary">Category C</span>
                                                 @endif
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach ($percentage_per_product as $key => $item)
-                                                @if ($item['category'] == 'category_b')
-                                                    {{ $key }} {{ $item['percentage'] }}%<br>
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach ($percentage_per_product as $key => $item)
-                                                @if ($item['category'] == 'category_c')
-                                                    {{ $key }} {{ $item['percentage'] }}%<br>
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
+
+
+
 
         <script></script>
 

@@ -1,6 +1,6 @@
 @extends('layouts.warehouse-manager_layout')
 
-@section('title', 'Generate QR')
+@section('title', 'Warehouse Stocks')
 
 
 @section('contents')
@@ -18,52 +18,66 @@
                         <div class="card-body">
                             <h5 class="card-title">Warehouse Stocks</h5>
 
-
-                            <!-- Table with stripped rows -->
-                            <table class="table datatable">
-                                <thead>
-                                    <tr>
-                                        <th>Rice type</th>
-                                        <th>Unit</th>
-                                        <th>Quantity</th>
-                                        <th>Arrival Date</th>
-                                        {{-- <th>Product Code</th> --}}
-                                        <th>Batch Code</th>
-                                        <th>Qr Code</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($warehouse_data['warehouse_stocks'] as $warehouse)
+                            <div class="table-responsive">
+                                <!-- Table with stripped rows -->
+                                <table class="table datatable">
+                                    <thead>
                                         <tr>
-                                            <td><?php
-                                            // $jsonwarehouse = json_decode($warehouse['products'], true);
-                                            // echo $jsonwarehouse;
-                                            $products_arr = json_decode(json_encode($warehouse_data['products']), true);
-                                            foreach ($products_arr as $product) {
-                                                $warehouse_arr = json_decode(json_encode($warehouse), true);
-                                                $product_arr = json_decode(json_encode($product), true);
-                                                if ($warehouse_arr['product_id'] == $product_arr['product_id']) {
-                                                    echo $product_arr['rice_type'];
-                                                }
-                                            }
-                                            ?></td>
-                                            <td>{{ $warehouse->unit }}</td>
-                                            <td>{{ $warehouse->quantity }}</td>
-                                            <td>{{ $warehouse->arrival_date }}</td>
-                                            {{-- <td>{{ $warehouse->product_code }}</td> --}}
-                                            <td>{{ $warehouse->batch_code }}</td>
-                                            <td>
-                                                <div class='qr_code'><span id="{{ $warehouse->qr_code }}"></span>
-                                                    <div class='qr_show'></div>
-                                                </div>
-                                                <a class="downloadqr" target="_blank" download>Download QR</a>
-                                            </td>
+                                            <th>Rice type</th>
+                                            <th>Unit</th>
+                                            <th>Quantity</th>
+                                            <th>Arrival Date</th>
+                                            {{-- <th>Product Code</th> --}}
+                                            <th>Batch Code</th>
+                                            <th>Qr Code</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <!-- End Table with stripped rows -->
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($warehouse_data['warehouse_stocks'] as $warehouse)
+                                            {{-- @if ($warehouse->quantity > 0) --}}
+                                            <tr>
+                                                <td><?php
+                                                // $jsonwarehouse = json_decode($warehouse['products'], true);
+                                                // echo $jsonwarehouse;
+                                                $products_arr = json_decode(json_encode($warehouse_data['products']), true);
+                                                foreach ($products_arr as $product) {
+                                                    $warehouse_arr = json_decode(json_encode($warehouse), true);
+                                                    $product_arr = json_decode(json_encode($product), true);
+                                                    if ($warehouse_arr['product_id'] == $product_arr['product_id']) {
+                                                        echo $product_arr['rice_type'];
+                                                    }
+                                                }
+                                                ?>
+                                                </td>
+                                                <td>{{ $warehouse->unit }}</td>
+                                                <td>{{ $warehouse->quantity }}</td>
+                                                <td>{{ $warehouse->arrival_date }}</td>
+                                                {{-- <td>{{ $warehouse->product_code }}</td> --}}
+                                                <td>{{ $warehouse->batch_code }}</td>
+                                                <td>
+                                                    <div class="qr_code"><span id ="{{ $warehouse->qr_code }}">
 
+                                                        </span>
+                                                        <div class='qr_show'></div>
+
+                                                    </div>
+                                                    <a class="downloadqr" target="_blank" download>Download QR</a>
+
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        @endforeach
+                                        </thead>
+                                    </tbody>
+                                </table>
+                                {{-- <div class='qr_code'><span id="{{ $warehouse->qr_code }}"></span>
+                                                            <div class='qr_show'></div>
+                                                        </div>
+                                                        <a class="downloadqr" target="_blank" download>Download QR</a> --}}
+
+                                <!-- End Table with stripped rows -->
+
+                            </div>
                         </div>
                     </div>
 
@@ -86,7 +100,6 @@
                         width: 128,
                         height: 128
                     });
-                    // var canvas = element.getElementsByTagName('img')[0].src;
                     setTimeout(() => {
                         let qelem = element.querySelector('.qr_show canvas')
                         var dataURL = qelem.toDataURL();
