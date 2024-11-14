@@ -20,7 +20,7 @@ class OrderStore extends Model
         'method',
         'location',
         'order_date',
-        'order_status',
+        'order_status', 
     ];
 
     public function product()

@@ -121,6 +121,11 @@ class InStoreController extends Controller
                      ->with('success', 'Order status updated successfully.');
 }
 
-    
+public function getDriverOrders()
+{
+    $orderstore = OrderStore::with('product')->where('method', 'delivery')->get();
+    return response()->json($orderstore);
+}
 
 }
+

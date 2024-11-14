@@ -11,74 +11,114 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Schedule of Delivery</h5>
+                        <h5 class="card-title">Delivery Schedule</h5>
 
-                        <!-- Table with stripped rows -->
-                        <table class="table datatable">
+                        <!-- Table to display orders within Iloilo City -->
+                        <h6>Deliveries within Iloilo City</h6>
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Order No.</th>
                                     <th>Customer Name</th>
                                     <th>Location</th>
                                     <th>Contact Number</th>
-                                    {{-- <th>Actions</th> --}}
+                                    <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
-
-                                <tr>
-                                    <td> 0079 </td>
-                                    <td> Sweet Joy Kween </td>
-                                    <td> San Juan, Molo, Iloilo City </td>
-                                    <td> +639090909099 </td>
-                                </tr>
-
-                                <tr>
-                                    <td> 0078 </td>
-                                    <td> Kathryn B </td>
-                                    <td> Lapaz, Iloilo City </td>
-                                    <td> +639090909099 </td>
-                                </tr>
-
-                                <tr>
-                                    <td> 0077 </td>
-                                    <td> Bea Borres </td>
-                                    <td> Jaro, Iloilo City </td>
-                                    <td> +639090909099 </td>
-                                </tr>
-
-                                <tr>
-                                    <td> 0076 </td>
-                                    <td> Nadine </td>
-                                    <td> Jaro, Iloilo City </td>
-                                    <td> +639090909099 </td>
-                                </tr>
-
-
-                                {{-- @foreach ($products as $product)
-                                    <tr>
-                                        <td>{{ $product->rice_type }}</td>
-                                        <td>{{ $product->unit }}</td>
-                                        <td>{{ $product->unit_price }}</td>
-                                        <td>{{ $product->selling_price }}</td>
-                                        <td>{{ $product->target_level }}</td>
-                                        <td>{{ $product->reorder_level }}</td> --}}
-                                {{-- <a href="{{ route('owner.show', $product->id) }}" class="btn">View</a>
-                                        <a href="{{ route('owner.edit', $product->id) }}" class="btn">Edit</a>
-                                        <form action="{{ route('owner.products.destroy', $product->id) }}" method="post"
-                                            style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn">Delete</button> --}}
-
-                                {{-- </tr>
-                                @endforeach
-                            </tbody> --}}
+                            <tbody id="orderDetailsBodyIloilo">
+                                <!-- Data for Iloilo City will be populated here by AJAX -->
+                            </tbody>
                         </table>
-                        <!-- End Table with stripped rows -->
+
+                        <!-- Table to display orders outside Iloilo City -->
+                        <h6>Deliveries Outside Iloilo City (Scheduled for Saturday)</h6>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Order No.</th>
+                                    <th>Customer Name</th>
+                                    <th>Location</th>
+                                    <th>Contact Number</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderDetailsBodyOutsideIloilo">
+                                <!-- Data for Outside Iloilo City will be populated here by AJAX -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 @endsection
+
+<!-- Include jQuery and Bootstrap JS for modal functionality -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSV1H3B9U0Ze4jyL05cJliB9CR7Zk14d4&libraries=places"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Function to check if the location is inside Iloilo City using Google Maps Geocoding API
+    function isOutsideIloilo(address) {
+        // Google Maps Geocoding API to get location data
+        var geocoder = new google.maps.Geocoder();
+        return new Promise((resolve, reject) => {
+            geocoder.geocode({ 'address': address }, function(results, status) {
+                if (status === 'OK') {
+                    // Check if Iloilo City is in the returned address components
+                    let components = results[0].address_components;
+                    let isIloilo = components.some(component => component.long_name.toLowerCase() === 'iloilo city');
+                    resolve(!isIloilo);  // Return true if outside Iloilo City, false otherwise
+                } else {
+                    reject('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        });
+    }
+
+    // Fetch orders when the page is loaded
+    $.ajax({
+        url: "{{ route('driver.orders') }}",  // Ensure this route is correct in your application
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            let orderDetailsBodyIloilo = $('#orderDetailsBodyIloilo');
+            let orderDetailsBodyOutsideIloilo = $('#orderDetailsBodyOutsideIloilo');
+            orderDetailsBodyIloilo.empty();  // Clear any previous data
+            orderDetailsBodyOutsideIloilo.empty();  // Clear any previous data
+
+            // Loop through each order and append to the appropriate table
+            data.forEach(async function(order) {
+                let orderRow = ` 
+                    <tr>
+                        <td>${order.order_id}</td>
+                        <td>${order.customer_name}</td>
+                        <td>${order.location}</td>
+                        <td>${order.phone_number}</td>
+                        <td>${order.order_status}</td>
+                    </tr>
+                `;
+
+                // Check if the address is outside Iloilo City
+                try {
+                    let isOutside = await isOutsideIloilo(order.location);
+                    if (isOutside) {
+                        // Append to the outside Iloilo table (Scheduled for Saturday)
+                        orderDetailsBodyOutsideIloilo.append(orderRow);
+                    } else {
+                        // Append to the Iloilo City table
+                        orderDetailsBodyIloilo.append(orderRow);
+                    }
+                } catch (error) {
+                    console.error('Error with Google Maps API:', error);
+                }
+            });
+        },
+        error: function(error) {
+            console.error('Error fetching orders:', error);
+        }
+    });
+});
+</script>
