@@ -121,11 +121,14 @@
                             <div>
                                 {{ date('M. d, Y') }}
                             </div>
-                            {{-- <div> {{ $warehouse->batch_code }} </div> --}}
+                            <h5 class="card-title">Product Details:</h5>
+                            <b><a>Rice Type:</b> {{ $data['products'][0]->rice_type }}<br>
                             <b><a>Batch Code:</b> {{ $data['warehouse_stock'][0]->batch_code }}<br>
+                            <b><a>Arrival Date:</b> {{$data['warehouse_stock'][0]->arrival_date}}<br>
 
                             <table class="table">
                                 <thead>
+                                <h4 class="card-title">For Outbound:</h4>
                                     <tr>
                                         <th>Rice Type</th>
                                         <th>Unit</th>
@@ -148,7 +151,7 @@
                             </table>
                             <div class="mt-5" style="padding-bottom: 20px">
                                 <div>
-                                    Received by: _________________________________
+                                    Confirmed by: _________________________________
                                 </div>
                                 <div>
                                     Delivered by: _________________________________
