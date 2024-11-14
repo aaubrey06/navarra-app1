@@ -46,6 +46,12 @@ class StockController extends Controller
     }
 }
 
+public function stockreq()
+    {
+     
+        $products = Product::all(); 
+        return view('owner.request_stock.index', compact('products'));
+    }
 
     
     

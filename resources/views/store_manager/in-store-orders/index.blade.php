@@ -17,6 +17,7 @@
                     <th>Quantity</th>
                     <th>Unit</th>
                     <th>Price</th>
+                    <th>Total Price</th> <!-- Added column for total price -->
                     <th>Location</th>
                     <th>Phone Number</th>
                     <th>Order Date</th>
@@ -33,6 +34,11 @@
                         <td>{{ $order->quantity }}</td>
                         <td>{{ $order->unit }}</td>
                         <td>₱{{ number_format($order->price, 2) }}</td>
+
+                        <!-- Calculate total price (unit price * quantity) -->
+                        <td>₱{{ number_format($order->product->unit_price * $order->quantity, 2) }}</td>
+                        <!-- Display total price -->
+
                         <td>{{ $order->location ?? 'N/A' }}</td>
                         <td>{{ $order->phone_number }}</td>
                         <td>{{ $order->order_date }}</td>

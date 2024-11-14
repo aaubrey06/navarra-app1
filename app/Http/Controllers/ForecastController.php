@@ -1,118 +1,105 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
+use App\Models\Data; 
 use Dcvn\Math\Statistics\MovingAverage;
-use Carbon\Carbon; 
-
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 
 class ForecastController extends Controller
 {
-    public function showDashboard()
-    {
-        return view('store_manager.forecast.dashboard');
-    }
-
-
-    public function uploadSalesData(Request $request)
-    {
-        $request->validate([
-            'sales_data' => 'required|mimes:csv,txt|max:2048', 
-        ]);
-
-
-        $file = $request->file('sales_data');
-        $filePath = $file->storeAs('sales_data', 'sales_data.csv'); 
-        return back()->with('success', 'Sales data uploaded successfully');
-    }
-
-    
-    public function forecastSales()
-    {
-        $inputCsv = storage_path('app/sales_data/sales_data.csv');
-        $outputCsv = storage_path('app/forecast.csv');
-
-        
-        if (!file_exists($inputCsv)) {
-            return back()->with('error', 'Sales data CSV file not found.');
-        }
-
-        
-        $process = new Process([
-            'python', 
-            storage_path('app/scripts/arima_forecast.py'), 
-            $inputCsv, 
-            $outputCsv
-        ]);
-        
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            \Log::error('Forecast process failed: ' . $process->getErrorOutput());
-            throw new ProcessFailedException($process);
-        }
-
-        return redirect()->route('store_manager.forecast.index')->with('success', 'Forecast generated successfully');
-    }
-
-    
-    public function getForecastData()
-    {
-
-        $outputCsv = storage_path('app/forecast.csv');
-        
-        if (!file_exists($outputCsv)) {
-            return response()->json(['error' => 'Forecast data not found.']);
-        }
-
-        $forecastData = array_map('str_getcsv', file($outputCsv));
-        array_shift($forecastData); 
-
-        $dates = [];
-        $forecastedSales = [];
-
-        foreach ($forecastData as $row) {
-            $dates[] = $row[0]; 
-            $forecastedSales[] = (float) $row[1]; 
-        }
-
-
-        return response()->json([
-            'dates' => $dates,
-            'forecasted_sales' => $forecastedSales
-        ]);
-    }
-
-    public function index()
-    {
-        return view('store_manager.forecast.index');
-    }
-
-    // MA
     public function showMovingAverage()
-    {
-        $movingAverages = [
-            'weekly' => [20020, 30000, 200005, 300005, 20008, 32000, 40000],  
-            'monthly' => [150000, 2000000, 1800000, 2200000, 250000, 2000070, 300000],  
-            'yearly' => [20000000, 25000, 240000000, 26000000, 2800000],  
-        ];
-    
-        $weeklyLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'];
-        $monthlyLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-        $yearlyLabels = ['2020', '2021', '2022', '2023', '2024'];
-    
-        return view('store_manager.forecasting.index', [
-            'result' => $movingAverages,  
-            'weeklyLabels' => $weeklyLabels,
-            'monthlyLabels' => $monthlyLabels,
-            'yearlyLabels' => $yearlyLabels
-        ]);
+{
+    $data = Data::select('sales_date', 'quantity_sold')->orderBy('sales_date')->get();
+
+    $windowSize = 5; 
+
+    $movingAverage = new MovingAverage(array_column($data->toArray(), 'quantity_sold'), $windowSize);
+    $movingAverages = $movingAverage->getMovingAverage();
+
+    // Ensure data is an array of objects
+    if (!$data->isEmpty() && $data->first() instanceof \Illuminate\Database\Eloquent\Model) {
+        $data = $data->toArray();
     }
+
+    return view('store_manager.forecasting.index', compact('data', 'movingAverages'));
+}
+public function showForecast(Request $request)
+{
+    // Get grouping option from request
+    $groupBy = $request->input('group_by', 'none');
+
+    // Fetch sales data
+    $data = Data::select('sales_date', 'quantity_sold')->orderBy('sales_date')->get();
+
+    // Group data based on selection
+    $groupedData = $this->groupDataBy($data, $groupBy);
+
+    // Calculate moving averages based on grouped data (as an example)
+    $quantities = $groupedData->pluck('quantity_sold')->toArray();
+    $windowSize = 5;
+    $movingAverages = [];
+    for ($i = 0; $i < count($quantities); $i++) {
+        if ($i >= $windowSize - 1) {
+            $average = array_sum(array_slice($quantities, $i - $windowSize + 1, $windowSize)) / $windowSize;
+            $movingAverages[] = round($average, 2);
+        } else {
+            $movingAverages[] = null; // No moving average for initial periods
+        }
+    }
+
+    return view('store_manager.forecasting.index', [
+        'data' => $groupedData,
+        'movingAverages' => $movingAverages,
+        'groupBy' => $groupBy
+    ]);
+}
+
+private function groupDataBy($data, $groupBy)
+{
+    switch ($groupBy) {
+        case 'weekly':
+            return $data->groupBy(function ($item) {
+                return Carbon::parse($item['sales_date'])->startOfWeek()->format('Y-m-d');
+            })->map(function ($group) {
+                return [
+                    'sales_date' => $group->first()['sales_date'],
+                    'quantity_sold' => $group->sum(function($item) {
+                        return (float) $item['quantity_sold']; // Explicitly cast to numeric value
+                    }),
+                ];
+            })->values();
     
+        case 'monthly':
+            return $data->groupBy(function ($item) {
+                return Carbon::parse($item['sales_date'])->format('Y-m');
+            })->map(function ($group) {
+                return [
+                    'sales_date' => $group->first()['sales_date'],
+                    'quantity_sold' => $group->sum(function($item) {
+                        return (float) $item['quantity_sold']; // Explicitly cast to numeric value
+                    }),
+                ];
+            })->values();
+    
+        case 'yearly':
+            return $data->groupBy(function ($item) {
+                return Carbon::parse($item['sales_date'])->format('Y');
+            })->map(function ($group) {
+                return [
+                    'sales_date' => $group->first()['sales_date'],
+                    'quantity_sold' => $group->sum(function($item) {
+                        return (float) $item['quantity_sold']; // Explicitly cast to numeric value
+                    }),
+                ];
+            })->values();
+    
+        default:
+            return $data;
+    }
+}
+
 
 }

@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->string('order_number')->unique(); // Unique order number
-            $table->foreignId('store_id')->constrained('stores', 'store_id'); // Foreign key referencing the stores table
-            $table->decimal('total_amount', 10, 2)->nullable(); // Total amount of the purchase order
-            $table->string('status')->default('pending'); // Status of the purchase order (e.g., pending, completed)
-            $table->text('notes')->nullable(); // Optional notes about the purchase order
+            $table->id('purchase_order_id'); // Primary key
+            $table->string('supplier_name'); // Supplier name
+            $table->string('rice_type'); // Type of rice
+            $table->decimal('quantity', 10, 2); // Quantity of rice ordered
+            $table->decimal('total_amount', 10, 2)->nullable(); // Total amount of the purchase order (Quantity * Unit Price)
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending'); // Status of the purchase order
             $table->timestamps(); // created_at and updated_at fields
         });
+        
+        
     }
 
     /**

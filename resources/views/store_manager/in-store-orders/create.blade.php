@@ -23,7 +23,9 @@
                         <select name="product_id" id="product_id" class="form-control" required>
                             <option value="">Select Rice Type</option>
                             @foreach ($products as $product)
-                                <option value="{{ $product->product_id }}">{{ $product->rice_type }}</option>
+                                <option value="{{ $product->product_id }}" data-price="{{ $product->unit_price }}">
+                                    {{ $product->rice_type }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -36,14 +38,17 @@
                     <div class="form-group">
                         <label for="unit">Unit</label>
                         <select name="unit" id="unit" class="form-control" required>
-                            <option value="kg">kg</option>
-                            <option value="sack">sack</option>
+                            <option value="">Select Unit</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="text" name="price" id="price" class="form-control" required>
+                        <input type="text" name="price" id="price" class="form-control" required readonly>
                     </div>
 
                     <div class="form-group">
@@ -71,4 +76,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productSelect = document.getElementById('product_id');
+            const quantityInput = document.getElementById('quantity');
+            const priceInput = document.getElementById('price');
+
+            function updatePrice() {
+                // Get the selected product and its unit price (from data-price attribute)
+                const selectedProduct = productSelect.options[productSelect.selectedIndex];
+                const pricePerUnit = parseFloat(selectedProduct.getAttribute('data-price')) || 0;
+
+                // Get the quantity entered by the user
+                const quantity = parseFloat(quantityInput.value) || 0;
+
+                // Calculate the total price
+                const totalPrice = pricePerUnit * quantity;
+
+                // Update the price field with the calculated total price
+                priceInput.value = totalPrice.toFixed(2);
+            }
+
+            // Event listeners for changes on product selection and quantity input
+            productSelect.addEventListener('change', updatePrice);
+            quantityInput.addEventListener('input', updatePrice);
+        });
+    </script>
 @endsection

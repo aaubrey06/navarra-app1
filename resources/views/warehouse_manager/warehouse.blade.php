@@ -34,38 +34,38 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($warehouse_data['warehouse_stocks'] as $warehouse)
-                                            {{-- @if ($warehouse->quantity > 0) --}}
-                                            <tr>
-                                                <td><?php
-                                                // $jsonwarehouse = json_decode($warehouse['products'], true);
-                                                // echo $jsonwarehouse;
-                                                $products_arr = json_decode(json_encode($warehouse_data['products']), true);
-                                                foreach ($products_arr as $product) {
-                                                    $warehouse_arr = json_decode(json_encode($warehouse), true);
-                                                    $product_arr = json_decode(json_encode($product), true);
-                                                    if ($warehouse_arr['product_id'] == $product_arr['product_id']) {
-                                                        echo $product_arr['rice_type'];
+                                            @if ($warehouse->quantity > 0)
+                                                <tr>
+                                                    <td><?php
+                                                    // $jsonwarehouse = json_decode($warehouse['products'], true);
+                                                    // echo $jsonwarehouse;
+                                                    $products_arr = json_decode(json_encode($warehouse_data['products']), true);
+                                                    foreach ($products_arr as $product) {
+                                                        $warehouse_arr = json_decode(json_encode($warehouse), true);
+                                                        $product_arr = json_decode(json_encode($product), true);
+                                                        if ($warehouse_arr['product_id'] == $product_arr['product_id']) {
+                                                            echo $product_arr['rice_type'];
+                                                        }
                                                     }
-                                                }
-                                                ?>
-                                                </td>
-                                                <td>{{ $warehouse->unit }}</td>
-                                                <td>{{ $warehouse->quantity }}</td>
-                                                <td>{{ $warehouse->arrival_date }}</td>
-                                                {{-- <td>{{ $warehouse->product_code }}</td> --}}
-                                                <td>{{ $warehouse->batch_code }}</td>
-                                                <td>
-                                                    <div class="qr_code"><span id ="{{ $warehouse->qr_code }}">
+                                                    ?>
+                                                    </td>
+                                                    <td>{{ $warehouse->unit }}</td>
+                                                    <td>{{ $warehouse->quantity }}</td>
+                                                    <td>{{ $warehouse->arrival_date }}</td>
+                                                    {{-- <td>{{ $warehouse->product_code }}</td> --}}
+                                                    <td>{{ $warehouse->batch_code }}</td>
+                                                    <td>
+                                                        <div class="qr_code"><span id ="{{ $warehouse->qr_code }}">
 
-                                                        </span>
-                                                        <div class='qr_show'></div>
+                                                            </span>
+                                                            <div class='qr_show'></div>
 
-                                                    </div>
-                                                    <a class="downloadqr" target="_blank" download>Download QR</a>
+                                                        </div>
+                                                        <a class="downloadqr" target="_blank" download>Download QR</a>
 
-                                                </td>
-                                            </tr>
-                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                         </thead>
                                     </tbody>

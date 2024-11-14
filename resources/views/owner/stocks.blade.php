@@ -1,82 +1,42 @@
 @extends('layouts.owner_layout')
-@section('title', 'Stocks')
 
 @section('contents')
-
-    {{-- <div class="d-flex flex-column">
-
-        <div class="d-flex justify-content-between mb-3">
-            <a href="{{ route('owner.create') }}" class="btn btn-primary">Add Sales</a>
-        </div> --}}
+    <div class="container my-4">
 
 
-
-    {{-- </div> --}}
-
-    <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-
-                <div class="card">
-                    <div class="card-body">
-
-                        <!-- Table with stripped rows -->
-                        <table class="table datatable">
-                            <thead>
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <table class="table table-striped table-bordered text-center">
+                            <thead class="thead-dark">
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Rice Type</th>
-                                    <th>Quantity</th>
-
-
+                                    <th>Product Name</th>
+                                    <th>Current Quantity</th>
+                                    <th>Reorder Point</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>01/15/2024</td>
-                                    <td>Sinandomeng</td>
-                                    <td>150</td>
-
-                                </tr>
-                                <tr>
-                                    <td>01/15/2024</td>
-                                    <td>Princess Blue</td>
-                                    <td>150</td>
-
-                                </tr>
-                                <tr>
-                                    <td>01/15/2024</td>
-                                    <td>Jasmine Blue</td>
-                                    <td>150</td>
-
-                                </tr>
-                                <tr>
-                                    <td>01/15/2024</td>
-                                    <td>Aroma</td>
-                                    <td>60</td>
-
-                                </tr>
-                                <tr>
-                                    <td>01/15/2024</td>
-                                    <td>Golden Cup</td>
-                                    <td>90</td>
-
-                                </tr>
-                                <tr>
-                                    <td>01/15/2024</td>
-                                    <td>Jasmine Green</td>
-                                    <td>80</td>
-
-                                </tr>
-
+                                @foreach ($products as $product)
+                                    <tr>
+                                        <td>{{ $product->rice_type }}</td>
+                                        <td>{{ $product->current_quantity }}</td>
+                                        <td>{{ $product->reorder_level }}</td>
+                                        <td>
+                                            @if ($product->current_quantity <= $product->reorder_level)
+                                                <span class="badge bg-danger fs-6 p-2">Low Stock - Reorder Needed</span>
+                                            @else
+                                                <span class="badge bg-success fs-6 p-2">In Stock</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
-                        <!-- End Table with stripped rows -->
-
                     </div>
                 </div>
-
             </div>
         </div>
-    </section>
+    </div>
 @endsection

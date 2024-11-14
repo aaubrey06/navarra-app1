@@ -217,16 +217,16 @@
                             <i class="bi bi-circle"></i><span>Warehouse Stocks</span>
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('owner.purchase_stock.index') }}">
                             <i class="bi bi-circle"></i><span>Purchase Stocks</span>
                         </a>
-                    </li>
-                    <li>
+                    </li> --}}
+                    {{-- <li>
                         <a href="{{ route('owner.request_stock.index') }}">
                             <i class="bi bi-circle"></i><span>Request Stocks</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                 </ul>
             </li><!-- End Charts Nav -->

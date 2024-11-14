@@ -191,7 +191,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('store_manager.walk-in.index') }}">
                     <i class="bi bi-person"></i>
-                    <span>In-Store</span>
+                    <span>Retail sale</span>
                 </a>
             </li>
 
@@ -217,11 +217,11 @@
                             <i class="bi bi-circle"></i><span>Warehouse Stocks</span>
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('store_manager.purchase_stock.index') }}">
                             <i class="bi bi-circle"></i><span>Purchase Stocks</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li>
                         <a href="{{ route('store_manager.inventory.stockrequest') }}">
                             <i class="bi bi-circle"></i><span>Request Stocks</span>

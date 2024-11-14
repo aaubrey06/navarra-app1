@@ -115,13 +115,15 @@
 
 
 
-
                         <div id="printable" style="padding: 20px;">
                             <h5 class="card-title">Invoice</h5>
 
                             <div>
                                 {{ date('M. d, Y') }}
                             </div>
+                            {{-- <div> {{ $warehouse->batch_code }} </div> --}}
+                            <b><a>Batch Code:</b> {{ $data['warehouse_stock'][0]->batch_code }}<br>
+
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -184,7 +186,7 @@
 
                                 </div>
                             </div>
-                         </form> 
+                        </form>
                     </div>
                 </div>
             </div>
@@ -197,38 +199,40 @@
 
 
     <script>
-    function save() {
-        var h = document.getElementById('printable').offsetHeight;
-        var w = document.getElementById('printable').offsetWidth;
+        function save() {
+            var h = document.getElementById('printable').offsetHeight;
+            var w = document.getElementById('printable').offsetWidth;
 
-        // Adjust the image size manually (in mm, 1 inch = 25.4mm)
-        var imageWidth = 168; // Example width in mm (adjust as needed)
-        var imageHeight = 105; // Example height in mm (adjust as needed)
+            // Adjust the image size manually (in mm, 1 inch = 25.4mm)
+            var imageWidth = 168; // Example width in mm (adjust as needed)
+            var imageHeight = 105; // Example height in mm (adjust as needed)
 
-        html2canvas(document.getElementById('printable'), {
-            scale: 2,
-            width: w,
-            height: h,
-            
-        }).then(function(canvas) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'letter'); // Letter size (8.5 x 11 inches)
+            html2canvas(document.getElementById('printable'), {
+                scale: 2,
+                width: w,
+                height: h,
 
-            // Add the image to PDF with custom width and height
-            doc.addImage(canvas.toDataURL("image/png"), 'PNG', 10, 10, imageWidth, imageHeight);
+            }).then(function(canvas) {
+                const {
+                    jsPDF
+                } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'letter'); // Letter size (8.5 x 11 inches)
 
-            // Save the PDF
-            doc.save('warehouse_invoice.pdf');
+                // Add the image to PDF with custom width and height
+                doc.addImage(canvas.toDataURL("image/png"), 'PNG', 10, 10, imageWidth, imageHeight);
 
-            // Trigger outbound link click and form submit
-            var a = document.createElement('a');
-            a.href = doc.output('bloburl'); // This opens the PDF in a new tab
-            a.download = "warehouse_invoice.pdf";
-            a.click();
-            document.getElementById("sendoutbound").submit();
-        });
-    }
-</script>
+                // Save the PDF
+                doc.save('warehouse_invoice.pdf');
+
+                // Trigger outbound link click and form submit
+                var a = document.createElement('a');
+                a.href = doc.output('bloburl'); // This opens the PDF in a new tab
+                a.download = "warehouse_invoice.pdf";
+                a.click();
+                document.getElementById("sendoutbound").submit();
+            });
+        }
+    </script>
 
 
 

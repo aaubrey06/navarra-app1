@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\InventoryTransactionType;
 
 class InventoryTransactionTypeSeeder extends Seeder
 {
@@ -11,10 +12,12 @@ class InventoryTransactionTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $transaction_types = [
-            'inbound',
-            'outbound',
+        $types = [
+            ['inventoryt_type' => 'Inbound'],
+            ['inventoryt_type' => 'Outbound'],
+           
         ];
 
+        InventoryTransactionType::insert($types);
     }
 }

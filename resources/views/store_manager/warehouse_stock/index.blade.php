@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($warehouse_stocks as $stock)
+                @foreach ($warehouseStocks as $stock)
                     <tr>
                         <td>
                             <span class="font-weight-bold">

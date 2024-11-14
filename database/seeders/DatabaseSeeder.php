@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Warehouse;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -55,13 +56,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            MethodSeeder::class,
-            StatusSeeder::class,
-            CustomerSeeder::class,
-            OrdersSeeder::class,
-            StatusSeeder::class,
-            InventoryTransactionTypeSeeder::class,
+            // MethodSeeder::class,  
+            // StatusSeeder::class, 
+            // CustomerSeeder::class,
+            // OrdersSeeder::class,
+            RiceSalesSeeder::class,
             WarehouseSeeder::class,
+            // StatusSeeder::class,
+            
         ]);
     }
 }

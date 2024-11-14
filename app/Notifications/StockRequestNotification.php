@@ -1,21 +1,20 @@
 <?php
 
-// StockRequestNotification.php
-
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class StockRequestNotification extends Notification
+class NewOrderNotification extends Notification
 {
     use Queueable;
 
-    protected $data;
+    protected $orderStore;
 
-    public function __construct($data)
+    // Constructor now accepts order data instead of stock request data
+    public function __construct($orderStore)
     {
-        $this->data = $data;
+        $this->orderStore = $orderStore;
     }
 
     // Define the delivery channels
@@ -28,10 +27,10 @@ class StockRequestNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'request_id' => $this->data['request_id'],
-            'product_id' => $this->data['product'],
-            'status_id' => $this->data['status'],
-            'recipient_role' => $this->data['warehouse_manager'],
+            'orderstore_ids' => $this->orderStore->pluck('id')->toArray(),  // Get the order IDs
+            'message' => 'You have new in-store orders pending.', // Custom message
+            'orderstore_status' => $this->orderStore->pluck('status')->toArray(),  // Get order statuses (optional)
+            'recipient_role' => 'driver', // Assuming this notification is for drivers
         ];
     }
 }

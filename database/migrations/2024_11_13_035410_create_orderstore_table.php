@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('phone_number');
             $table->unsignedBigInteger('product_id'); 
             $table->integer('quantity'); 
-            $table->string('unit');
+            $table->enum('unit', ['5', '10', '25', '50']); 
             $table->decimal('price', 8, 2); 
             $table->string('method'); 
             $table->string('location')->nullable(); 

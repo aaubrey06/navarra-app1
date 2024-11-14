@@ -225,6 +225,4 @@
                 checkFormValidity();
             });
         </script>
-
-
     @endsection

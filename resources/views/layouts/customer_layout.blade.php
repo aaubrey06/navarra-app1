@@ -186,7 +186,8 @@
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
                             <h6>{{ auth()->user()->name }}</h6>
-                            <span class="d-none d-lg-block text-capitalize">{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</span>
+                            <span
+                                class="d-none d-lg-block text-capitalize">{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</span>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
@@ -203,7 +204,8 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('customer-account-settings') }}">
+                            <a class="dropdown-item d-flex align-items-center"
+                                href="{{ route('customer-account-settings') }}">
                                 <i class="bi bi-gear"></i>
                                 <span>Account Settings</span>
                             </a>
@@ -244,8 +246,8 @@
 
             <li class="nav-item">
                 <!--<a class="nav-link" href="">-->
-                    <i class="bi bi-grid"></i>
-                    <span>Dashboard</span>
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
                 <!--</a>-->
             </li><!-- End Dashboard Nav -->
 
