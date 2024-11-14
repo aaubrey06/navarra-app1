@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CustomerAccountSettingController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
@@ -10,8 +12,6 @@ use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\InStoreController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderHistoryController;
-use App\Http\Controllers\CustomerProfileController;
-use App\Http\Controllers\CustomerAccountSettingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
@@ -54,7 +54,6 @@ Route::middleware(['auth', 'verified', 'owner-dashboard'])->group(function () {
     Route::get('owner-dashboard', [\App\Http\Controllers\StoreManagerDashboardController::class, 'indexowner'])->name('owner-dashboard');
 });
 
-
 Route::middleware(['auth', 'verified', 'warehouse'])->group(function () {
     Route::view('warehouse', 'warehouse_manager.warehouse')->name('warehouse');
 });
@@ -62,7 +61,6 @@ Route::middleware(['auth', 'verified', 'warehouse'])->group(function () {
 Route::middleware(['auth', 'verified', 'store-manager-dashboard'])->group(function () {
     Route::get('store-manager-dashboard', [\App\Http\Controllers\StoreManagerDashboardController::class, 'index'])->name('store-manager-dashboard');
 });
-
 
 Route::prefix('owner')->group(function () {
     // Route::get('products', [ProductController::class, 'products'])->name('owner.products');
@@ -94,8 +92,6 @@ Route::prefix('owner')->group(function () {
 
     Route::get('/owner/request_stock/index', [ProductController::class, 'stockreq'])->name('owner.request_stock.index');
 
-
-
     // Route::resource('owner/truck', TruckController::class);
     Route::get('/owner/truck/index', [TruckController::class, 'index'])->name('owner.truck.index');
     Route::get('/owner/truck/create', [TruckController::class, 'create'])->name('owner.truck.create');
@@ -117,8 +113,6 @@ Route::prefix('owner')->group(function () {
     Route::get('/owner/warehouse_stock/index', [WarehousestockController::class, 'showstock'])->name(name: 'owner.warehouse_stock.index');
     Route::get('/owner/purchase_stock/index', [PurchaseController::class, 'stock'])->name(name: 'owner.purchase_stock.index');
     Route::get('/owner/request_stock/index', [WarehouseManagerController::class, 'request'])->name(name: 'owner.request_stock.index');
-    
-
 
     Route::get('/owner/store/index', [StoreController::class, 'index'])->name(name: 'owner.store.index');
     Route::get('/owner/store/create', [StoreController::class, 'create'])->name(name: 'owner.store.create');
@@ -183,7 +177,7 @@ Route::prefix('store_manager')->group(function () {
     Route::get('/store_manager/forecast/index', [ForecastController::class, 'index'])->name(name: 'store_manager.forecast.index');
 
     Route::get('/store_manager/delivery/index', [DeliveryController::class, 'index'])->name('store_manager.delivery.index');
-    Route::get('/store_manager/order/index', [OrderController::class, 'index'])->name('store_manager.order.index');
+    // Route::get('/store_manager/order/index', [OrderController::class, 'index'])->name('store_manager.order.index');
     Route::get('/store_manager/walk-in/index', [WalkinController::class, 'index'])->name('store_manager.walk-in.index');
     Route::get('/store_manager/pos', [WalkinController::class, 'index'])->name('store_manager.pos');
     Route::post('/store_manager/pos/submit', [WalkinController::class, 'submit'])->name('store_manager.pos.submit');
@@ -192,7 +186,6 @@ Route::prefix('store_manager')->group(function () {
     Route::get('purchase-stock/create', action: [PurchaseController::class, 'create'])->name('store_manager.purchase_stock.create');
     Route::post('/purchase-stock/store', [PurchaseController::class, 'store'])->name('store_manager.purchase_stock.store');
 
-
     Route::post('purchase-stock', [PurchaseController::class, 'submit'])->name('store_manager.purchase_stock.submit');
     Route::get('/store_manager/warehouse_stock/index', [WarehousestockController::class, 'index'])->name(name: 'store_manager.warehouse_stock.index');
     Route::post('/store_manager.orders/index', [ProductController::class, 'submitWalkinOrder'])->name('store_manager.orders.walkin_orders');
@@ -200,12 +193,14 @@ Route::prefix('store_manager')->group(function () {
     Route::get('/store-manager/walk-in/add', [ProductController::class, 'addWalkIn'])->name(name: 'store_manager.walk-in.add');
     Route::post('/store-manager/walk-in/store', [ProductController::class, 'storeWalkInSale'])->name('store_manager.walk-in.store');
 
+    Route::get('store_manager.orders.index', [OrderController::class, 'index'])->name('store_manager.orders.index');
+
     //order
     // Route::patch('/orders/{id}/status', [ProductController::class, 'updateStatus'])
     // ->name('store_manager.orders.update_status');
     // Route::get('/store-manager/store_orders/index', [OrderController::class, 'getOrders'])->name('store_manager.store_orders.index');
 
-    Route::get('/store_manager.orders.index', action: [OrderController::class, 'orders'])->name('store_manager.orders.index');
+    // Route::get('/store_manager.orders.index', action: [OrderController::class, 'orders'])->name('store_manager.orders.index');
     Route::get('/store_manager.orders/walkin_order', [OrderController::class, 'showWalkinForm'])->name('store_manager.orders.walkin_order');
     Route::post('/orders', [OrderController::class, 'store'])->name('store_manager.orders.store');
 
@@ -227,9 +222,7 @@ Route::prefix('store_manager')->group(function () {
     Route::get('/store_manager/forecasting/index', [ForecastController::class, 'showMovingAverage'])->name(name: 'store_manager.forecasting.index');
     Route::get('/store_manager/forecasting/forecast', [ForecastController::class, 'showForecast'])->name('store_manager.forecasting.showForecast');
 
-
-
-    //instore orders 
+    //instore orders
     Route::get('/store_manager/in-store-orders/index', [InStoreController::class, 'index'])->name(name: 'store_manager.in-store-orders.index');
     Route::get('/store_manager/in-store-orders/create', [InStoreController::class, 'create'])->name('store_manager.in-store-orders.create');
     Route::post('/store_manager/in-store-orders/store', [InStoreController::class, 'store'])->name('store_manager.in-store-orders.store');
@@ -251,13 +244,11 @@ Route::prefix('driver')->group(function () {
     Route::get('/markers', [App\Http\Controllers\MapController::class, 'getMarkers']);
     Route::get('/driver/orders', [InStoreController::class, 'getDriverOrders'])->name('driver.orders');
     Route::get('/driver/in-store-orders', [DriverController::class, 'getInStoreOrders'])->name('driver.inStoreOrders');
-    
+
     Route::get('/driver/routes', [DriverController::class, 'showRoutes']);
 
     Route::get('/driver/capture', 'DriverController@showCapturePage')->name('driver.capture');
     Route::get('/driver/routes', [DriverController::class, 'showOrders']);
-
-
 
 });
 

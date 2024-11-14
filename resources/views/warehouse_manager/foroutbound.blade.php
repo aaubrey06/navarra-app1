@@ -115,13 +115,15 @@
 
 
 
-
                         <div id="printable" style="padding: 20px;">
                             <h5 class="card-title">Invoice</h5>
 
                             <div>
                                 {{ date('M. d, Y') }}
                             </div>
+                            {{-- <div> {{ $warehouse->batch_code }} </div> --}}
+                            <b><a>Batch Code:</b> {{ $data['warehouse_stock'][0]->batch_code }}<br>
+
                             <table class="table">
                                 <thead>
                                     <tr>

@@ -57,8 +57,8 @@ class WarehouseManagerController extends Controller
 
         $warehouse_stocks_id = $request->qrData;
         $warehouse_stock = DB::table('warehouse_stocks')->where('qr_code', '=', $request->qrData)->get();
-        $warehouse_stocks_id = $request->batchCode;
-        $warehouse_stock = DB::table('warehouse_stocks')->where('batch_code', '=', $request->batchCode)->get();
+        // $warehouse_stocks_id = $request->batchCode;
+        // $warehouse_stock = DB::table('warehouse_stocks')->where('batch_code', '=', $request->batchCode)->get();
         $stock_requests_id = $request->requestId;
         $stock_request = DB::table('stock_requests')->where('request_id', '=', $request->requestId)->get();
 
