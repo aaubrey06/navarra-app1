@@ -56,7 +56,7 @@
                                                 <td>{{ $warehouse->batch_code }}</td>
                                                 <td>
                                                     <div class="qr_code"><span id ="{{ $warehouse->qr_code }}">
-                                                      
+
                                                         </span>
                                                         <div class='qr_show'></div>
 
@@ -65,7 +65,7 @@
 
                                                 </td>
                                             </tr>
-                                            {{-- @endif --}}
+                                        @endif
                                         @endforeach
                                         </thead>
                                     </tbody>
@@ -90,7 +90,7 @@
                 var qr_code_div = document.querySelectorAll('.qr_code')
                 var qr_code_array = [...qr_code_div];
 
-               qr_code_array.forEach(element => {
+                qr_code_array.forEach(element => {
                     // const text = element.textContent;
                     const qrcodeDiv = element.querySelector('.qr_show');
                     const text = element.getElementsByTagName("span")[0].id
