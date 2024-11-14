@@ -15,19 +15,20 @@ class Customer extends Model
 
     public $incrementing = true;
 
-   
+
     protected $fillable = [
         'user_id',
+        'phone',
         'region',
         'province',
         'city',
         'barangay',
         'address',
         'latitude',
-        'longitude'
+        'longitude',
     ];
 
-    
+
     // public function user()
     // {
     //     return $this->belongsTo(User::class, 'user_id');
@@ -38,6 +39,12 @@ class Customer extends Model
     // {
     //     return $this->hasMany(Order::class, 'customer_id');
     // }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function orders()
     {
         return $this->hasMany(Order::class, 'customer_id');  // assuming 'customer_id' is the foreign key in the orders table

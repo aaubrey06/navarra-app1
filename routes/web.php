@@ -10,6 +10,8 @@ use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\InStoreController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderHistoryController;
+use App\Http\Controllers\CustomerProfileController;
+use App\Http\Controllers\CustomerAccountSettingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
@@ -247,17 +249,37 @@ Route::prefix('customer')->group(function () {
     Route::get('/order-summary', [CartController::class, 'summary'])->name('cart.summary');
 
     //Order-list
+    Route::get('/order-list', [CartController::class, 'orders'])->name('cart.order-list');
     Route::post('/order-list', [CartController::class, 'placeOrder'])->name('cart.placeOrder');
     Route::get('customer/customer-order-details/{order}', [CartController::class, 'orderDetails'])->name('customer.order-details');
     Route::patch('/order/{order}/cancel', [CartController::class, 'cancelOrder'])->name('order.cancel');
 
     //History
-    Route::get('/order-history-details/{id}', [OrderHistoryController::class, 'showOrderDetails'])->name('order.history.details');
-    Route::delete('/history/{id}', [OrderHistoryController::class, 'destroy'])->name('customer.history.destroy');
+    Route::get('/order-history-details/{order}', [OrderHistoryController::class, 'showOrderDetails'])->name('order.history.details');
+    Route::get('/history', [OrderHistoryController::class, 'index'])->name('customer.history.index');
+    Route::get('/history', [OrderHistoryController::class, 'history'])->name('customer.history.history');
+    Route::delete('/history/{order}', [OrderHistoryController::class, 'destroy'])->name('customer.history.destroy');
+    Route::get('/order/{order}/download-invoice', [OrderHistoryController::class, 'downloadInvoice'])->name('order.downloadInvoice');
+
+    //Profile
+    Route::get('/customer-profile', [CustomerProfileController::class, 'index'])->name('customer-profile');
+    Route::get('/customer-account-settings', [CustomerAccountSettingController::class, 'index'])->name('customer-account-settings');
 
     // Confirm Delivery
-    Route::post('/confirm-delivery', [OrderController::class, 'confirmDelivery'])->name('customer.confirm-delivery');
+    Route::post('/order/{order}/confirm', [CartController::class, 'confirmDelivery'])->name('order.confirm');
+
+    // Route::get('/order-list', [CartController::class, 'orders'])->name('order-list');
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('history');
+
+    //Edit Profile
+    Route::get('/customer-edit-profile', [CartController::class, 'editProfile'])->name('customer.editProfile');
+    Route::put('/customer-update-profile', [CustomerProfileController::class, 'updateProfile'])->name('customer.updateProfile');
+
+    //Middleware
+    Route::middleware('auth')->group(function () {
+        Route::get('/customer-edit-profile', [CustomerProfileController::class, 'editProfile'])->name('customer.editProfile');
+        Route::put('/customer-update-profile', [CustomerProfileController::class, 'updateProfile'])->name('customer.updateProfile');
+    });
 });
 
 Route::get('/home', function () {

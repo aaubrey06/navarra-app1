@@ -12,8 +12,8 @@
                 @php
                     $cartItems = session()->get('cartItems', []);
                     $totalPrice = 0;
-                    <!-- $totalPrice = calculateTotalPrice($cartItems); -->
-                    $totalQuantity = 0; <!--Initialize total quantity-->
+                    // $totalPrice = calculateTotalPrice($cartItems);
+                    $totalQuantity = 0; // Initialize total quantity
                 @endphp
 
                 <div class="card">
@@ -30,7 +30,7 @@
                                     <th>Selling Price</th>
                                     <th>Quantity</th>
                                     <th>Total Selling Price</th>
-                                    <!-- <th>Action</th> -->
+                                    {{-- <th>Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,7 +47,7 @@
                                 @php
                                     $totalPrice += $item['total_selling_price'];
 
-                                    $totalQuantity += $item['quantity']; <!--Accumulate total quantity-->
+                                    $totalQuantity += $item['quantity']; // Accumulate total quantity
                                 @endphp
 
                                 @empty
@@ -61,17 +61,34 @@
 
                         <div class="card-body">
                             <h5 class="card-title">Delivery Address</h5>
-                            <h5>Grace Poe</h5>
-                            <h5>09123456789</h5>
-                            <h5>Iloilo City, Iloilo</h5>
-                            <h5>5800</h5>
+                            <h5>{{ $user->first_name }} {{ $user->last_name }}</h5>
+                            <h5>{{ $customer->phone }}</h5>
+                            <h5>{{ $customer->barangay }}, {{ $customer->city }},
+                                {{ $customer->province }}, {{ $customer->region }}</h5>
+
                             <button class="btn btn-primary edit-btn">Edit</button>
                         </div>
+
+                        {{-- <div class="card-body">
+                            <h5 class="card-title">Delivery Option</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="deliveryOption" id="delivery" value="delivery" checked>
+                                <label class="form-check-label" for="delivery">
+                                    Delivery
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="deliveryOption" id="pickup" value="pickup">
+                                <label class="form-check-label" for="pickup">
+                                    Pick-up
+                                </label>
+                            </div>
+                        </div> --}}
 
                         <div class="card-body">
                             <h5 class="card-title">Delivery Option</h5>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="deliveryOption" id="delivery" value="delivery"
+                                <input class="form-check-input" type="radio" name="delivery_option" id="delivery" value="Delivery"
                                 @if($totalQuantity < 20) disabled @endif>
                                 <label class="form-check-label" for="delivery">
                                     Delivery
@@ -81,9 +98,9 @@
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="deliveryOption" id="pickup" value="pickup"
+                                <input class="form-check-input" type="radio" name="delivery_option" id="pickup" value="Pick-up"
                                 @if($totalQuantity < 20) checked @endif>
-                                <label class="form-check-label" for="pickup">
+                                <label class="form-check-label" for="ickup">
                                     Pick-up
                                 </label>
                             </div>
@@ -96,6 +113,8 @@
                                 <a href="{{ route('cart') }}" class="btn btn-success mx-2">Edit Order</a>
                                 <button type="button" id="placeOrderBtn" class="btn btn-success mx-2">Place Order</button>
                             </div>
+
+                            <input type="hidden" name="delivery_option" id="deliveryOptionInput" value="pickup">
                         </form>
 
                     </div>
@@ -113,6 +132,13 @@
             } else {
                 // Do nothing, stay on the page
             }
+        });
+
+        document.querySelectorAll('input[name="delivery_option"]').forEach((input) => {
+            input.addEventListener('change', function() {
+                // Set the value of the hidden input to the selected delivery option
+                document.getElementById('deliveryOptionInput').value = this.value;
+            });
         });
     </script>
 @endsection

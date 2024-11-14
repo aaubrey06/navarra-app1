@@ -9,6 +9,8 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
+    @yield('styles')
+
     <!-- Favicons -->
     <link href="{{ asset('admin_assets/assets/img/favicon.png') }}" rel="icon">
     <link href="{{ asset('admin_assets/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
@@ -29,8 +31,78 @@
     <link href="{{ asset('admin_assets/assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
     <link href="{{ asset('admin_assets/assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
 
+
     <!-- Template Main CSS File -->
     <link href="{{ asset('admin_assets/assets/css/style.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
+    <!-- Leaflet CSS -->
+    {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/> --}}
+
+    <!-- Leaflet JS -->
+    {{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script> --}}
+
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSV1H3B9U0Ze4jyL05cJliB9CR7Zk14d4&libraries=places"> --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+
+        #controls {
+            padding: 10px;
+            background: #f9f9f9;
+        }
+
+        #controls input,
+        #controls button {
+            margin: 5px 0;
+            padding: 10px;
+            width: calc(100% - 22px);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #controls ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #controls ul li {
+            background: #e9e9e9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        #clear-fields {
+            background: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #directions-panel {
+            margin-top: 10px;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
 
     <!-- =======================================================
   * Template Name: NiceAdmin
@@ -39,6 +111,16 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+    <!-- Leaflet CSS -->
+    {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/> --}}
+
+    <!-- Leaflet JS -->
+    {{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script> --}}
 </head>
 
 <body>
@@ -54,12 +136,12 @@
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
 
-        <div class="search-bar">
+        {{-- <div class="search-bar">
             <form class="search-form d-flex align-items-center" method="POST" action="#">
                 <input type="text" name="query" placeholder="Search" title="Enter search keyword">
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
-        </div><!-- End Search Bar -->
+        </div><!-- End Search Bar --> --}}
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -70,6 +152,26 @@
                     </a>
                 </li><!-- End Search Icon-->
 
+                {{-- Cart Navbar --}}
+                {{-- <li class="nav-item">
+                    <a class="nav-link nav-icon" href="{{ route('cart') }}">
+                        <i class="bi bi-cart-plus"></i>
+                    </a>
+                </li> --}}
+                <li class="nav-item">
+                    <a class="nav-link nav-icon position-relative" href="{{ route('cart') }}">
+                        <i class="bi bi-cart-plus"></i>
+                        @php
+                            $cartItems = session('cartItems', []);
+                            $itemCount = count($cartItems);
+                        @endphp
+                        @if ($itemCount > 0)
+                            <span class="custom-badge">
+                                {{ $itemCount }}
+                            </span>
+                        @endif
+                    </a>
+                </li>
 
 
                 <li class="nav-item dropdown pe-3">
@@ -84,15 +186,14 @@
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
                             <h6>{{ auth()->user()->name }}</h6>
-                            <span class="d-none d-lg-block text-capitalize"><?php $user = Auth::user();
-                            echo $user['first_name'] . ' ' . $user['last_name']; ?></span>
+                            <span class="d-none d-lg-block text-capitalize">{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</span>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="/profile">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('customer-profile') }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -102,7 +203,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('customer-account-settings') }}">
                                 <i class="bi bi-gear"></i>
                                 <span>Account Settings</span>
                             </a>
@@ -143,8 +244,8 @@
 
             <li class="nav-item">
                 <!--<a class="nav-link" href="">-->
-                <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
                 <!--</a>-->
             </li><!-- End Dashboard Nav -->
 
@@ -161,17 +262,17 @@
                 </a>
                 <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <!-- <a href="{{ route('cart') }}">
+                        <a href="{{ route('cart') }}">
                             <i class="bi bi-circle"></i><span>My Cart</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('cart.order-list') }}">
                             <i class="bi bi-circle"></i><span>Order List</span>
-                        </a> -->
+                        </a>
                     </li>
                 </ul>
-            </li>End Forms Nav
+            </li><!-- End Forms Nav -->
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('history') }}">
@@ -186,7 +287,7 @@
 
     <main id="main" class="main">
 
-        <div class="pagetitle">
+        {{-- <div class="pagetitle">
             <h1>Dashboard</h1>
             <nav>
                 <ol class="breadcrumb">
@@ -194,7 +295,7 @@
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div><!-- End Page Title --> --}}
 
 
         <!-- Dynamic Content Section -->
@@ -231,6 +332,7 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('admin_assets/assets/js/main.js') }}"></script>
 
+    @yield('scripts')
 </body>
 
 </html>
