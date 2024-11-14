@@ -16,7 +16,7 @@ class StockRequestController extends Controller
     public function getAllStockRequest()
     {
         $warehouse_stocks = [];
-        $stores = Store::all();
+        $store = Store::all();
         $products = Product::all();
         $requests = StockRequest::all();
         $stock_requests = [];
@@ -82,9 +82,9 @@ class StockRequestController extends Controller
                 'updated_at' => now(),
             ]);
 
-            return redirect()->back()->with('success', 'Stock Requested successfully.');
+            // return redirect()->route('store_manager.inventory.stockrequest')->with('success', 'Stock Requested successfully.');
 
-            // return redirect()->back()->with('success', 'Stock Requested successfully.');
+            return redirect()->back()->with('success', 'Stock Requested successfully.');
         }
     }
 }

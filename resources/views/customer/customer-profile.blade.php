@@ -1,25 +1,4 @@
-{{-- @extends('layouts.customer_layout')
-
-@section('title', 'Profile')
-
-@section('contents')
-<section class="section">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Profile</h5>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-@endsection
- --}}
-
- @extends('layouts.customer_layout')
+@extends('layouts.customer_layout')
 
 @section('title', 'Profile')
 
@@ -63,14 +42,14 @@
 
                         <div class="mb-3">
                             <span><strong>Phone:</strong>
-                                {{ $user->phone }}
+                                {{ $customer->phone }}
                             </span>
                         </div>
 
                         <div class="mb-3">
                             <span><strong>Address:</strong>
-                                {{ $user->barangay }}, {{ $user->city }},
-                                {{ $user->province }}, {{ $user->region }}
+                                {{ $customer->barangay }}, {{ $customer->city }},
+                                {{ $customer->province }}, {{ $customer->region }}
                             </span>
                         </div>
                     </div>

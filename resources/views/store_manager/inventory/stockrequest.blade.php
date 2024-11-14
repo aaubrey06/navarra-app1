@@ -1,6 +1,6 @@
 @extends('layouts.store-manager_layout')
 
-@section('title', 'Generate QR')
+@section('title', 'Stock Request')
 
 
 @section('contents')

@@ -33,7 +33,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($requests as $request)
-                                            @if ($request->status == 'pending')
+                                            @if ($request->status == 'Pending')
                                                 <tr>
                                                     <td>
                                                         {{ $request->request_id }}

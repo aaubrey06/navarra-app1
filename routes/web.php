@@ -6,9 +6,12 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\InStoreController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderHistoryController;
+use App\Http\Controllers\CustomerProfileController;
+use App\Http\Controllers\CustomerAccountSettingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
@@ -18,11 +21,8 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\WalkinController;
 use App\Http\Controllers\WarehouseManagerController;
-use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\WarehousestockController;
 use Illuminate\Support\Facades\Route;
-
-
 
 Route::view('/', 'welcome')->name('welcome')->middleware(['customer-dashboard']);
 
@@ -33,7 +33,6 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
-
 
 // Route::get('login', [AuthController::class, 'login'])->name('auth.login');
 
@@ -90,18 +89,18 @@ Route::prefix('owner')->group(function () {
     // Route::resource('owner/truck', TruckController::class);
     Route::get('/owner/truck/index', [TruckController::class, 'index'])->name('owner.truck.index');
     Route::get('/owner/truck/create', [TruckController::class, 'create'])->name('owner.truck.create');
-    Route::post('/truck', [TruckController::class, 'store'])->name('owner.truck.store'); 
+    Route::post('/truck', [TruckController::class, 'store'])->name('owner.truck.store');
     Route::get('/truck/{truck}/edit', [TruckController::class, 'edit'])->name('owner.truck.edit');
     Route::put('/truck/{truck}', [TruckController::class, 'update'])->name('owner.truck.update');
     Route::delete('/truck/{truck}', [TruckController::class, 'destroy'])->name('owner.truck.destroy');
 
     Route::prefix('owner/employee')->name('owner.employee.')->group(function () {
-        Route::get('/index', [EmployeeController::class, 'index'])->name('index');       
-        Route::get('/create', [EmployeeController::class, 'create'])->name('create');      
-        Route::post('/store', [EmployeeController::class, 'store'])->name('store');        
-        Route::get('/{employee}/edit', [EmployeeController::class, 'edit'])->name('edit'); 
-        Route::put('/{employee}', [EmployeeController::class, 'update'])->name('update');  
-        Route::delete('/{employee}', [EmployeeController::class, 'destroy'])->name('destroy'); 
+        Route::get('/index', [EmployeeController::class, 'index'])->name('index');
+        Route::get('/create', [EmployeeController::class, 'create'])->name('create');
+        Route::post('/store', [EmployeeController::class, 'store'])->name('store');
+        Route::get('/{employee}/edit', [EmployeeController::class, 'edit'])->name('edit');
+        Route::put('/{employee}', [EmployeeController::class, 'update'])->name('update');
+        Route::delete('/{employee}', [EmployeeController::class, 'destroy'])->name('destroy');
     });
 
     Route::get('/owner/delivery/delivery}', [DeliveryController::class, 'showdelivery'])->name('owner.delivery.delivery');
@@ -116,15 +115,12 @@ Route::prefix('owner')->group(function () {
     Route::put('store/{store_id}', [StoreController::class, 'update'])->name('owner.store.update');
     Route::delete('store/{store_id}', [StoreController::class, 'destroy'])->name('owner.store.destroy');
 
-
     Route::get('/owner/employee/index', [EmployeeController::class, 'index'])->name('owner.employee.index');
     Route::get('/owner/employee/create', [EmployeeController::class, 'create'])->name('owner.employee.create');
     Route::get('/owner/employee/store', [EmployeeController::class, 'store'])->name('owner.employee.store');
     Route::get('employees/{employee_id}/edit', [EmployeeController::class, 'edit'])->name('owner.employee.edit');
     Route::put('employees/{employee_id}', [EmployeeController::class, 'update'])->name('owner.employee.update');
     Route::delete('/employee/{employee_id}', [EmployeeController::class, 'destroy'])->name('owner.employee.destroy');
-
-
 
     Route::get('/owner/order/order', action: [OrderController::class, 'order'])->name(name: 'owner.order.order');
     Route::get('/owner/sales/sales', action: [SalesController::class, 'sales'])->name(name: 'owner.sales.sales');
@@ -144,7 +140,7 @@ Route::prefix('warehouse_manager')->group(function () {
     Route::get('foroutbound', [WarehouseManagerController::class, 'foroutbound'])->name('foroutbound');
     Route::get('outbound_stocks', [WarehouseManagerController::class, 'outbound_stocks'])->name('outbound_stocks');
     Route::post('sendoutbound', [WarehouseManagerController::class, 'sendoutbound']);
-    Route::get('/clean-warehouse-stocks', [WarehouseManagerController::class, 'cleanZeroOrNegativeQuantityStocks']);
+    // Route::get('/clean-warehouse-stocks', [WarehouseManagerController::class, 'cleanZeroOrNegativeQuantityStocks']);
     Route::get('categorization', [WarehouseManagerController::class, 'categorization'])->name('categorization');
     Route::get('/warehouse-manager/notifications', [WarehouseManagerController::class, 'showNotifications'])->middleware('auth');
 
@@ -155,26 +151,24 @@ Route::prefix('warehouse_manager')->group(function () {
 
 Route::prefix('store_manager')->group(function () {
     Route::resource('sales', SalesController::class);
-   
 
     Route::get('/', function () {
         return redirect()->route('store_manager.sales.sales');
     });
 
     Route::get('/store_manager/sales/index', [SalesController::class, 'index'])->name('store_manager.sales.index');
-    
+
     Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 
     Route::get('inventory/stockrequests', [StockRequestController::class, 'getAllStockRequest'])->name('store_manager.inventory.stockrequest');
     Route::post('inventory/stockrequests/add', [StockRequestController::class, 'addStock'])->name('store_manager.inventory.newstockrequest');
-   
+
     Route::get('/store_manager/forecast/dashboard', [ForecastController::class, 'showDashboard'])->name('store_manager.forecast.dashboard');
     Route::post('/store_manager/forecast/upload-sales-data', [ForecastController::class, 'uploadSalesData'])->name('forecast.sales.upload');
     Route::post('/store_manager/forecast/run-forecast', [ForecastController::class, 'forecastSales'])->name('forecast.sales.run');
     Route::get('/store_manager/forecast/forecast-data', [ForecastController::class, 'getForecastData'])->name(name: 'forecast.sales.data');
-    
-    Route::get('/store_manager/forecast/index', [ForecastController::class, 'index'])->name(name: 'store_manager.forecast.index');
 
+    Route::get('/store_manager/forecast/index', [ForecastController::class, 'index'])->name(name: 'store_manager.forecast.index');
 
     Route::get('/store_manager/delivery/index', [DeliveryController::class, 'index'])->name('store_manager.delivery.index');
     Route::get('/store_manager/order/index', [OrderController::class, 'index'])->name('store_manager.order.index');
@@ -197,17 +191,14 @@ Route::prefix('store_manager')->group(function () {
 
     Route::get('/store_manager.orders.index', action: [OrderController::class, 'orders'])->name('store_manager.orders.index');
     Route::get('/store_manager.orders/walkin_order', [OrderController::class, 'showWalkinForm'])->name('store_manager.orders.walkin_order');
-    Route::post('/orders', [OrderController::class, 'store'])->name('store_manager.orders.store'); 
-
+    Route::post('/orders', [OrderController::class, 'store'])->name('store_manager.orders.store');
 
     Route::get('/store-manager/stocks/index', [StockController::class, 'index'])->name('store_manager.stocks.index');
     Route::get('/store-manager/stocks/create', [StockController::class, 'create'])->name('store_manager.stocks.create');
     Route::post('/store-manager/stocks/store', [StockController::class, 'store'])->name('store_manager.stocks.store');
     Route::patch('/orders/{orderId}/status', [OrderController::class, 'updateStatus'])->name('store_manager.orders.updateStatus');
 
-
-
-    // products 
+    // products
 
     Route::get('/store_manager/products/index', [ProductController::class, 'index'])->name('store_manager.products.index');
     Route::get('store_manager/products/create', [ProductController::class, 'create'])->name('store_manager.products.create');
@@ -218,19 +209,19 @@ Route::prefix('store_manager')->group(function () {
 
     // MA
     Route::get('/store_manager/forecasting/index', [ForecastController::class, 'showMovingAverage'])->name(name: 'store_manager.forecasting.index');
-    
-    //instore orders 
+
+    //instore orders
     Route::get('/store_manager/in-store-orders/index', [InStoreController::class, 'index'])->name(name: 'store_manager.in-store-orders.index');
     Route::get('/store_manager/in-store-orders/create', [InStoreController::class, 'create'])->name('store_manager.in-store-orders.create');
     Route::post('/store_manager/in-store-orders/store', [InStoreController::class, 'store'])->name('store_manager.in-store-orders.store');
     Route::get('in-store-orders/{order}/edit', [InStoreController::class, 'edit'])->name('store_manager.in-store-orders.edit');
-    Route::put('in-store-orders/{order}', [InStoreController::class, 'update'])->name('store_manager.in-store-orders.update'); 
+    Route::put('in-store-orders/{order}', [InStoreController::class, 'update'])->name('store_manager.in-store-orders.update');
     Route::delete('in-store-orders/{order}', [InStoreController::class, 'destroy'])->name('store_manager.in-store-orders.destroy');
     Route::put('/orders/{order_id}/update-status', [InStoreController::class, 'updateStatus'])
-    ->name('store_manager.in-store-orders.update-status');
+        ->name('store_manager.in-store-orders.update-status');
 
-    Route::get('inventory/stockrequests', [StockRequestController::class, 'getAllStockRequest'])->name('store_manager.inventory.stockrequest');
-    Route::post('inventory/stockrequests/add', [StockRequestController::class, 'addStock'])->name('store_manager.inventory.newstockrequest');
+    // Route::get('inventory/stockrequests', [StockRequestController::class, 'getAllStockRequest'])->name('store_manager.inventory.stockrequest');
+    // Route::post('inventory/stockrequests/add', [StockRequestController::class, 'addStock'])->name('store_manager.inventory.newstockrequest');
 });
 
 // driver
@@ -269,17 +260,37 @@ Route::prefix('customer')->group(function () {
     Route::get('/order-summary', [CartController::class, 'summary'])->name('cart.summary');
 
     //Order-list
+    Route::get('/order-list', [CartController::class, 'orders'])->name('cart.order-list');
     Route::post('/order-list', [CartController::class, 'placeOrder'])->name('cart.placeOrder');
     Route::get('customer/customer-order-details/{order}', [CartController::class, 'orderDetails'])->name('customer.order-details');
-    Route::patch('/order/{order}/cancel', [CartController::class, 'cancelOrder'])->name('order.cancel');
+    Route::patch('/order/{order}/cancel', [CartController::class, 'cancel'])->name('order.cancel');
 
     //History
-    Route::get('/order-history-details/{id}', [OrderHistoryController::class, 'showOrderDetails'])->name('order.history.details');
-    Route::delete('/history/{id}', [OrderHistoryController::class, 'destroy'])->name('customer.history.destroy');
+    Route::get('/order-history-details/{order}', [OrderHistoryController::class, 'showOrderDetails'])->name('order.history.details');
+    Route::get('/history', [OrderHistoryController::class, 'index'])->name('customer.history.index');
+    Route::get('/history', [OrderHistoryController::class, 'history'])->name('customer.history.history');
+    Route::delete('/history/{order}', [OrderHistoryController::class, 'destroy'])->name('customer.history.destroy');
+    Route::get('/order/{order}/download-invoice', [OrderHistoryController::class, 'downloadInvoice'])->name('order.downloadInvoice');
+
+    //Profile
+    Route::get('/customer-profile', [CustomerProfileController::class, 'index'])->name('customer-profile');
+    Route::get('/customer-account-settings', [CustomerAccountSettingController::class, 'index'])->name('customer-account-settings');
 
     // Confirm Delivery
-    Route::post('/confirm-delivery', [OrderController::class, 'confirmDelivery'])->name('customer.confirm-delivery');
+    Route::post('/order/{order}/confirm', [CartController::class, 'confirmDelivery'])->name('order.confirm');
+
+    // Route::get('/order-list', [CartController::class, 'orders'])->name('order-list');
     Route::get('/history', [OrderHistoryController::class, 'index'])->name('history');
+
+    //Edit Profile
+    Route::get('/customer-edit-profile', [CartController::class, 'editProfile'])->name('customer.editProfile');
+    Route::put('/customer-update-profile', [CustomerProfileController::class, 'updateProfile'])->name('customer.updateProfile');
+
+    //Middleware
+    Route::middleware('auth')->group(function () {
+        Route::get('/customer-edit-profile', [CustomerProfileController::class, 'editProfile'])->name('customer.editProfile');
+        Route::put('/customer-update-profile', [CustomerProfileController::class, 'updateProfile'])->name('customer.updateProfile');
+    });
 });
 
 Route::get('/home', function () {

@@ -9,6 +9,8 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderDetails;
 
+use Illuminate\Support\Facades\Auth;
+
 class CartController extends Controller
 {
     //INDEX
@@ -104,8 +106,12 @@ class CartController extends Controller
     //SUMMARY
     public function summary()
     {
+        $user = Auth::user();
+        $customer = \App\Models\Customer::where('user_id', $user->id)->first(); // Fetch the customer data
+
         $cartItems = session()->get('cartItems', []);
-        return view('customer.order-summary', compact('cartItems'));
+
+        return view('customer.order-summary', compact('cartItems', 'user', 'customer'));
     }
 
     //PLACE ORDER
@@ -154,17 +160,22 @@ class CartController extends Controller
             return redirect()->back()->with('status', 'Your cart is empty');
         }
 
+        // Capture the delivery option from the request
+        $deliveryOption = $request->input('delivery_option');
+
         $order = Order::create([
             'tracking_no' => Str::random(10),
-            'delivery_date' => now()->addDays(7), // Adjust delivery date logic
+            // 'delivery_date' => now()->addDays(7), // Adjust delivery date logic
+            'delivery_date' => now(),
             'payment_status' => 'Pending',
             'order_status' => 'Processing',
+            'delivery_option' => $deliveryOption,
         ]);
 
         // Link OrderDetails to Order (if applicable)
         foreach ($cartItems as $item) {
             OrderDetails::create([
-                'order_id' => $order->id,
+                'order_id' => $order->order_id,
                 'product_id' => $item['product_id'],
                 'rice_type' => $item['rice_type'],
                 'unit' => $item['unit'],
@@ -235,13 +246,19 @@ class CartController extends Controller
     //View Order Details
     public function orderDetails(Order $order)
     {
-        $orderDetails = $order->orderDetails; // Assuming a relationship exists between Order and OrderDetails models
-        return view('customer.customer-order-details', compact('order', 'orderDetails'));
+        $user = Auth::user();
+        $customer = \App\Models\Customer::where('user_id', $user->id)->first(); // Fetch the customer data
+        // $orderDetails = OrderDetails::where('order_id', $order->id)->get();
+        $orderDetails = $order->orderDetails;
+
+        return view('customer.customer-order-details', compact('order', 'orderDetails', 'user', 'customer'));
     }
 
     //Cancel Order
-    public function cancelOrder(Order $order)
+    public function cancel(Order $order)
     {
+        $order = Order::findOrFail($order->order_id);
+
         // Update the order status to "Cancelled"
         $order->update([
             'order_status' => 'Cancelled',

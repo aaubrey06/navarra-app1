@@ -3,7 +3,6 @@
 @section('title', 'Order List')
 
 @section('contents')
-
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -21,37 +20,50 @@
                         <table class="table datatable">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
+                                    {{-- <th>Order ID</th> --}}
                                     <th>Tracking No.</th>
                                     <th>Delivery Date</th>
                                     <th>Payment Status</th>
                                     <th>Order Status</th>
+                                    <th>Delivery Option</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($orders as $order)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
+                                    {{-- <td>{{ $order->order_id }}</td> --}}
                                     <td>{{ $order->tracking_no }}</td>
                                     <td>{{ $order->delivery_date }}</td>
                                     <td>{{ $order->payment_status }}</td>
                                     <td>{{ $order->order_status }}</td>
+                                    <td>{{ $order->delivery_option }}</td>
                                     <td>
-                                        <form action="{{ route('order.cancel', $order->id) }}" method="POST" onsubmit="confirmCancellation(event, this)">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-danger mx-2">Cancel</button>
-                                        </form>
+                                        {{-- <button type="submit" class="btn btn-danger mx-2">Cancel</button> --}}
+                                        {{-- <button type="submit" class="btn btn-success mx-2">View</button>
+                                        <button type="submit" class="btn btn-success mx-2">Confirm Delivery </button> --}}
 
-                                        <a href="{{ route('customer.order-details', $order->id) }}" class="btn btn-success mx-2">View</a>
+                                        <div class="d-flex justify-content-start align-items-center">
+                                            {{-- Cancel Button --}}
+                                            @if ($order->order_status !== 'Accepted' && $order->order_status !== 'Delivered')
+                                                <form action="{{ route('order.cancel', ['order' => $order->order_id]) }}" method="POST" onsubmit="confirmCancellation(event, this)">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="btn btn-danger mx-2"><i class="fas fa-times"></i> Cancel</button>
+                                                </form>
+                                            @endif
 
-                                        @if ($order->order_status !== 'Delivered')
-                                            <form action="{{ route('order.confirm', $order->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-success mx-2">Confirm Delivery</button>
-                                            </form>
-                                        @endif
+                                            {{-- View Button --}}
+                                            <a href="{{ route('customer.order-details', ['order' => $order->order_id]) }}" class="btn btn-primary mx-2"><i class="fas fa-eye"></i> View</a>
+
+                                            {{-- Delivered Button --}}
+                                            @if ($order->order_status !== 'Delivered')
+                                                <form action="{{ route('order.confirm', $order->order_id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success mx-2"><i class="fas fa-check-circle"></i> Confirm Delivery</button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
@@ -78,3 +90,4 @@
         </div>
     </section>
 @endsection
+
