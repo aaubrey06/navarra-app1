@@ -138,11 +138,11 @@
     <script>
         document.getElementById('placeOrderBtn').addEventListener('click', function() {
             // Check if the address is missing
-            const phone = "{{ $customer->phone }}";
-            const barangay = "{{ $customer->barangay }}";
-            const city = "{{ $customer->city }}";
-            const province = "{{ $customer->province }}";
-            const region = "{{ $customer->region }}";
+            const phone = "{{ $customer->phone ?? '' }}";
+            const barangay = "{{ $customer->barangay ?? '' }}";
+            const city = "{{ $customer->city ?? '' }}";
+            const province = "{{ $customer->province ?? '' }}";
+            const region = "{{ $customer->region ?? '' }}";
 
             // If any address or phone field is empty, show a message and stop form submission
             if (!phone || !barangay || !city || !province || !region) {
