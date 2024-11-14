@@ -146,12 +146,17 @@
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
                 <!--</a>-->
+                <!--<a class="nav-link" href="">-->
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+                <!--</a>-->
             </li><!-- End Dashboard Nav -->
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('customer-dashboard') }}">
-                    <i class="bi bi-menu-button-wide"></i><span>Products</span>
-                </a>
+                    <a class="nav-link" href="{{ route('customer-dashboard') }}">
+                        <i class="bi bi-menu-button-wide"></i><span>Products</span>
+                    </a>
 
             </li><!-- End Components Nav -->
 
@@ -163,20 +168,25 @@
                     <li>
                         <a href="{{ route('cart') }}">
                             <i class="bi bi-circle"></i><span>My Cart</span>
-                        </a>
+                            <a href="{{ route('cart') }}">
+                                <i class="bi bi-circle"></i><span>My Cart</span>
+                            </a>
                     </li>
                     <li>
-                        <a href="{{ route('cart.order-list') }}">
+                        <a href="{{ route('order-list') }}">
                             <i class="bi bi-circle"></i><span>Order List</span>
-                        </a>
+                            <a href="{{ route('cart.order-list') }}">
+                                <i class="bi bi-circle"></i><span>Order List</span>
+                            </a>
                     </li>
                 </ul>
             </li><!-- End Forms Nav -->
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('history') }}">
-                    <i class="bi bi-menu-button-wide"></i><span>History</span>
-                </a>
+                    <a class="nav-link" href="{{ route('history') }}">
+                        <i class="bi bi-menu-button-wide"></i><span>History</span>
+                    </a>
 
             </li><!-- End Tables Nav -->
 
@@ -197,6 +207,8 @@
         </div><!-- End Page Title -->
 
 
+        <!-- Dynamic Content Section -->
+        @yield('contents')
         <!-- Dynamic Content Section -->
         @yield('contents')
     </main><!-- End #main -->
