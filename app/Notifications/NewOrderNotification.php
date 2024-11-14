@@ -1,32 +1,35 @@
 <?php
 
-namespace App\Http\Controllers; // Make sure the controller has the correct namespace
+// Newordernotification.php
 
-use App\Models\Order;  // Make sure the Order model is imported
-use App\Models\User;
-use App\Notifications\NewOrderNotification;
-use Illuminate\Support\Facades\Notification;
+namespace App\Notifications;
 
-class OrderController extends Controller  // Ensure the method is inside a controller class
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
+
+class NewOrderNotification extends Notification
 {
-    // Method to assign the order to a driver and notify
-    public function assignOrderToDriver($order_id)
+    use Queueable;
+
+    protected $data;
+
+    public function __construct($data)
     {
-        // Fetch the order and driver
-        $order = Order::findOrFail($order_id); // Find the order by ID using the correct variable $order_id
-        $driver = User::where('role', 'driver')->first(); // Get the assigned driver (ensure this is correct based on your logic)
+        $this->data = $data;
+    }
 
-        // Send notification to driver
-        if ($driver) {
-            // Send the notification to the driver
-            $driver->notify(new NewOrderNotification($order));  // Notify the driver
+    // Define the delivery channels
+    public function via($notifiable)
+    {
+        return ['database']; // We're saving the notification to the database
+    }
 
-            return response()->json([
-                'message' => 'New order notification sent to driver successfully.',
-                'order' => $order
-            ]);
-        }
-
-        return response()->json(['error' => 'No driver found to assign this order.'], 404);
+    // Define the data to store in the database
+    public function toArray($notifiable)
+    {
+        return [
+            'order_id' => $this->data['order_id'],
+            'recipient_role' => $this->data['driver'],
+        ];
     }
 }

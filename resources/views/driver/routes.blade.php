@@ -35,338 +35,249 @@
 <!-- Directions panel -->
 <div id="directions-panel"></div>
 
-<!-- Camera capture modal (hidden initially) -->
-<div id="cameraModal" style="display: none;">
-    <video id="video" autoplay style="width: 100%; height: auto;"></video>
-    <button id="capture">Capture Photo</button>
-</div>
-<canvas id="canvas" style="display: none;"></canvas>
-
 <script>
-    var map, directionsService, directionsRenderer, userLocationMarker;
-    var geocoder;
-    var locations = [];
-    var distanceMatrix = {};
+   var map, directionsService, directionsRenderer, userLocationMarker;
+  var geocoder;
+  var locations = [];
+  var markers = []; // To store the markers for locations
+  var routePolyline;
+  var userLocation;
+  var routePath = [];
 
-    // Initialize the map and fetch orders
-    function initMap() {
-        const iloiloCity = { lat: 10.720986774017764, lng: 122.56177996419011 };
-        map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
-            center: iloiloCity
-        });
+  // Initialize the map and fetch orders
+  function initMap() {
+      const iloiloCity = { lat: 10.720986774017764, lng: 122.56177996419011 };
+      map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: iloiloCity
+      });
 
-        directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer();
-        directionsRenderer.setMap(map);
-        directionsRenderer.setPanel(document.getElementById('directions-panel'));
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer();
+      directionsRenderer.setMap(map);
+      directionsRenderer.setPanel(document.getElementById('directions-panel'));
 
-        geocoder = new google.maps.Geocoder();
+      geocoder = new google.maps.Geocoder();
 
-        // Geolocation to get user's current location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                map.setCenter(userLocation);
+      // Geolocation to get user's current location
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+              userLocation = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+              };
+              map.setCenter(userLocation);
 
-                // Add a green marker for the user's current location
-                userLocationMarker = new google.maps.Marker({
-                    position: userLocation,
-                    map: map,
-                    title: 'Your Location',
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 8,
-                        fillColor: 'green',
-                        fillOpacity: 1,
-                        strokeWeight: 1,
-                        strokeColor: 'white'
-                    }
-                });
+              // Add a green marker for the user's current location
+              userLocationMarker = new google.maps.Marker({
+                  position: userLocation,
+                  map: map,
+                  title: 'Your Location',
+                  icon: {
+                      path: google.maps.SymbolPath.CIRCLE,
+                      scale: 8,
+                      fillColor: 'green',
+                      fillOpacity: 1,
+                      strokeWeight: 1,
+                      strokeColor: 'white'
+                  }
+              });
 
-                // Start fetching waypoints after setting the user location
-                fetchScheduledWaypoints();
-            }, function() {
-                console.error('Geolocation service failed.');
-            });
-        } else {
-            console.error('Your browser doesn\'t support geolocation.');
-        }
-    }
+              // Start fetching waypoints after setting the user location
+              fetchScheduledWaypoints();
+          }, function() {
+              console.error('Geolocation service failed.');
+          });
+      } else {
+          console.error('Your browser doesn\'t support geolocation.');
+      }
+  }
 
-    // Fetch orders and prepare the graph for Dijkstra’s algorithm
-    function fetchScheduledWaypoints() {
-        const today = new Date().getDay(); // 0 = Sunday, 6 = Saturday
-        const isSaturday = today === 6;
+  // Fetch orders and prepare the locations for the route
+  async function fetchScheduledWaypoints() {
+      const today = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+      const isSaturday = today === 6;
 
-        $.ajax({
-            url: "{{ route('driver.orders') }}",
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                const orderDetailsBody = $('#locations-table tbody');
-                orderDetailsBody.empty();
-                locations = [];
+      $.ajax({
+          url: "{{ route('driver.orders') }}",
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+              const orderDetailsBody = $('#locations-table tbody');
+              orderDetailsBody.empty();
+              locations = [];
+              markers = []; // Clear any existing markers
 
-                data.forEach(function(order) {
-                    if (isInIloiloCity(order.location) || (isSaturday && !isInIloiloCity(order.location))) {
-                        // Add the order to the table
-                        orderDetailsBody.append(`
-                            <tr>
-                                <td>${order.customer_name}</td>
-                                <td>${order.contact_number || 'No contact number available.'}</td>
-                                <td>${order.location || 'No location available.'}</td>
-                                <td id="status-${order.id}">Pending</td>
-                                <td>
-                                    <button onclick="openCamera('${order.id}')">Delivered</button>
-                                    <button onclick="updateStatus('${order.id}', 'Failed')">Failed</button>
-                                </td>
-                            </tr>
-                        `);
+              data.forEach(function(order, index) {
+                  if (isInIloiloCity(order.location) || (isSaturday && !isInIloiloCity(order.location))) {
+                      // Add the order to the table
+                      orderDetailsBody.append(
+                          `<tr>
+                              <td>${order.customer_name}</td>
+                              <td>${order.phone_number || 'No contact number available.'}</td>
+                              <td>${order.location || 'No location available.'}</td>
+                              <td id="status-${order.id}">Pending</td>
+                              <td>
+                                  <button onclick="checkLocationAndDeclareDelivered('${order.id}', '${order.location}', ${index})">Delivered</button>
+                                  <button onclick="checkLocationAndDeclareFailed('${order.id}', '${order.location}', ${index})">Failed</button>
+                              </td>
+                          </tr>`
+                      );
 
-                        // Add location to locations array for graph setup
-                        geocoder.geocode({ 'address': order.location }, function(results, status) {
-                            if (status === 'OK') {
-                                const location = results[0].geometry.location;
-                                locations.push({
-                                    id: order.id,
-                                    position: location,
-                                    title: order.location
-                                });
+                      // Add location to locations array for routing setup
+                      geocoder.geocode({ 'address': order.location }, function(results, status) {
+                          if (status === 'OK') {
+                              const location = results[0].geometry.location;
+                              locations.push({
+                                  id: order.id,
+                                  position: location,
+                                  title: order.location
+                              });
 
-                                // Add marker on the map
-                                new google.maps.Marker({
-                                    position: location,
-                                    map: map,
-                                    title: order.location
-                                });
+                              // Add marker for each location with numbers instead of letters
+                              const marker = new google.maps.Marker({
+                                  position: location,
+                                  map: map,
+                                  title: order.location,
+                              });
 
-                                // Calculate distance from current location to each location and store in distanceMatrix
-                                if (locations.length > 1) calculateDistanceMatrix();
-                            } else {
-                                console.error('Geocode failed for location:', order.location);
-                            }
-                        });
-                    }
-                });
-            },
-            error: function(error) {
-                console.error('Error fetching orders:', error);
-            }
-        });
-    }
+                              markers.push(marker); // Store markers for future reference
 
-    // Check if a location is within Iloilo City
-    function isInIloiloCity(address) {
-        return address.includes("Iloilo City");
-    }
+                              // Enable the route generation button only if there are multiple locations
+                              if (locations.length > 1) {
+                                  $('#find-route').prop('disabled', false);
+                              }
+                          } else {
+                              console.error('Geocode failed for location:', order.location);
+                          }
+                      });
+                  }
+              });
+          },
+          error: function(error) {
+              console.error('Error fetching orders:', error);
+          }
+      });
+  }
 
-    // Calculate the distance matrix for Dijkstra's algorithm
-    function calculateDistanceMatrix() {
-        // Include user location as the starting node in the matrix
-        locations.unshift({
-            id: 'current',
-            position: userLocation,
-            title: 'Your Location'
-        });
+  // Check if a location is within Iloilo City
+  function isInIloiloCity(address) {
+      return address.includes("Iloilo City");
+  }
 
-        for (let i = 0; i < locations.length; i++) {
-            for (let j = 0; j < locations.length; j++) {
-                if (i !== j) {
-                    const origin = locations[i].position;
-                    const destination = locations[j].position;
+  // Function to check the driver's location before declaring delivery as delivered
+  function checkLocationAndDeclareDelivered(orderId, orderLocation, index) {
+      const orderLatLng = new google.maps.LatLng(orderLocation.lat, orderLocation.lng);
 
-                    directionsService.route({
-                        origin: origin,
-                        destination: destination,
-                        travelMode: 'DRIVING'
-                    }, function(response, status) {
-                        if (status === 'OK') {
-                            const distance = response.routes[0].legs[0].distance.value;
-                            distanceMatrix[`${i}-${j}`] = distance;
-                        } else {
-                            console.error('Directions request failed due to ' + status);
-                        }
-                    });
-                }
-            }
-        }
-    }
+      // Calculate distance between the user's location and the order's location
+      const distance = google.maps.geometry.spherical.computeDistanceBetween(userLocation, orderLatLng);
 
-    // Implement Dijkstra's algorithm to find the shortest path
-    function dijkstra(startIndex) {
-        const distances = {};
-        const visited = {};
-        const previous = {};
+      // If the distance is less than 100 meters (or set your own threshold), allow delivery
+      if (distance < 100) {
+          confirmDelivery(orderId);
+      } else {
+          alert('You must be within the delivery location to confirm delivery.');
+      }
+  }
 
-        // Initialize distances and previous
-        for (let i = 0; i < locations.length; i++) {
-            distances[i] = Infinity;
-            previous[i] = null;
-        }
-        distances[startIndex] = 0;
+  // Function to check the driver's location before declaring the order as failed
+  function checkLocationAndDeclareFailed(orderId, orderLocation, index) {
+      const orderLatLng = new google.maps.LatLng(orderLocation.lat, orderLocation.lng);
 
-        // Dijkstra's algorithm
-        for (let i = 0; i < locations.length - 1; i++) {
-            let minDistNode = null;
+      // Calculate distance between the user's location and the order's location
+      const distance = google.maps.geometry.spherical.computeDistanceBetween(userLocation, orderLatLng);
 
-            // Find the closest unvisited node
-            for (let node in distances) {
-                if (!visited[node] && (minDistNode === null || distances[node] < distances[minDistNode])) {
-                    minDistNode = node;
-                }
-            }
+      // If the driver is within a reasonable range (e.g., 100 meters), allow marking it as Failed
+      if (distance < 100) {
+          const reason = prompt("Please enter the reason for the failure:");
 
-            if (distances[minDistNode] === Infinity) break;
-            visited[minDistNode] = true;
+          if (reason) {
+              updateStatus(orderId, 'Failed', reason);
+          }
+      } else {
+          alert('You must be within the delivery location to mark the order as failed.');
+      }
+  }
 
-            // Update distances for neighbors
-            for (let neighbor in distances) {
-                if (!visited[neighbor] && distanceMatrix[`${minDistNode}-${neighbor}`] !== undefined) {
-                    const newDist = distances[minDistNode] + distanceMatrix[`${minDistNode}-${neighbor}`];
-                    if (newDist < distances[neighbor]) {
-                        distances[neighbor] = newDist;
-                        previous[neighbor] = minDistNode;
-                    }
-                }
-            }
-        }
+  // Function to confirm delivery and update order status
+  function confirmDelivery(id) {
+      $.ajax({
+          url: `/driver/confirm-delivery/${id}`,
+          method: 'POST',
+          data: {
+              _token: '{{ csrf_token() }}'
+          },
+          success: function(response) {
+              alert(response.message);
+              const statusCell = document.getElementById(`status-${id}`);
+              statusCell.innerText = 'Delivered';
+              statusCell.style.color = 'green';
+          },
+          error: function(xhr, status, error) {
+              console.error("Failed to confirm delivery:", error);
+              alert('Failed to confirm delivery');
+          }
+      });
+  }
 
-        // Build the shortest path
-        const path = [];
-        let currentNode = Object.keys(distances).reduce((minNode, node) => distances[node] < distances[minNode] ? node : minNode, startIndex);
-        while (currentNode !== null) {
-            path.unshift(currentNode);
-            currentNode = previous[currentNode];
-        }
+  // Function to update the order status
+  function updateStatus(id, status, reason = '') {
+      if (status === 'Failed' && !reason) {
+          alert('Please provide a reason for the failure.');
+          return;
+      }
 
-        displayShortestPath(path);
-    }
+      // Update the status cell with the status and reason
+      const statusCell = document.getElementById(`status-${id}`);
+      statusCell.innerText = `${status}${reason ? ` - ${reason}` : ''}`;
+      statusCell.style.color = 'red';
 
-    // Display the shortest path on the map
-    function displayShortestPath(path) {
-        const route = path.map(index => locations[index].position);
-        const origin = route[0];
-        const destination = route[route.length - 1];
-        const waypoints = route.slice(1, -1).map(position => ({ location: position, stopover: true }));
+      // Optionally, send the failure reason to the server if you need to store it
+      $.ajax({
+          url: `/driver/update-status/${id}`,
+          method: 'POST',
+          data: {
+              status: status,
+              reason: reason,
+              _token: '{{ csrf_token() }}'
+          },
+          success: function(response) {
+              alert(response.message);
+          },
+          error: function(xhr, status, error) {
+              console.error("Failed to update status:", error);
+          }
+      });
+  }
 
-        directionsService.route({
-            origin: origin,
-            destination: destination,
-            waypoints: waypoints,
-            travelMode: 'DRIVING'
-        }, function(response, status) {
-            if (status === 'OK') {
-                directionsRenderer.setDirections(response);
-            } else {
-                console.error('Directions request failed due to ' + status);
-            }
-        });
-    }
+  // Find the shortest route and generate the path
+  $('#find-route').on('click', function() {
+      const waypoints = locations.map(function(location) {
+          return {
+              location: location.position,
+              stopover: true
+          };
+      });
 
-    // Execute Dijkstra's algorithm after all locations have been fetched and distances are calculated
-    function findShortestRoute() {
-        dijkstra(0);  // Start from the driver's current location (index 0 after unshift)
-    }
+      const request = {
+          origin: userLocation,
+          destination: locations[locations.length - 1].position,
+          waypoints: waypoints,
+          travelMode: 'DRIVING'
+      };
 
-    // Attach the findShortestRoute function to the "Find Route" button
-    document.getElementById('find-route').addEventListener('click', findShortestRoute);
+      directionsService.route(request, function(result, status) {
+          if (status === 'OK') {
+              directionsRenderer.setDirections(result);
+              routePolyline = result.routes[0].overview_path; // Store the polyline for further use
+          } else {
+              alert('Directions request failed due to ' + status);
+          }
+      });
+  });
 
-    // Function to open camera for delivery confirmation
-    function openCamera(id) {
-        const video = document.getElementById('video');
-        const cameraModal = document.getElementById('cameraModal');
-        cameraModal.style.display = 'block';
-
-        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-            video.srcObject = stream;
-            video.play();
-            document.getElementById('capture').onclick = () => capturePhoto(id, stream);
-        }).catch((error) => {
-            console.error("Error accessing the camera:", error);
-        });
-    }
-
-    // Function to capture photo and confirm delivery
-    function capturePhoto(id, stream) {
-        const canvas = document.getElementById('canvas');
-        const video = document.getElementById('video');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/png');
-        stream.getTracks().forEach(track => track.stop());
-        document.getElementById('cameraModal').style.display = 'none';
-        confirmDelivery(id, imageData);
-    }
-
-    // Function to confirm delivery and update order status
-    function confirmDelivery(id, imageData) {
-        $.ajax({
-            url: `/driver/confirm-delivery/${id}`,
-            method: 'POST',
-            data: {
-                image: imageData,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                alert(response.message);
-                const statusCell = document.getElementById(`status-${id}`);
-                statusCell.innerText = 'Delivered';
-                statusCell.style.color = 'green';
-            },
-            error: function(xhr, status, error) {
-                console.error("Failed to confirm delivery:", error);
-                alert('Failed to confirm delivery');
-            }
-        });
-    }
-
-    // Function to update the order status
-    // Function to update the order status with reason for failure
-function updateStatus(id, status) {
-    if (status === 'Failed') {
-        const reason = prompt("Please enter the reason for the failure:");
-
-        if (reason) {
-            // Update the status cell with the status and reason
-            const statusCell = document.getElementById(`status-${id}`);
-            statusCell.innerText = `${status}`;
-            statusCell.style.color = 'red';
-
-            // Optionally, send the failure reason to the server if you need to store it
-            $.ajax({
-                url: `/driver/update-status/${id}`,
-                method: 'POST',
-                data: {
-                    status: status,
-                    reason: reason,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    alert(response.message);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Failed to update status:", error);
-                    alert('Failed to update status');
-                }
-            });
-        }
-    } else {
-        // For other statuses like 'Delivered', just update the status text
-        const statusCell = document.getElementById(`status-${id}`);
-        statusCell.innerText = status;
-        statusCell.style.color = 'green';
-    }
-}
-
-
-    // Load the map after the page is ready
-    google.maps.event.addDomListener(window, 'load', initMap);
-
+  // Initialize the map when the window loads
+  window.onload = initMap;
 </script>
 
 @endsection

@@ -238,6 +238,10 @@ Route::prefix('driver')->group(function () {
     Route::get('/driver/capture', 'DriverController@showCapturePage')->name('driver.capture');
     Route::get('/driver/routes', [DriverController::class, 'showOrders']);
 
+    Route::post('/order/{orderId}/confirm', [OrderController::class, 'confirmDelivery']);
+
+
+
 
 
 });

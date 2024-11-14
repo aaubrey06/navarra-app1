@@ -127,5 +127,45 @@ public function getDriverOrders()
     return response()->json($orderstore);
 }
 
-}
+public function notifyDriversAboutNewOrders(Request $request)
+{
+    // Create a new In-Store Order
+    $data = new OrderStore;  // Make sure 'OrderStore' is the correct model name
+    $data->order_id = $request->order;  // Order ID from the request
+    $data->product_id = $request->product;  // Product ID from the request
+    $data->order_status = $request->status;  // Order status from the request
+    $data->save();
 
+    // Fetch new orders from the orderstore table where status is 'new'
+    $orderStore = OrderStore::where('status', 'new')->get(); // Using Eloquent to fetch orders
+
+    if ($orderStore->isNotEmpty()) {
+        // Fetch all drivers
+        $drivers = User::where('role', 'driver')->get(); // Fetch all drivers with 'driver' role
+
+        foreach ($drivers as $driver) {
+            // Send the notification to each driver
+            $driver->notify(new NewOrderNotification($orderStore)); // Trigger the notification
+
+            // Insert the notification into the database for each driver (optional if using the notify method)
+            \DB::table('notifications')->insert([
+                'id' => (string) Str::uuid(), // Generate a unique UUID for the notification
+                'notifiable_type' => get_class($driver),
+                'notifiable_id' => $driver->id,
+                'type' => 'App\\Notifications\\NewOrderNotification', // Notification class type
+                'data' => json_encode([
+                    'message' => 'You have a new in-store order pending.',
+                    'orderstore_ids' => $orderStore->pluck('id')->toArray(), // Include the order IDs as an array
+                ]),
+                'recipient_role' => 'driver', // Set the recipient role
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Notification sent to drivers about new orders.');
+    } else {
+        return redirect()->back()->with('error', 'No new in-store orders available.');
+    }
+}
+}
