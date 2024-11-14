@@ -11,6 +11,7 @@ use App\Http\Controllers\InStoreController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderHistoryController;
 use App\Http\Controllers\CustomerProfileController;
+use App\Http\Controllers\CustomerAccountSettingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
