@@ -247,8 +247,9 @@ class CartController extends Controller
     public function orderDetails(Order $order)
     {
         $user = Auth::user();
-        $customer = $user->customer;
-        $orderDetails = OrderDetails::where('order_id', $order->id)->get();
+        $customer = \App\Models\Customer::where('user_id', $user->id)->first(); // Fetch the customer data
+        // $orderDetails = OrderDetails::where('order_id', $order->id)->get();
+        $orderDetails = $order->orderDetails;
 
         return view('customer.customer-order-details', compact('order', 'orderDetails', 'user', 'customer'));
     }
