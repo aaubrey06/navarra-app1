@@ -9,7 +9,7 @@
 
 
 
-                        <div id="printable" class="container"
+                        {{-- <div id="printable" class="container"
                             style="padding: 3px; max-width: 100%; margin: 0 auto; font-size: 10px;">
 
                             <!-- Left-aligned Invoice Title and Date -->
@@ -95,7 +95,7 @@
                                         required style="font-size: 10px;">
                                 </div>
                             </div>
-                        </form>
+                        </form> --}}
 
 
 
@@ -116,7 +116,7 @@
 
 
 
-                        {{-- <div id="printable" style="padding: 20px;">
+                        <div id="printable" style="padding: 20px;">
                             <h5 class="card-title">Invoice</h5>
 
                             <div>
@@ -184,7 +184,7 @@
 
                                 </div>
                             </div>
-                         </form> --}}
+                         </form> 
                     </div>
                 </div>
             </div>
@@ -196,34 +196,39 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        function save() {
-            var h = document.getElementById('printable').offsetHeight;
-            var w = document.getElementById('printable').offsetWidth;
+    function save() {
+        var h = document.getElementById('printable').offsetHeight;
+        var w = document.getElementById('printable').offsetWidth;
 
-            // Adjust the image size manually (in mm, 1 inch = 25.4mm)
-            var imageWidth = 168; // Example width in mm (adjust as needed)
-            var imageHeight = 105; // Example height in mm (adjust as needed)
+        // Adjust the image size manually (in mm, 1 inch = 25.4mm)
+        var imageWidth = 168; // Example width in mm (adjust as needed)
+        var imageHeight = 105; // Example height in mm (adjust as needed)
 
-            html2canvas(document.getElementById('printable'), {
-                scale: 2,
-                width: w,
-                height: h,
-            }).then(function(canvas) {
-                const {
-                    jsPDF
-                } = window.jspdf;
-                const doc = new jsPDF('p', 'mm', 'letter'); // Letter size (8.5 x 11 inches)
+        html2canvas(document.getElementById('printable'), {
+            scale: 2,
+            width: w,
+            height: h,
+            
+        }).then(function(canvas) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'letter'); // Letter size (8.5 x 11 inches)
 
-                // Add the image to PDF with custom width and height
-                doc.addImage(canvas.toDataURL("image/png"), 'PNG', 10, 10, imageWidth, imageHeight);
+            // Add the image to PDF with custom width and height
+            doc.addImage(canvas.toDataURL("image/png"), 'PNG', 10, 10, imageWidth, imageHeight);
 
-                // Save the PDF
-                doc.save('warehouse_invoice.pdf');
-            });
-        }
-    </script>
+            // Save the PDF
+            doc.save('warehouse_invoice.pdf');
+
+            // Trigger outbound link click and form submit
+            var a = document.createElement('a');
+            a.href = doc.output('bloburl'); // This opens the PDF in a new tab
+            a.download = "warehouse_invoice.pdf";
+            a.click();
+            document.getElementById("sendoutbound").submit();
+        });
+    }
+</script>
 
 
 

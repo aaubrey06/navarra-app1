@@ -54,16 +54,14 @@ class DatabaseSeeder extends Seeder
             'role' => 'owner',
         ]);
 
-        
-        
-
-
         $this->call([
-            MethodSeeder::class,  
-            StatusSeeder::class, 
+            MethodSeeder::class,
+            StatusSeeder::class,
             CustomerSeeder::class,
             OrdersSeeder::class,
             StatusSeeder::class,
+            InventoryTransactionTypeSeeder::class,
+            WarehouseSeeder::class,
         ]);
     }
 }

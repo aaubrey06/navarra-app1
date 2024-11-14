@@ -55,20 +55,8 @@
                                                 {{-- <td>{{ $warehouse->product_code }}</td> --}}
                                                 <td>{{ $warehouse->batch_code }}</td>
                                                 <td>
-                                                    <div class="qr_code"
-                                                        data-arrival-date="{{ $warehouse->arrival_date }}"data-qr-text="{{ $warehouse->qr_code }}"
-                                                        data-rice-type="<?php
-                                                        // Get the rice_type from the product matching the warehouse's product_id
-                                                        $products_arr = json_decode(json_encode($warehouse_data['products']), true);
-                                                        foreach ($products_arr as $product) {
-                                                            $warehouse_arr = json_decode(json_encode($warehouse), true);
-                                                            $product_arr = json_decode(json_encode($product), true);
-                                                            if ($warehouse_arr['product_id'] == $product_arr['product_id']) {
-                                                                echo $product_arr['rice_type'];
-                                                            }
-                                                        }
-                                                        ?>">
-                                                        <span id="{{ $warehouse->qr_code }}">
+                                                    <div class="qr_code"><span id ="{{ $warehouse->qr_code }}">
+
                                                         </span>
                                                         <div class='qr_show'></div>
 
@@ -77,7 +65,7 @@
 
                                                 </td>
                                             </tr>
-                                            {{-- @endif --}}
+                                        @endif
                                         @endforeach
                                         </thead>
                                     </tbody>
@@ -105,32 +93,21 @@
                 qr_code_array.forEach(element => {
                     // const text = element.textContent;
                     const qrcodeDiv = element.querySelector('.qr_show');
-                    const text = element.querySelector('span') ? element.querySelector('span').textContent : '';
-
-                    const qrText = element.getAttribute('data-qr-text');
-                    const arrivalDate = element.getAttribute('data-arrival-date');
-                    const riceType = element.getAttribute('data-rice-type') || '';
-
+                    const text = element.getElementsByTagName("span")[0].id
                     console.log(text)
                     const qrcode = new QRCode(qrcodeDiv, {
                         text: text,
-                        width: 175,
-                        height: 175
+                        width: 128,
+                        height: 128
                     });
-                    // var canvas = element.getElementsByTagName('img')[0].src;
                     setTimeout(() => {
                         let qelem = element.querySelector('.qr_show canvas')
                         var dataURL = qelem.toDataURL();
                         let dlink = element.parentElement.querySelector('.downloadqr')
                         let qr = qelem.getAttribute('src');
-                        const fileName = riceType ? `${riceType}_${arrivalDate}.png` :
-                            `qrcode_${arrivalDate}.png`;
                         dlink.setAttribute('href', dataURL);
-                        dlink.setAttribute('download', fileName);
+                        dlink.setAttribute('download', 'qrcode1.png');
                         dlink.removeAttribute('hidden');
-                        // dlink.setAttribute('href', dataURL);
-                        // dlink.setAttribute('download', `qrcode,${arrivalDate}.png`);
-                        // dlink.removeAttribute('hidden');
 
                         element.text = '';
                     }, 1000);
