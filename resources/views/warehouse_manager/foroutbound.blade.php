@@ -12,9 +12,9 @@
                         {{-- <b><a>Product Code:</b> {{ $data['warehouse_stock'][0]->product_code }}<br></a> --}}
                         <b><a>Batch Code:</b> {{ $data['warehouse_stock'][0]->batch_code }}<br></a>
                         <?php
-                                    echo $data['products'];
-                                    echo $data['stock_requests']
-                                ?>
+                        echo $data['products'];
+                        echo $data['stock_requests'];
+                        ?>
                         <form action="{{ url('warehouse_manager/sendoutbound') }}" method="POST">
                             @csrf
 
@@ -29,7 +29,7 @@
                                     <input type="text" class="form-control" id="warehouse_stocks_id"
                                         name="warehouse_stocks_id" style="display: none"
                                         value=" {{ $data['warehouse_stock'][0]->warehouse_stocks_id }}" required> --}}
-                                        
+
 
                                 </div>
                             </div>

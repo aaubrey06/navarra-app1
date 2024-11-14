@@ -36,7 +36,8 @@ class ProductController extends Controller
 
     public function stocks(): View
     {
-        return view('owner.stocks');
+        $products = Product::all();         
+        return view('owner.stocks', compact('products'));
     }
 
     public function products(): View
@@ -213,6 +214,75 @@ class ProductController extends Controller
    
     return view('store_manager.walk-in.add', compact('products'));
     }
+
+    public function storeWalkInSale(Request $request)
+    {
+        // Validate incoming data
+        $validatedData = $request->validate([
+            'product_id' => 'required|exists:products,product_id', // Ensure product exists
+            'quantity_sold' => 'required|integer|min:1', // Ensure quantity_sold is a positive integer
+        ]);
+    
+        // Log the validated data to see if it's correct
+        Log::debug('Validated data: ', $validatedData);
+    
+        // Retrieve the selected product from the database
+        $product = Product::find($validatedData['product_id']);
+    
+        // Log the product data to verify it's being fetched correctly
+        Log::debug('Product Data: ', $product ? $product->toArray() : 'Product not found');
+    
+        if (!$product) {
+            return redirect()->back()->withErrors(['product_id' => 'Product not found.']);
+        }
+    
+        if ($product->current_quantity < $validatedData['quantity_sold']) {
+            return redirect()->back()->withErrors(['quantity_sold' => 'Not enough stock available']);
+        }
+    
+        // Calculate the total price (selling_price * quantity sold)
+        $totalPrice = $product->selling_price * $validatedData['quantity_sold'];
+    
+        // Begin a database transaction
+        DB::beginTransaction();
+    
+        try {
+            // Decrease the product quantity by the sold amount
+            $product->current_quantity -= $validatedData['quantity_sold'];
+            $product->save(); // Save the updated product
+    
+            // Log before creating the sale to ensure everything is ready
+            Log::debug('Creating sale with data: ', [
+                'product_id' => $product->product_id,
+                'quantity_sold' => $validatedData['quantity_sold'],
+                'total_price' => $totalPrice,
+                'sale_date' => now(),
+            ]);
+    
+            // Create a new sale record
+            Sale::create([
+                'product_id' => $product->product_id,
+                'quantity_sold' => $validatedData['quantity_sold'],
+                'total_price' => $totalPrice,
+                'sale_date' => now(),
+            ]);
+    
+            // Commit the transaction
+            DB::commit();
+    
+            return redirect()->route('store_manager.walk-in.index')->with('success', 'Sale recorded successfully!');
+        } catch (\Exception $e) {
+            // Rollback the transaction on error
+            DB::rollBack();
+    
+            // Log the exception
+            Log::error('Error during sale creation: ' . $e->getMessage());
+    
+            return redirect()->back()->withErrors(['sale' => 'Failed to record the sale.']);
+        }
+    }
+    
+    
  
 //     public function storeWalkInSale(Request $request)
 // {

@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PurchaseOrder extends Model
+class PurchaseOrders extends Model
 {
     use HasFactory;
+
     protected $table = 'purchase_orders';
 
     protected $primaryKey = 'purchase_order_id';
@@ -30,6 +31,4 @@ class PurchaseOrder extends Model
     {
         return $this->hasMany(PurchaseOrderItem::class, 'purchase_order_id');
     }
-
-    
 }
