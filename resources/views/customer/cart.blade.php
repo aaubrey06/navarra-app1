@@ -108,21 +108,14 @@
         document.querySelector('#checkoutButton').addEventListener('click', function(event) {
             event.preventDefault(); // Prevent default form submission
 
-            // Fetch phone from Blade (if it is set correctly)
-            const phone = "{{ $customer->phone ?? '' }}"; // Replace $customer->phone with your correct variable
-
-            // Check if phone is null or an empty string
-            if (!phone) {
-                alert("Your order cannot be processed until you provide your shipping address and contact phone number. Please update your profile information immediately to avoid any delays in processing your order.");
-                return; // Stop further execution if phone is missing
-            }
-
-            // If phone is present, show confirmation dialog
             const result = confirm('Delivery is available for orders with 20 or more sacks. For orders with a smaller number of sacks, pick-up is only available. Are you sure to continue?');
 
             if (result) {
                 // If the user clicks "OK", submit the form programmatically
                 document.querySelector('#checkoutForm').submit();
+            } else {
+                // If the user clicks "Cancel", do nothing
+                return false;
             }
         });
     </script>

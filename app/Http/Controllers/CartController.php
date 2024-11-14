@@ -107,7 +107,8 @@ class CartController extends Controller
     public function summary()
     {
         $user = Auth::user();
-        $customer = $user->customer;
+        $customer = \App\Models\Customer::where('user_id', $user->id)->first(); // Fetch the customer data
+
         $cartItems = session()->get('cartItems', []);
 
         return view('customer.order-summary', compact('cartItems', 'user', 'customer'));
