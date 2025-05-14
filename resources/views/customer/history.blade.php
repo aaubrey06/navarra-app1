@@ -32,7 +32,7 @@
                                 <!-- Dynamic product rows will go here -->
                                 @forelse ($orders as $order)
                                     <tr>
-                                        <td>{{ $order->id }}</td>
+                                        <td>{{ $order->order_id }}</td>
                                         <td>{{ $order->tracking_no }}</td>
                                         <td>{{ $order->delivery_date }}</td>
                                         <td>{{ $order->order_status }}</td>

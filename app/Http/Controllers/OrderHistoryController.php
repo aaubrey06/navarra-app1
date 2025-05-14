@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -54,5 +55,12 @@ class OrderHistoryController extends Controller
         return view('customer.history', compact('orders'));
     }
 
+    public function downloadInvoice(Order $order)
+    {
+        $user = Auth::user();
+        $customer = $user->customer;$customer = \App\Models\Customer::where('user_id', $user->id)->first();
 
+        $pdf = Pdf::loadView('customer.order-invoice', compact('order', 'user', 'customer'));
+        return $pdf->download('invoice_' . $order->id . '.pdf');
+    }
 }
