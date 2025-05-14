@@ -12,6 +12,11 @@
                     <div class="card-body">
                         <h5 class="card-title">Order History Details</h5>
 
+                        <!-- Download Invoive Button -->
+                        <div class="text-end mb-3">
+                            <a href="{{ route('order.downloadInvoice', $order->order_id) }}" class="btn btn-success">Download Invoice</a>
+                        </div>
+
                         <!-- Table with stripped rows -->
                         <table class="table datatable">
                             <thead>
